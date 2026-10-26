@@ -117,12 +117,14 @@ def test_worker_child_does_not_inherit_channel_or_admin_secrets(monkeypatch):
     monkeypatch.setenv("CHATTWIN_ADMIN_TOKEN", "private")
     monkeypatch.setenv("OPENAI_API_KEY", "private")
     monkeypatch.setenv("HF_TOKEN", "private")
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "1")
     environment = worker_environment()
     assert (
         not {"QQ_ACCESS_TOKEN", "CHATTWIN_ADMIN_TOKEN", "OPENAI_API_KEY", "HF_TOKEN"}
         & environment.keys()
     )
     assert environment["HF_HUB_DISABLE_IMPLICIT_TOKEN"] == "1"
+    assert environment["CUDA_VISIBLE_DEVICES"] == "1"
 
 
 def test_worker_refuses_source_drift_before_loading_data_or_model(tmp_path, monkeypatch):

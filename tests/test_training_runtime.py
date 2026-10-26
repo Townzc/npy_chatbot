@@ -36,6 +36,25 @@ def test_real_lora_updates_saves_and_reloads_in_new_process(artifact):
     assert result["manifest"]["relationship_id"] == spec.relationship_id
 
 
+def test_checkpointed_lora_recomputes_without_losing_frozen_input_gradients(artifact, tmp_path):
+    from safetensors.torch import load_file
+
+    spec, original = artifact
+    checkpointed = spec.model_copy(
+        update={"output_path": tmp_path / "checkpointed", "gradient_checkpointing": True}
+    )
+    result = train(checkpointed)
+    assert result["report"]["gradient_checkpointing"] is True
+    assert result["report"]["max_parameter_update"] > 0
+    assert result["report"]["reload_comparison"]["max_logit_delta"] > 0
+    assert result["report"]["reload_comparison"]["pid"] != result["report"]["training_pid"]
+    assert result["report"]["losses"] == pytest.approx(original["report"]["losses"], abs=1e-6)
+    expected = load_file(spec.output_path / "adapter/adapter_model.safetensors")
+    actual = load_file(checkpointed.output_path / "adapter/adapter_model.safetensors")
+    for name, tensor in expected.items():
+        assert actual[name].allclose(tensor, atol=1e-6)
+
+
 def test_real_tokenizer_masks_history_and_keeps_current_target(artifact):
     spec, _ = artifact
     tokenizer = AutoTokenizer.from_pretrained(spec.base_model_id, local_files_only=True)

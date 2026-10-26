@@ -227,13 +227,13 @@ def backup_restore(backup: Path, destination: Path):
 def training_process(module, arguments, *, model_server=False):
     import subprocess
 
+    from chattwin.runtime_paths import training_python_path
     from chattwin.training.worker import worker_environment
 
-    root = Path(__file__).resolve().parents[3]
-    python = root / "training/.venv/bin/python"
+    python = training_python_path()
     if not python.is_file():
         raise typer.BadParameter(
-            "Install isolated training dependencies: uv sync --project training --locked"
+            "Install isolated training dependencies or set CHATTWIN_TRAINING_PYTHON to their absolute interpreter path"
         )
     environment = worker_environment()
     if model_server:
@@ -243,15 +243,27 @@ def training_process(module, arguments, *, model_server=False):
 
 
 @train_app.command("prepare")
-def train_prepare(dataset: Path, output: Path, spec: Path):
+def train_prepare(dataset: Path, output: Path, spec: Path, profile: str = "reference"):
     from chattwin.training.spec import prepare_spec
 
-    prepared = prepare_spec(dataset, output)
+    if profile not in {"reference", "rtx4090-dry-run"}:
+        raise typer.BadParameter("profile must be reference or rtx4090-dry-run")
+    prepared = prepare_spec(
+        dataset, output, profile="rtx4090-dry-run" if profile == "rtx4090-dry-run" else "reference"
+    )
     spec.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     with spec.open("x") as handle:
         spec.chmod(0o600)
         handle.write(prepared.model_dump_json(indent=2))
     typer.echo(f"Training spec created: {spec}; hardware still UNVERIFIED")
+
+
+@train_app.command("doctor")
+def train_doctor():
+    """Inspect the isolated worker and visible GPUs without loading or downloading a model."""
+    from chattwin.jobs.environment import inspect_environment
+
+    typer.echo(inspect_environment().model_dump_json(indent=2))
 
 
 @train_app.command("run")

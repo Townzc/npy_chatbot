@@ -1,4 +1,42 @@
 {
+  "$defs": {
+    "CudaDevice": {
+      "properties": {
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "total_memory_bytes": {
+          "title": "Total Memory Bytes",
+          "type": "integer"
+        },
+        "free_memory_bytes": {
+          "title": "Free Memory Bytes",
+          "type": "integer"
+        },
+        "compute_capability": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Compute Capability",
+          "type": "array"
+        }
+      },
+      "required": [
+        "index",
+        "name",
+        "total_memory_bytes",
+        "free_memory_bytes",
+        "compute_capability"
+      ],
+      "title": "CudaDevice",
+      "type": "object"
+    }
+  },
   "properties": {
     "python_available": {
       "title": "Python Available",
@@ -40,6 +78,37 @@
       "default": false,
       "title": "Cuda Bf16 Supported",
       "type": "boolean"
+    },
+    "cuda_runtime": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cuda Runtime"
+    },
+    "cuda_devices": {
+      "items": {
+        "$ref": "#/$defs/CudaDevice"
+      },
+      "title": "Cuda Devices",
+      "type": "array"
+    },
+    "active_cuda_device": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Active Cuda Device"
     },
     "supports_reference_training": {
       "default": false,

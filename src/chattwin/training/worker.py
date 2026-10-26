@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import importlib.metadata
 import json
@@ -21,6 +22,7 @@ from filelock import FileLock
 
 from chattwin.runtime_paths import training_code_hash, training_lock_path
 
+from .hardware import inspect_cuda
 from .masking import encode_target, pad_batch
 from .spec import (
     QWEN_REVISION,
@@ -102,7 +104,7 @@ def load_base(spec: TrainingSpec) -> tuple[Any, Any, Any]:
     if (
         spec.precision == "bfloat16"
         and spec.device == "cuda"
-        and not torch.cuda.is_bf16_supported()
+        and not torch.cuda.is_bf16_supported(including_emulation=False)
     ):
         raise ValueError("CUDA device does not support bf16")
     tokenizer = auto_tokenizer.from_pretrained(
@@ -163,6 +165,7 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
     started = time.time()
     cancelled = False
     old_handlers: dict[int, Any] = {}
+    torch = None
     status: dict[str, Any] = {
         "status": "validating",
         "pid": os.getpid(),
@@ -197,11 +200,15 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
         if is_cancelled():
             update(status="cancelled")
             return status
+        torch, *_ = _imports()
+        hardware = inspect_cuda(torch)
+        write_json(work / "hardware.json", hardware)
+        if spec.device == "cuda" and hardware["cuda_available"]:
+            torch.cuda.reset_peak_memory_stats()
         torch, model, tokenizer = load_base(spec)
         torch.manual_seed(spec.seed)
         if spec.device == "cuda":
             torch.cuda.manual_seed_all(spec.seed)
-            torch.cuda.reset_peak_memory_stats()
         examples = [
             json.loads(line)
             for line in (spec.dataset_path / "train.jsonl").read_text().splitlines()
@@ -231,6 +238,13 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
             ),
         )
         model.config.use_cache = False
+        if spec.gradient_checkpointing:
+            # Non-reentrant checkpointing supports frozen base/embedding inputs.
+            model.gradient_checkpointing_enable(
+                gradient_checkpointing_kwargs={"use_reentrant": False}
+            )
+            if not model.is_gradient_checkpointing:
+                raise ValueError("model did not enable gradient checkpointing")
         trainable = {name: param for name, param in model.named_parameters() if param.requires_grad}
         initial = {name: value.detach().cpu().clone() for name, value in trainable.items()}
         if not trainable:
@@ -271,6 +285,7 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
                         raise ValueError("training loss became non-finite")
                     losses.append(value)
                     scaler.scale(loss / len(group)).backward()
+                    del loss, tensors
                 if is_cancelled():
                     break
                 scaler.unscale_(optimizer)
@@ -306,7 +321,13 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
             "training_pid": os.getpid(),
             "platform": platform.platform(),
             "dependencies": _versions(),
+            "hardware": hardware,
+            "gradient_checkpointing": spec.gradient_checkpointing,
+            "distributed_training": False,
             "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated()
+            if spec.device == "cuda"
+            else None,
+            "peak_cuda_reserved_bytes": torch.cuda.max_memory_reserved()
             if spec.device == "cuda"
             else None,
             "quality_evaluation": "UNVERIFIED; loss and reload smoke do not establish chat quality",
@@ -341,7 +362,8 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
         write_json(work / "manifest.json", manifest)
         write_json(work / "reload_prompt.json", accepted[0]["messages"][:-1])
         # Free GPU model before independent reload to avoid doubling peak VRAM.
-        del model, optimizer, trainable, initial
+        del model, optimizer, trainable, initial, scaler
+        gc.collect()
         if spec.device == "cuda":
             torch.cuda.empty_cache()
         process = subprocess.Popen(
@@ -384,8 +406,16 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
         )
         return {"status": status, "manifest": manifest, "report": report}
     except BaseException as exc:
+        memory = {}
+        if torch is not None and spec.device == "cuda" and torch.cuda.is_available():
+            memory = {
+                "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(),
+                "peak_cuda_reserved_bytes": torch.cuda.max_memory_reserved(),
+            }
         update(
-            status="cancelled" if is_cancelled() else "failed", error=f"{type(exc).__name__}: {exc}"
+            status="cancelled" if is_cancelled() else "failed",
+            error=f"{type(exc).__name__}: {exc}",
+            **memory,
         )
         raise
     finally:
@@ -507,12 +537,13 @@ def main() -> None:
     prepare.add_argument("--dataset", type=Path, required=True)
     prepare.add_argument("--output", type=Path, required=True)
     prepare.add_argument("--spec", type=Path, required=True)
+    prepare.add_argument("--profile", choices=("reference", "rtx4090-dry-run"), default="reference")
     sub.add_parser("tokenizer-check")
     args = parser.parse_args()
     if args.command == "train":
         result = train(TrainingSpec.model_validate_json(args.spec.read_text()))
     elif args.command == "prepare":
-        spec = prepare_spec(args.dataset, args.output)
+        spec = prepare_spec(args.dataset, args.output, profile=args.profile)
         write_json(args.spec, spec.model_dump(mode="json"))
         result = {"spec": str(args.spec), "status": "prepared", "hardware": "UNVERIFIED"}
     elif args.command == "tokenizer-check":

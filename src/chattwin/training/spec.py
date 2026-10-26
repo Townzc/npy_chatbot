@@ -69,6 +69,7 @@ class TrainingSpec(BaseModel):
     max_sequence_length: int = Field(default=1024, ge=16, le=32768)
     batch_size: int = Field(default=1, ge=1, le=128)
     gradient_accumulation: int = Field(default=4, ge=1, le=1024)
+    gradient_checkpointing: bool = False
     learning_rate: float = Field(default=2e-4, gt=0, le=0.1)
     epochs: int = Field(default=1, ge=1, le=100)
     max_steps: int = Field(default=100, ge=1, le=1000000)
@@ -149,7 +150,12 @@ def validate_scope(manifest: dict[str, Any], persona_id: str, relationship_id: s
         raise ValueError("adapter scope mismatch")
 
 
-def prepare_spec(dataset_path: Path, output_path: Path) -> TrainingSpec:
+def prepare_spec(
+    dataset_path: Path,
+    output_path: Path,
+    *,
+    profile: Literal["reference", "rtx4090-dry-run"] = "reference",
+) -> TrainingSpec:
     """Prepare the pinned Qwen candidate. This does not assert GPU compatibility."""
     manifest = json.loads((dataset_path.expanduser() / "manifest.json").read_text())
     lock = training_lock_path()
@@ -164,5 +170,19 @@ def prepare_spec(dataset_path: Path, output_path: Path) -> TrainingSpec:
         dependency_lock_hash=sha256_file(lock),
         code_version="source:" + training_code_hash(),
     )
+    if profile == "rtx4090-dry-run":
+        spec = TrainingSpec.model_validate(
+            spec.model_dump()
+            | {
+                "gradient_checkpointing": True,
+                "max_sequence_length": 512,
+                "batch_size": 1,
+                "gradient_accumulation": 4,
+                "max_steps": 2,
+                "epochs": 2,
+            }
+        )
+    elif profile != "reference":
+        raise ValueError("unknown training profile")
     validate_dataset(spec)
     return spec

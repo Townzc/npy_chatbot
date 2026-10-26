@@ -9,7 +9,7 @@ from chattwin.runtime_paths import training_python_path
 from chattwin.training.spec import QWEN_REVISION, QWEN_TEMPLATE_HASH
 from chattwin.training.worker import worker_environment
 
-from .models import TrainingEnvironment
+from .models import CudaDevice, TrainingEnvironment
 
 
 def training_python() -> Path:
@@ -21,7 +21,9 @@ import importlib.metadata, json, platform
 result = {'platform': platform.system(), 'python_version': platform.python_version()}
 try:
  import torch
- result.update(dependencies={n: importlib.metadata.version(n) for n in ('torch','transformers','peft','accelerate','safetensors')}, cuda_available=torch.cuda.is_available(), cuda_bf16_supported=bool(torch.cuda.is_available() and torch.cuda.is_bf16_supported()))
+ from chattwin.training.hardware import inspect_cuda
+ result.update(dependencies={n: importlib.metadata.version(n) for n in ('torch','transformers','peft','accelerate','safetensors')})
+ result.update(inspect_cuda(torch))
 except ImportError:
  result['dependency_error'] = True
 print(json.dumps(result))
@@ -74,6 +76,11 @@ def inspect_environment(python: Path | None = None) -> TrainingEnvironment:
     result.python_version = data.get("python_version")
     result.cuda_available = data.get("cuda_available", False)
     result.cuda_bf16_supported = data.get("cuda_bf16_supported", False)
+    result.cuda_runtime = data.get("cuda_runtime")
+    result.cuda_devices = [
+        CudaDevice.model_validate(device) for device in data.get("cuda_devices", [])
+    ]
+    result.active_cuda_device = data.get("active_cuda_device")
     result.tiny_available = result.dependencies_available
     result.supports_reference_training = (
         result.dependencies_available and result.cuda_available and result.platform == "Linux"

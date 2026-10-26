@@ -17,6 +17,7 @@ class TrainingJobRequest(BaseModel):
     max_sequence_length: int = Field(default=1024, ge=16, le=32768)
     batch_size: int = Field(default=1, ge=1, le=128)
     gradient_accumulation: int = Field(default=4, ge=1, le=1024)
+    gradient_checkpointing: bool = False
     learning_rate: float = Field(default=2e-4, gt=0, le=0.1)
     epochs: int = Field(default=1, ge=1, le=100)
     max_steps: int = Field(default=100, ge=1, le=1000000)
@@ -59,6 +60,14 @@ class JobLogs(BaseModel):
     raw_logs_exposed: Literal[False] = False
 
 
+class CudaDevice(BaseModel):
+    index: int
+    name: str
+    total_memory_bytes: int
+    free_memory_bytes: int
+    compute_capability: list[int]
+
+
 class TrainingEnvironment(BaseModel):
     python_available: bool
     dependencies_available: bool
@@ -67,6 +76,9 @@ class TrainingEnvironment(BaseModel):
     dependencies: dict[str, str] = Field(default_factory=dict)
     cuda_available: bool = False
     cuda_bf16_supported: bool = False
+    cuda_runtime: str | None = None
+    cuda_devices: list[CudaDevice] = Field(default_factory=list)
+    active_cuda_device: int | None = None
     supports_reference_training: bool = False
     tiny_available: bool = False
     blockers: list[str] = Field(default_factory=list)

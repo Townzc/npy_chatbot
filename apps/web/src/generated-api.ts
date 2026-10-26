@@ -942,6 +942,19 @@ export interface components {
              */
             mapping: string;
         };
+        /** CudaDevice */
+        CudaDevice: {
+            /** Index */
+            index: number;
+            /** Name */
+            name: string;
+            /** Total Memory Bytes */
+            total_memory_bytes: number;
+            /** Free Memory Bytes */
+            free_memory_bytes: number;
+            /** Compute Capability */
+            compute_capability: number[];
+        };
         /** DeleteInput */
         DeleteInput: {
             /** Impact Hash */
@@ -1349,6 +1362,12 @@ export interface components {
              * @default false
              */
             cuda_bf16_supported: boolean;
+            /** Cuda Runtime */
+            cuda_runtime?: string | null;
+            /** Cuda Devices */
+            cuda_devices?: components["schemas"]["CudaDevice"][];
+            /** Active Cuda Device */
+            active_cuda_device?: number | null;
             /**
              * Supports Reference Training
              * @default false
@@ -1416,6 +1435,11 @@ export interface components {
              * @default 4
              */
             gradient_accumulation: number;
+            /**
+             * Gradient Checkpointing
+             * @default false
+             */
+            gradient_checkpointing: boolean;
             /**
              * Learning Rate
              * @default 0.0002

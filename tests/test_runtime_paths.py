@@ -37,3 +37,28 @@ def test_training_interpreter_override_preserves_venv_symlink(tmp_path, monkeypa
     monkeypatch.setenv("CHATTWIN_TRAINING_PYTHON", "relative/python")
     with pytest.raises(ValueError, match="absolute"):
         training_python_path()
+
+
+def test_cli_worker_uses_explicit_interpreter_and_preserves_gpu_selection(tmp_path, monkeypatch):
+    import json
+
+    from typer.testing import CliRunner
+
+    from chattwin.cli import app
+
+    output = tmp_path / "invocation.json"
+    interpreter = tmp_path / "python"
+    interpreter.write_text(
+        "#!/usr/bin/env python3\nimport json,os,sys\n"
+        f"open({str(output)!r}, 'w').write(json.dumps({{'arguments':sys.argv[1:],'environment':dict(os.environ)}}))\n"
+    )
+    interpreter.chmod(0o700)
+    monkeypatch.setenv("CHATTWIN_TRAINING_PYTHON", str(interpreter))
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "1")
+    monkeypatch.setenv("QQ_ACCESS_TOKEN", "synthetic-private-key")
+    result = CliRunner().invoke(app, ["train", "run", str(tmp_path / "spec.json")])
+    assert result.exit_code == 0, result.output
+    invocation = json.loads(output.read_text())
+    assert invocation["arguments"][:3] == ["-m", "chattwin.training.worker", "train"]
+    assert invocation["environment"]["CUDA_VISIBLE_DEVICES"] == "1"
+    assert "QQ_ACCESS_TOKEN" not in invocation["environment"]

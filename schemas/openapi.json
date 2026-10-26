@@ -2900,6 +2900,42 @@
         ],
         "title": "Body_run_import_api_v1_imports_post"
       },
+      "CudaDevice": {
+        "properties": {
+          "index": {
+            "type": "integer",
+            "title": "Index"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "total_memory_bytes": {
+            "type": "integer",
+            "title": "Total Memory Bytes"
+          },
+          "free_memory_bytes": {
+            "type": "integer",
+            "title": "Free Memory Bytes"
+          },
+          "compute_capability": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Compute Capability"
+          }
+        },
+        "type": "object",
+        "required": [
+          "index",
+          "name",
+          "total_memory_bytes",
+          "free_memory_bytes",
+          "compute_capability"
+        ],
+        "title": "CudaDevice"
+      },
       "DeleteInput": {
         "properties": {
           "impact_hash": {
@@ -3930,6 +3966,35 @@
             "title": "Cuda Bf16 Supported",
             "default": false
           },
+          "cuda_runtime": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuda Runtime"
+          },
+          "cuda_devices": {
+            "items": {
+              "$ref": "#/components/schemas/CudaDevice"
+            },
+            "type": "array",
+            "title": "Cuda Devices"
+          },
+          "active_cuda_device": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Cuda Device"
+          },
           "supports_reference_training": {
             "type": "boolean",
             "title": "Supports Reference Training",
@@ -4039,6 +4104,11 @@
             "minimum": 1.0,
             "title": "Gradient Accumulation",
             "default": 4
+          },
+          "gradient_checkpointing": {
+            "type": "boolean",
+            "title": "Gradient Checkpointing",
+            "default": false
           },
           "learning_rate": {
             "type": "number",

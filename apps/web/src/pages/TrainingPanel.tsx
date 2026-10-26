@@ -43,6 +43,7 @@ const initialConfig: TrainingConfig = {
   max_sequence_length: 1024,
   batch_size: 1,
   gradient_accumulation: 4,
+  gradient_checkpointing: false,
   learning_rate: 0.0002,
   epochs: 1,
   max_steps: 100,
@@ -235,7 +236,10 @@ export default function TrainingPanel({
     }
   }
   function numberField(
-    key: Exclude<keyof TrainingConfig, 'precision' | 'allow_model_download'>,
+    key: Exclude<
+      keyof TrainingConfig,
+      'precision' | 'allow_model_download' | 'gradient_checkpointing'
+    >,
     label: string,
     minimum: number,
     maximum: number,
@@ -434,6 +438,14 @@ export default function TrainingPanel({
               <dd>{environment?.cuda_bf16_supported ? '可用' : '未通过'}</dd>
             </div>
           </dl>
+          {environment?.cuda_devices?.map((device) => (
+            <p className="field-hint" key={device.index}>
+              GPU {device.index} · {device.name} · 空闲{' '}
+              {(device.free_memory_bytes / 1024 ** 3).toFixed(1)} /{' '}
+              {(device.total_memory_bytes / 1024 ** 3).toFixed(1)} GiB
+              {device.index === environment.active_cuda_device ? ' · 当前训练用卡' : ''}
+            </p>
+          ))}
           {environment?.blockers.map((blocker) => (
             <p className="warning" key={blocker}>
               {blocker}
@@ -492,6 +504,44 @@ export default function TrainingPanel({
             {numberField('seed', '随机种子', 0, 2147483647)}
           </div>
         </details>
+        <div className="action-row">
+          <button
+            className="button secondary small-button"
+            onClick={() => {
+              setConfig((previous) => ({
+                ...previous,
+                precision: 'bfloat16',
+                rank: 8,
+                alpha: 16,
+                max_sequence_length: 512,
+                batch_size: 1,
+                gradient_accumulation: 4,
+                gradient_checkpointing: true,
+                max_steps: 2,
+                epochs: 2,
+              }));
+              setNotice(
+                '已填入单卡 4090 的 2 步试运行配置，尚未开始训练。实际显存需求以训练报告为准。',
+              );
+            }}
+          >
+            使用 4090 试运行配置
+          </button>
+          <span className="field-hint">一次作业使用一张 GPU；多张卡的显存不会自动合并。</span>
+        </div>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={config.gradient_checkpointing}
+            onChange={(event) =>
+              setConfig((previous) => ({
+                ...previous,
+                gradient_checkpointing: event.target.checked,
+              }))
+            }
+          />
+          <span>启用梯度检查点：减少训练显存占用，会增加计算时间。</span>
+        </label>
         <label className="checkbox-label">
           <input
             type="checkbox"

@@ -165,6 +165,7 @@ def test_private_bundle_contains_exact_dataset_and_portable_worker_without_crede
     from chattwin.runtime_paths import training_code_hash
 
     store, request = system
+    request = request.model_copy(update={"gradient_checkpointing": True})
     (store.root / "owner-token").write_text("synthetic-super-secret-token")
     manager = JobManager(store)
     archive, manifest = create_training_bundle(manager, request)
@@ -187,6 +188,7 @@ def test_private_bundle_contains_exact_dataset_and_portable_worker_without_crede
             assert hashlib.sha256(content).hexdigest() == info["sha256"]
             assert b"synthetic-super-secret-token" not in content
         compile(bundle.read("run_training.py"), "run_training.py", "exec")
+        assert json.loads(bundle.read("configuration.json"))["gradient_checkpointing"] is True
         bundle.extractall(tmp_path / "exported")
     assert manifest["training_code_version"] == "source:" + training_code_hash()
     extracted = tmp_path / "exported/src/chattwin"
@@ -196,6 +198,23 @@ def test_private_bundle_contains_exact_dataset_and_portable_worker_without_crede
     assert training_code_hash(extracted) != training_code_hash()
     assert manifest["credentials_included"] is False
     assert manifest["contains_private_training_data"] is True
+
+
+def test_4090_profile_keeps_frozen_data_scope_and_requires_real_cuda(system, tmp_path):
+    from chattwin.training.spec import prepare_spec
+
+    store, request = system
+    spec = prepare_spec(
+        store.root / "datasets" / request.dataset_id,
+        tmp_path / "gpu-job",
+        profile="rtx4090-dry-run",
+    )
+    assert spec.gradient_checkpointing and spec.max_steps == 2
+    assert spec.max_sequence_length == 512 and spec.batch_size == 1
+    assert spec.persona_id == request.persona_id and spec.relationship_id == request.relationship_id
+    assert spec.device == "cuda" and not spec.synthetic_smoke
+    with pytest.raises(ValueError, match="unknown training profile"):
+        prepare_spec(spec.dataset_path, spec.output_path, profile="invented")
 
 
 def test_router_auth_export_and_scope_contract(system, monkeypatch, tmp_path):

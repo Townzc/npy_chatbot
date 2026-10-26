@@ -6,7 +6,7 @@
 |---|---|---|---|
 | T01 范围/ADR | DONE | ADR、模块边界、上游许可记录 | 用户后续授权源码推送；未授权发布 release/模型或代发私聊 |
 | T02 doctor/QQ探针 | PARTIAL；实机 BLOCKED | doctor、只读身份/版本/status探针、preflight | 无可连接桥、账号/指定会话配置；未真实发送 |
-| T03 训练预检 | DONE（预检） | 固定 Qwen revision/template/依赖、实际 tokenizer；GPU环境API | 本机 Darwin 无 CUDA；48GB方案仍需实际显存 dry run |
+| T03 训练预检 | DONE（预检） | 固定 Qwen revision/template/依赖、实际 tokenizer；逐卡显存API/CLI、4090单卡2步配置 | 用户可提供两张4090，待Linux/SSH信息及实际显存dry run；无需先租卡 |
 | T04 工程/CI | DONE（本地）；CI BLOCKED | 两套Python锁、前端锁、lint/type/test/build/wheel | GitHub OAuth缺workflow权限；CI保留为ci/模板，未远程运行 |
 | T05 领域契约 | PARTIAL | 消息/控制/产物/部署/作业/短会话/预算OpenAPI和生成TS | 未承诺所有附件类型；保持不支持类型显式表示 |
 | T06 存储迁移 | DONE（当前） | 冻结0001、增量0002部署表；旧备份升级测试 | 新版向旧版不破坏性降级 |
@@ -24,7 +24,7 @@
 | T18 唯一outbox | DONE（工程）；实机 BLOCKED | 最终发送屏障、账号锁、unknown只读/人工审计、不重发、冲突重开unknown | 人工证据为本人声明；真实平台核对能力未验证 |
 | T19 OneBot | PARTIAL；实机 BLOCKED | 真WS客户端、身份核验、选定私聊过滤、防回放/合并、文本段、回执 | 无真实桥；自身echo先到会保守暂停；手机本人发言识别未验收 |
 | T20 移动接管UI | DONE（浏览器工程） | 390×844无横溢、固定接管、通知/unknown状态 | 真手机蜂窝网与QQ未测；不宣称v0.2已验收 |
-| T21 LoRA worker | PARTIAL | 真AdamW/PEFT更新/保存/新进程重载；源码/数据/依赖pin；取消/中断 | 13项独立训练测试；仍需正式Qwen Linux/CUDA训练，无优化器续训 |
+| T21 LoRA worker | PARTIAL | 真AdamW/PEFT更新/保存/新进程重载；源码/数据/依赖pin；取消/中断；非重入梯度检查点与峰值显存报告 | 16项训练/硬件契约测试；仍需正式Qwen Linux/CUDA训练；无多卡或优化器续训 |
 | T22 产物/推理 | DONE（本地工程） | artifact校验/登记、认证base+adapter实际推理、scope/模型hash、部署切换/回滚 | tiny证明执行；Qwen部署与质量未验收；网页未跑有效LoRA成功路径 |
 | T23 训练管理 | DONE（本地工程） | SQLite持久队列/心跳/取消/锁/日志、网页、GPU预检、独立训练包 | 真tiny作业和wheel导出已测；Mac正式任务明确CUDA失败 |
 | T24 正式训练评测 | PARTIAL；GPU/数据 BLOCKED | 真HTTP B0–B3 runner、版本验证、未来/heldout隔离、blind/score工具 | 缺Qwen CUDA训练、足量确认数据和独立人工质量评分；不发v0.3 |
@@ -36,5 +36,7 @@
 | T30 RC审查 | PARTIAL；v1 BLOCKED | release-readiness明确每项支持声明/限制 | 只推送源码；不创建release、不称T01–T30全部完成 |
 
 最终本地检查：`uv run pytest -q` 125 passed / 1 skipped（未安装可选torch的核心环境跳过runtime训练）；独立training环境13 passed；Ruff、mypy、生产构建通过。详见[第二批报告](evidence/management-milestone-2026-10-26.md)及[浏览器证据](evidence/web-management-2026-10-26.md)。
+
+4090/QQ 接入准备增量：核心 129 passed / 1 skipped，独立训练与硬件契约 16 passed；Ruff 81文件、mypy 60源文件、生产构建及网页预设→实际下载训练包通过。见 [本批证据](evidence/gpu-and-qq-preparation-2026-10-26.md)、[GPU 步骤](gpu-4090.md)、[QQ/QCE 调研与步骤](qq-setup-research.md)。已知GPU资源不等于已连接或完成T24，QCE上游发布包也不等于已验收用户导出。
 
 下一批：提供Linux/CUDA后先以虚构数据做Qwen显存dry run/真实训练/认证部署，随后足量确认数据与人工B0–B3；提供桥后先只读探针，再由用户自行验证指定原私聊；并行真手机TLS/休眠、实际模型恢复、≥7天试运行和依赖审查。当前内部代码缺口与外部未验收不混写。

@@ -132,6 +132,11 @@
       "title": "Gradient Accumulation",
       "type": "integer"
     },
+    "gradient_checkpointing": {
+      "default": false,
+      "title": "Gradient Checkpointing",
+      "type": "boolean"
+    },
     "learning_rate": {
       "default": 0.0002,
       "exclusiveMinimum": 0,

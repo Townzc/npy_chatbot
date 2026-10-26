@@ -58,6 +58,8 @@ uv run --project training --locked python -m chattwin.training.smoke
 
 正式训练固定 `Qwen/Qwen3-4B-Instruct-2507` revision、tokenizer/template 和数据集 hash；需用户提供 Linux/CUDA 环境。完整步骤、产物认证推理、取消及依赖隔离见 [docs/training.md](docs/training.md)。不自动租用 GPU、上传训练数据或发布模型。
 
+已有两张 4090 可先按 [单卡 Qwen 实测准备](docs/gpu-4090.md) 使用其中一张：新增 2 步试运行预设、梯度检查点和显存报告，第二张可单独跑推理。尚未取得该主机连接，不能声称已通过 4090 验收。没有桥或可读导出时，按 [QQ 接入与导出步骤](docs/qq-setup-research.md) 准备环境。
+
 CLI 同时提供 `chattwin train prepare/run/cancel` 和 `chattwin model serve`；`train cancel` 的参数是 TrainingSpec 路径。网页已有持久作业队列、预检/进度/日志/取消、私有训练包下载、产物登记和模型版本测试/切换/回滚。训练包已从隔离 wheel 安装中导出，解包后真实 tiny LoRA 更新与新进程加载通过。详见 [jobs.md](docs/jobs.md) 与 [evaluation.md](docs/evaluation.md)。
 
 ## QQ 原私聊

@@ -88,6 +88,8 @@ JOB_ID/
 
 正式训练前应在目标硬件做小步数 dry run，记录 precision、sequence length、batch、accumulation、显卡驱动与 CUDA，以及报告中的峰值分配显存。当前没有显存容量保证。CUDA 或 bf16 不可用、dataset/template/lock hash 不匹配时失败，不伪装为成功。
 
+两张 4090 的准备步骤见 [gpu-4090.md](gpu-4090.md)：新增单卡 2 步预设、可选非重入梯度检查点、每卡显存预检、分配/保留峰值报告以及纯虚构数据准备脚本。当前仍不实现多卡训练；两张卡可以分别用于训练和独立推理。`uv run chattwin train doctor` 不下载模型。CLI 与管理作业都尊重 `CHATTWIN_TRAINING_PYTHON` 和 `CUDA_VISIBLE_DEVICES`。
+
 ## 私有 adapter 推理端点
 
 仅加载 status 为 succeeded、manifest 文件 hash 完整且 scope 匹配的产物。由用户给模型服务单独配置至少 32 字符随机 token，不与 QQ 或控制页凭证共用。环境变量名为 `CHATTWIN_MODEL_TOKEN`；不把值提交到 Git 或写入命令历史示例。
