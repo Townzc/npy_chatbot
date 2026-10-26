@@ -813,6 +813,10 @@ export interface components {
              * @default false
              */
             weights_forgotten: boolean;
+            /** Deployment Status */
+            deployment_status?: string | null;
+            /** Restore Reason */
+            restore_reason?: string | null;
         };
         /** ArtifactRegistration */
         ArtifactRegistration: {

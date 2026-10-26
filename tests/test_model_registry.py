@@ -193,3 +193,52 @@ async def test_model_switch_cannot_skip_unresolved_notice(tmp_path):
     assert len(store.rows(outbox)) == 1
     await coordinator.close()
     store.close()
+
+
+def test_restored_artifact_catalog_remains_readable_and_unavailable(
+    registry_client, tmp_path_factory
+):
+    from chattwin.domain import now, uid
+    from chattwin.models.registry import ArtifactRecord
+    from chattwin.ops import create_backup, restore_backup
+    from chattwin.storage import artifacts
+
+    app, _, scope, _ = registry_client
+    # Metadata-only fixture exercises restore schema; it is never accepted as a
+    # trained artifact and does not provide training evidence.
+    artifact = ArtifactRecord(
+        **scope,
+        id=uid(),
+        artifact_path="/nonexistent/synthetic-model",
+        status="unavailable",
+        manifest={},
+        manifest_hash="0" * 64,
+        created_at=now().isoformat(),
+    )
+    with app.state.store.transaction() as conn:
+        conn.execute(
+            artifacts.insert().values(id=artifact.id, **scope, payload=artifact.model_dump())
+        )
+    work = tmp_path_factory.mktemp("restore-catalog")
+    create_backup(app.state.store, work / "backup")
+    restore_backup(work / "backup", work / "restored")
+    with TestClient(
+        create_app(work / "restored", token="synthetic-restored"),
+        headers={"Authorization": "Bearer synthetic-restored"},
+    ) as client:
+        response = client.get("/api/v1/model-artifacts", params=scope)
+        assert response.status_code == 200, response.text
+        item = response.json()[0]
+        assert item["status"] == "unavailable" and item["restore_requires_verification"]
+        assert item["restore_reason"] and item["deployment_status"] == "unavailable"
+        denied = client.post(
+            "/api/v1/model-deployments",
+            json={
+                **scope,
+                "artifact_id": artifact.id,
+                "endpoint": "http://testserver/v1",
+                "model": "chattwin-adapter",
+                "label": "restored",
+            },
+        )
+        assert denied.status_code == 409

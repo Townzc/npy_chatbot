@@ -21,7 +21,7 @@
 
 | 命令/检查 | 实际结果 |
 |---|---|
-| `uv run pytest -q` | 124 passed、1 skipped；核心环境无可选torch，训练runtime单独验证 |
+| `uv run pytest -q` | 125 passed、1 skipped；核心环境无可选torch，训练runtime单独验证 |
 | training环境training_contracts/runtime | 13 passed；真实参数更新、新进程重载、base与adapter认证推理、scope拒绝、源码漂移拒绝 |
 | `ruff check` / `ruff format --check` | 通过，78文件格式一致 |
 | `mypy src/chattwin` | 59源码文件通过 |
@@ -29,6 +29,7 @@
 | `sh scripts/build_web.sh` | OpenAPI/TS严格检查/Vite通过，42模块，JS279.53kB/gzip86.65kB |
 | 新wheel隔离安装 | 代码确来自site-packages，demo→冻结数据集→API训练ZIP下载成功 |
 | 导出包独立环境 | 20文件hash验证；独立`uv sync --project training --locked`及真实tiny训练成功 |
+| 代码版本回滚 | 旧0e3f5e9/0001备份→新7602922/0002升级→旧应用从升级前备份恢复；4消息/4用途/1数据集hash不变，AI暂停、绑定归档、发送0 |
 | launchd定义 | 实际生成并通过`plutil -lint`；未安装到用户登录服务 |
 
 独立包tiny执行记录：8次optimizer step，最大参数变化0.160826，训练PID88378与加载PID88483不同。源码pin随后加入并再次用独立训练13测试核对；最终源码/wheel训练指纹一致。上述数值只证明执行，不是个人模型质量。
@@ -45,6 +46,8 @@
 
 详见[浏览器管理验收](web-management-2026-10-26.md)。登录/导入/类型隔离/记忆/风格/试聊/接管/预算/备份/删除/unknown核对均走实际API和SQLite。真实worker任务正确失败于`CUDA_UNAVAILABLE`，没有下载模型或声称训练成功。所有四个测试binding最终HUMAN。
 
-剩余：QCE真实样本、正式Qwen CUDA/足量确认数据/100完整人工场景、QQ原私聊/手机离网/休眠组合、≥7天运行、应用发行版恢复与依赖审查。详见[任务状态](../tasks.md)和[交付审查](../release-readiness.md)。
+剩余：QCE真实样本、正式Qwen CUDA/足量确认数据/100完整人工场景、QQ原私聊/手机离网/休眠组合、≥7天运行、实际私人模型恢复与依赖审查。详见[任务状态](../tasks.md)和[交付审查](../release-readiness.md)。
 
 GPU候选：Runpod官方页面于2026-10-26列A40 48GB约$0.59/小时；4小时算力约$2.36，另计存储，实际报价可能变动。已建议首轮预算上限$10、仅用虚构数据，等待用户提供或自行租用环境。没有自动采购或上传。[官方价格](https://www.runpod.io/pricing)
+
+补充恢复审查修复：ArtifactRecord显式接纳恢复原因/部署不可用字段，新增真实备份恢复后的API目录读取与拒绝启用回归。指定代码版本的独立环境回滚演练详见[回滚证据](application-rollback-2026-10-26.md)。

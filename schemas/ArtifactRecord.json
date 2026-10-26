@@ -67,6 +67,30 @@
       "default": false,
       "title": "Weights Forgotten",
       "type": "boolean"
+    },
+    "deployment_status": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deployment Status"
+    },
+    "restore_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Restore Reason"
     }
   },
   "required": [

@@ -30,11 +30,11 @@
 | T24 正式训练评测 | PARTIAL；GPU/数据 BLOCKED | 真HTTP B0–B3 runner、版本验证、未来/heldout隔离、blind/score工具 | 缺Qwen CUDA训练、足量确认数据和独立人工质量评分；不发v0.3 |
 | T25 数据/诊断 | DONE（本地工程） | 删除影响hash确认、训练/模型/部署/评测撤销、文件清理回滚、预算、脱敏诊断 | 已发HTTP不能撤回；删除等待源租约完成，接管不等网络；旧备份/权重需另处理 |
 | T26 安装/手机 | PARTIAL | 隔离wheel安装实测、短会话、launchd生成+plutil通过、私网TLS操作文档 | 未安装登录项；休眠/唤醒/真手机离网未测 |
-| T27 备份/恢复/回滚 | PARTIAL | 一致快照、UI下载、旧0001恢复升级0002、撤销源不复活、模型回滚 | 权重/原文件/凭证排除；完整旧应用版本回滚和实际模型重部署未验收 |
-| T28 独立验收 | PARTIAL；试运行 BLOCKED | 多代理独立审查与竞态修复；124核心测试、13训练测试、浏览器证据 | 未满100完整人工质量场景、真实≥7天和手机/QQ组合 |
+| T27 备份/恢复/回滚 | DONE（本地工程） | 一致快照、UI下载、0001→0002升级、独立旧应用+升级前备份实际回滚、撤销源不复活、模型指针回滚 | 权重/原文件/凭证排除；实际私人模型重部署仍需环境 |
+| T28 独立验收 | PARTIAL；试运行 BLOCKED | 多代理独立审查与竞态修复；125核心测试、13训练测试、浏览器证据 | 未满100完整人工质量场景、真实≥7天和手机/QQ组合 |
 | T29 发布准备 | PARTIAL | README/贡献/许可证/隐私扫描、225组件锁清单SBOM、合成样例与证据 | 各组件完整许可/漏洞复审、Linux安装矩阵及T28仍缺 |
 | T30 RC审查 | PARTIAL；v1 BLOCKED | release-readiness明确每项支持声明/限制 | 只推送源码；不创建release、不称T01–T30全部完成 |
 
-最终本地检查：`uv run pytest -q` 124 passed / 1 skipped（未安装可选torch的核心环境跳过runtime训练）；独立training环境13 passed；Ruff、mypy、生产构建通过。详见[第二批报告](evidence/management-milestone-2026-10-26.md)及[浏览器证据](evidence/web-management-2026-10-26.md)。
+最终本地检查：`uv run pytest -q` 125 passed / 1 skipped（未安装可选torch的核心环境跳过runtime训练）；独立training环境13 passed；Ruff、mypy、生产构建通过。详见[第二批报告](evidence/management-milestone-2026-10-26.md)及[浏览器证据](evidence/web-management-2026-10-26.md)。
 
-下一批：提供Linux/CUDA后先以虚构数据做Qwen显存dry run/真实训练/认证部署，随后足量确认数据与人工B0–B3；提供桥后先只读探针，再由用户自行验证指定原私聊；并行真手机TLS/休眠、应用版本恢复、≥7天试运行和依赖审查。当前内部代码缺口与外部未验收不混写。
+下一批：提供Linux/CUDA后先以虚构数据做Qwen显存dry run/真实训练/认证部署，随后足量确认数据与人工B0–B3；提供桥后先只读探针，再由用户自行验证指定原私聊；并行真手机TLS/休眠、实际模型恢复、≥7天试运行和依赖审查。当前内部代码缺口与外部未验收不混写。

@@ -41,6 +41,8 @@ class ArtifactRecord(Scope):
     revoked_reason: str | None = None
     restore_requires_verification: bool = False
     weights_forgotten: bool = False
+    deployment_status: str | None = None
+    restore_reason: str | None = None
 
 
 class DeploymentInput(Scope):

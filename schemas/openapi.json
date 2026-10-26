@@ -2609,6 +2609,28 @@
             "type": "boolean",
             "title": "Weights Forgotten",
             "default": false
+          },
+          "deployment_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment Status"
+          },
+          "restore_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restore Reason"
           }
         },
         "additionalProperties": false,
