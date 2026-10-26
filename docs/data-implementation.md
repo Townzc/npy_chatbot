@@ -53,7 +53,7 @@ CSV 默认列：sender_id、occurred_at、text、conversation，message_id/sende
 
 `uv run pytest tests/test_data.py -q`：13 passed。覆盖坏行事务回滚、CSV BOM/换行/同秒连发、秒/毫秒/DST、未知媒体/群聊、CSV 与规范格式缺 kind 不授予关系用途、导出者与训练目标不同、规范格式权限不可信、重复导入、关系隔离/记忆删除、冻结哈希和 split 无重叠、测试来源不进风格/记忆。`uv run mypy` 数据模块通过；Ruff 通过。
 
-对用户提供的 chat_record **仅做本地格式元数据检查**：8 个无扩展名文件，合计 146,747,392 bytes；未识别为 JSON/CSV/SQLite/ZIP/gzip。没有输出文件名、账号、昵称或正文，没有复制入 Git。不能把未知容器当作已支持的导出；需要版本明确的 QCE/ChatLab/CSV 导出文件。
+对用户提供的 chat_record **仅做本地格式元数据检查**：8 个无扩展名文件，合计 146,747,392 bytes；未识别为 JSON/CSV/SQLite/ZIP/gzip。2026-10-26 用户确认使用 QQ“聊天记录管理 → 备份聊天记录到电脑”，故来源已确认，内部结构仍未解析。没有输出文件名、账号、昵称或正文，没有复制入 Git。不能把备份容器当作已支持的导出；需要核对电脑端可见历史并取得版本明确的 QCE/ChatLab/CSV，见 [QQ 步骤](qq-setup-research.md)。
 
 T09：PARTIAL（单JSON解析器和固定源码契约的虚构fixture已验证，真实导出待验收）。T10/T11/T12：已有上述虚构工程测试、显式身份重映射与 sidecar 验证；真实导出兼容与人工抽样核对仍未验收。10 万条合成 CSV 的预览/导入性能已测，见下文。T13：数据构建已实现，tokenizer mask/模型训练验收由训练线维护；短数据不形成有效质量评测。T14/T25：风格版本确认编辑、记忆纠正、来源删除传播到 adapter/部署/评测已实现，详见数据管理文档。原始文件未托管复制；数据库留来源哈希。未知历史缺口无法推断。
 

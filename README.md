@@ -37,7 +37,7 @@ uv run chattwin serve
 | QCE 单文件 JSON | 参考 v6.3.2 的导出核心 0.1.0 schema；解析/身份/数据集与网页合成验证通过，真实导出及分块 JSONL 未验收；见[兼容边界](docs/qce-compatibility.md) |
 | 手机数据库/备份容器 | 不支持自动解密、提取或假装导入 |
 
-本机 `chat_record` 检查到 8 个无扩展名、未识别格式的容器，约 140 MiB。检查仅输出格式和数量元数据，未把私聊正文放进开发上下文；需要先得到明确的 ChatLab、CSV、规范 JSONL 或版本明确的 QCE 导出。
+本机 `chat_record` 检查到 8 个无扩展名容器，约 140 MiB；用户已确认来自 QQ“聊天记录管理 → 备份聊天记录到电脑”。内部格式尚未解析，这些备份不等于 QCE JSON。检查仅输出格式和数量元数据，未把私聊正文放进开发上下文；按 [备份与可读导出的边界](docs/qq-setup-research.md) 核对电脑端可见历史，再取得支持的导出。
 
 网页上传上限为 20 MiB；大文件使用 CLI。成功解析提供的条目不代表历史完整。群聊和未知会话类型可保留预览，默认不进入双人关系的风格、记忆或训练。详见 [数据实现说明](docs/data-implementation.md)。
 
@@ -58,7 +58,7 @@ uv run --project training --locked python -m chattwin.training.smoke
 
 正式训练固定 `Qwen/Qwen3-4B-Instruct-2507` revision、tokenizer/template 和数据集 hash；需用户提供 Linux/CUDA 环境。完整步骤、产物认证推理、取消及依赖隔离见 [docs/training.md](docs/training.md)。不自动租用 GPU、上传训练数据或发布模型。
 
-已有两张 4090 可先按 [单卡 Qwen 实测准备](docs/gpu-4090.md) 使用其中一张：新增 2 步试运行预设、梯度检查点和显存报告，第二张可单独跑推理。尚未取得该主机连接，不能声称已通过 4090 验收。没有桥或可读导出时，按 [QQ 接入与导出步骤](docs/qq-setup-research.md) 准备环境。
+用户计划在 AutoDL 租卡，首轮只需按 [AutoDL 单卡步骤](docs/autodl.md) 准备 1 张 4090：已有 2 步试运行预设、梯度检查点、显存报告和安装前只读容量检查。尚未取得 SSH，不能声称已通过 4090 验收。没有桥或可读导出时，按 [QQ 接入与导出步骤](docs/qq-setup-research.md) 准备环境。
 
 CLI 同时提供 `chattwin train prepare/run/cancel` 和 `chattwin model serve`；`train cancel` 的参数是 TrainingSpec 路径。网页已有持久作业队列、预检/进度/日志/取消、私有训练包下载、产物登记和模型版本测试/切换/回滚。训练包已从隔离 wheel 安装中导出，解包后真实 tiny LoRA 更新与新进程加载通过。详见 [jobs.md](docs/jobs.md) 与 [evaluation.md](docs/evaluation.md)。
 
