@@ -1,0 +1,122 @@
+{
+  "plan_version": "2.0",
+  "date": "2026-10-26",
+  "contains_application_implementation": false,
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "size_bytes": 3353,
+      "sha256": "08d27ec275d9bb6f32d178c4be7d35b26b012041068406200a5741d80edeff68"
+    },
+    {
+      "path": "CODEX_START.md",
+      "size_bytes": 1525,
+      "sha256": "86b400ba1070a682a319ee69f2ddef5c8f9b08d0c743f91566ead142c11b4e7c"
+    },
+    {
+      "path": "DEVELOPMENT_PLAN.md",
+      "size_bytes": 65694,
+      "sha256": "04dd183cd0da1bb4ad1ced90a0a1e0a5b359612cb67f399afc86696a4a6d536e"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 2136,
+      "sha256": "95c797130af15bf111a79efa6826bd6dd14848a13184533b06f00d6bec528e5b"
+    },
+    {
+      "path": "docs/acceptance-checklist.md",
+      "size_bytes": 1838,
+      "sha256": "12bdf1322a58ae17cb7887e77f94bc871b346d34a24bf31076e6f698154f9ca9"
+    },
+    {
+      "path": "docs/architecture.md",
+      "size_bytes": 6354,
+      "sha256": "d7035e26eb5a6a2e6133ffb3c51293c28cbb7cc61aac83f06c745a655ffb9d8a"
+    },
+    {
+      "path": "docs/contracts.md",
+      "size_bytes": 10387,
+      "sha256": "ac63691a76a80ca1bbafce94232ac2a3443bba8ddaaf10f383020bdb55548d12"
+    },
+    {
+      "path": "docs/data-and-training.md",
+      "size_bytes": 10012,
+      "sha256": "5c31da652f234b5b9541d7338094867f708ae5d43e597db1635e9dda000ab6b7"
+    },
+    {
+      "path": "docs/evaluation.md",
+      "size_bytes": 3923,
+      "sha256": "fcd45410368ffeeb8587061880854a6ce5442e3cd68825b9203db614ef169dea"
+    },
+    {
+      "path": "docs/open-source-and-ops.md",
+      "size_bytes": 7699,
+      "sha256": "69c16da676eb219b0d072c77301550380141c29214f559289e4283ecf0395399"
+    },
+    {
+      "path": "docs/product.md",
+      "size_bytes": 6497,
+      "sha256": "3d9cfb8fbfd3d38ac4f060490b84e96bbfa264aa4bdf98827c8248bd2e1c9c0e"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "size_bytes": 2344,
+      "sha256": "8789bfaaa57f2c79fb4875be63a077bc31a62a83c7f20cb35d3d8688c77d1a81"
+    },
+    {
+      "path": "docs/runtime-and-modes.md",
+      "size_bytes": 10280,
+      "sha256": "1dece6ce1909d20624460cb75004739be3b37d17106438d6b1179c783b6014fc"
+    },
+    {
+      "path": "docs/sources.md",
+      "size_bytes": 2834,
+      "sha256": "d144cb82915684c422e8c0e035d166e1d1f7a1f89d15275ff4a43639c32f25fa"
+    },
+    {
+      "path": "docs/tasks.md",
+      "size_bytes": 4362,
+      "sha256": "e9de702dab01b3ca52709630396fe8877baa82d4152e3cfcad41c65104c3a19b"
+    },
+    {
+      "path": "examples/README.md",
+      "size_bytes": 971,
+      "sha256": "6c1a880220a12683f576363a13d7c28af1efdd7d71b047b236208e81ac833ae9"
+    },
+    {
+      "path": "examples/canonical_manifest.synthetic.json",
+      "size_bytes": 746,
+      "sha256": "b73622e6a1951638fc74cff1ca0193d9321efe49631c6097699f33b733742dfa"
+    },
+    {
+      "path": "examples/canonical_messages.synthetic.jsonl",
+      "size_bytes": 4345,
+      "sha256": "34d25097f8f630b2b3ae48013ea37afe25f0c9e7b7f8ffeaeaf78fc6bacca95c"
+    },
+    {
+      "path": "examples/chatlab_qq.synthetic.json",
+      "size_bytes": 914,
+      "sha256": "86c67d9b5018249b1c2567f46b3123dc359ec30ed13bfff2e9ca9f65e90df1b6"
+    },
+    {
+      "path": "examples/chatlab_wechat.synthetic.jsonl",
+      "size_bytes": 1256,
+      "sha256": "a74e3813c0ae876394e71facc42848e791a6ace08d2142de37593dbae8732bbb"
+    },
+    {
+      "path": "examples/generic_chat.synthetic.csv",
+      "size_bytes": 513,
+      "sha256": "b957f1ac88ae281c34d960082eed2bb765d7dcdb42037fe34c74a8f0f08a95e5"
+    },
+    {
+      "path": "examples/mode_cases.json",
+      "size_bytes": 4260,
+      "sha256": "b94246f89361d736b933766857911d17b2c6deb66f46a331f45e92a0de799cc6"
+    },
+    {
+      "path": "scripts/sync_plan_docs.py",
+      "size_bytes": 1047,
+      "sha256": "fc4c9fa35bfada313f135919d209336e7155e21f708da7008d1795006c3f3681"
+    }
+  ]
+}

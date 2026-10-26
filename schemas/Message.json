@@ -1,0 +1,277 @@
+{
+  "$defs": {
+    "Content": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "default": "text",
+          "title": "Type",
+          "type": "string"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "attachments": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Attachments",
+          "type": "array"
+        },
+        "reply_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reply To"
+        },
+        "unsupported_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unsupported Type"
+        }
+      },
+      "title": "Content",
+      "type": "object"
+    },
+    "MessageUse": {
+      "additionalProperties": false,
+      "properties": {
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "relationship_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relationship Id"
+        },
+        "identity_mapping_version": {
+          "title": "Identity Mapping Version",
+          "type": "integer"
+        },
+        "sender_role": {
+          "enum": [
+            "owner",
+            "partner",
+            "other",
+            "system"
+          ],
+          "title": "Sender Role",
+          "type": "string"
+        },
+        "use_policy": {
+          "$ref": "#/$defs/UsePolicy"
+        }
+      },
+      "required": [
+        "persona_id",
+        "identity_mapping_version",
+        "sender_role"
+      ],
+      "title": "MessageUse",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "platform": {
+          "title": "Platform",
+          "type": "string"
+        },
+        "importer": {
+          "title": "Importer",
+          "type": "string"
+        },
+        "importer_version": {
+          "title": "Importer Version",
+          "type": "string"
+        },
+        "source_account_id": {
+          "title": "Source Account Id",
+          "type": "string"
+        },
+        "source_message_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Message Id"
+        },
+        "import_batch_id": {
+          "title": "Import Batch Id",
+          "type": "string"
+        },
+        "file_sha256": {
+          "title": "File Sha256",
+          "type": "string"
+        },
+        "record_index": {
+          "title": "Record Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "platform",
+        "importer",
+        "importer_version",
+        "source_account_id",
+        "import_batch_id",
+        "file_sha256",
+        "record_index"
+      ],
+      "title": "Source",
+      "type": "object"
+    },
+    "UsePolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "default": true,
+          "title": "Context",
+          "type": "boolean"
+        },
+        "style": {
+          "default": false,
+          "title": "Style",
+          "type": "boolean"
+        },
+        "training_target": {
+          "default": false,
+          "title": "Training Target",
+          "type": "boolean"
+        }
+      },
+      "title": "UsePolicy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/Source"
+    },
+    "conversation_id": {
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Relationship Id"
+    },
+    "sender_id": {
+      "title": "Sender Id",
+      "type": "string"
+    },
+    "origin": {
+      "default": "unknown",
+      "enum": [
+        "human",
+        "ai",
+        "mode_notice",
+        "platform_system",
+        "unknown"
+      ],
+      "title": "Origin",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "ingested_at": {
+      "format": "date-time",
+      "title": "Ingested At",
+      "type": "string"
+    },
+    "sequence": {
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "content": {
+      "$ref": "#/$defs/Content"
+    },
+    "use_context": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MessageUse"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "provenance": {
+      "additionalProperties": true,
+      "title": "Provenance",
+      "type": "object"
+    }
+  },
+  "required": [
+    "source",
+    "conversation_id",
+    "sender_id",
+    "occurred_at",
+    "sequence",
+    "content"
+  ],
+  "title": "Message",
+  "type": "object"
+}

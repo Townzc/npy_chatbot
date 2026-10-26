@@ -1,0 +1,18 @@
+[project]
+name = "chattwin-training"
+version = "0.1.0.dev1"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "chattwin",
+  "torch==2.9.1",
+  "transformers==4.57.6",
+  "peft==0.18.1",
+  "accelerate==1.12.0",
+  "safetensors==0.7.0",
+]
+
+[tool.uv.sources]
+chattwin = { path = "..", editable = true }
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2"]

@@ -1,0 +1,7 @@
+{"_type": "header", "chatlab": {"version": "0.0.2", "exportedAt": 1792976400, "generator": "ChatTwin synthetic fixture", "description": "Fictional records only"}, "meta": {"name": "虚构示例：本人和小禾", "platform": "wechat", "type": "private", "ownerId": "demo_owner"}}
+{"_type": "member", "platformId": "demo_owner", "accountName": "本人示例"}
+{"_type": "member", "platformId": "demo_partner", "accountName": "小禾（虚构）"}
+{"_type": "message", "platformMessageId": "synthetic-wx-1", "sender": "demo_partner", "accountName": "小禾（虚构）", "timestamp": 1792972800, "type": 0, "content": "周末想去看展吗？"}
+{"_type": "message", "platformMessageId": "synthetic-wx-2", "sender": "demo_owner", "accountName": "本人示例", "timestamp": 1792972820, "type": 0, "content": "好呀，先看看有哪些展～"}
+{"_type": "message", "platformMessageId": "synthetic-wx-3", "sender": "demo_partner", "accountName": "小禾（虚构）", "timestamp": 1792972840, "type": 0, "content": "我想找一个安静一点的。"}
+{"_type": "message", "platformMessageId": "synthetic-wx-4", "sender": "demo_owner", "accountName": "本人示例", "timestamp": 1792972860, "type": 0, "content": "记住啦，一起挑个不太挤的。"}

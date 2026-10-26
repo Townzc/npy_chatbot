@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "persona_id": {
+      "title": "Persona Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "title": "Relationship Id",
+      "type": "string"
+    },
+    "messages": {
+      "items": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object"
+      },
+      "title": "Messages",
+      "type": "array"
+    },
+    "max_tokens": {
+      "default": 256,
+      "maximum": 4096,
+      "minimum": 1,
+      "title": "Max Tokens",
+      "type": "integer"
+    },
+    "model": {
+      "default": "mock",
+      "title": "Model",
+      "type": "string"
+    }
+  },
+  "required": [
+    "persona_id",
+    "relationship_id",
+    "messages"
+  ],
+  "title": "GenerationRequest",
+  "type": "object"
+}

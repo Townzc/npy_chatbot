@@ -1,0 +1,143 @@
+"""Run explicitly in training/.venv; core installations skip optional model dependencies."""
+
+import json
+from pathlib import Path
+
+import pytest
+
+pytest.importorskip("torch")
+pytest.importorskip("peft")
+
+from fastapi.testclient import TestClient
+from transformers import AutoTokenizer
+
+from chattwin.training.masking import encode_target
+from chattwin.training.serve import create_inference_app
+from chattwin.training.smoke import create_smoke_spec
+from chattwin.training.worker import train, verify_artifact
+
+
+@pytest.fixture(scope="module")
+def artifact(tmp_path_factory):
+    root = tmp_path_factory.mktemp("real-tiny-lora")
+    spec = create_smoke_spec(root)
+    result = train(spec)
+    return spec, result
+
+
+def test_real_lora_updates_saves_and_reloads_in_new_process(artifact):
+    spec, result = artifact
+    report = result["report"]
+    assert report["max_parameter_update"] > 0
+    assert report["reload_comparison"]["pid"] != report["training_pid"]
+    assert report["reload_comparison"]["max_logit_delta"] > 0
+    assert (spec.output_path / "adapter/adapter_model.safetensors").exists()
+    assert report["evidence"] == "tiny_cpu_smoke"
+    assert result["manifest"]["relationship_id"] == spec.relationship_id
+
+
+def test_real_tokenizer_masks_history_and_keeps_current_target(artifact):
+    spec, _ = artifact
+    tokenizer = AutoTokenizer.from_pretrained(spec.base_model_id, local_files_only=True)
+    messages = [
+        {"role": "user", "content": "hi"},
+        {"role": "assistant", "content": "hi"},
+        {"role": "user", "content": "hi"},
+        {"role": "assistant", "content": "hi"},
+    ]
+    row = encode_target(tokenizer, {"messages": messages, "target_index": 3}, 64)
+    boundary = len(
+        tokenizer.apply_chat_template(messages[:-1], tokenize=True, add_generation_prompt=True)
+    )
+    assert row["labels"][:boundary] == [-100] * boundary
+    assert tokenizer.decode(row["labels"][boundary:]) == "hi <eos>"
+
+
+def test_endpoint_auth_scope_and_actual_inference(artifact):
+    spec, _ = artifact
+    token = "test-model-token-" + "x" * 32
+    app = create_inference_app(spec.output_path, token)
+    client = TestClient(app)
+    body = {
+        "model": "chattwin-adapter",
+        "messages": [{"role": "user", "content": "hello"}],
+        "max_tokens": 4,
+        "metadata": {"persona_id": spec.persona_id, "relationship_id": spec.relationship_id},
+    }
+    assert client.post("/v1/chat/completions", json=body).status_code == 401
+    headers = {"Authorization": "Bearer " + token}
+    mismatch = {**body, "metadata": {**body["metadata"], "relationship_id": "another-friend"}}
+    assert client.post("/v1/chat/completions", json=mismatch, headers=headers).status_code == 403
+    response = client.post("/v1/chat/completions", json=body, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["usage"]["completion_tokens"] > 0
+
+
+def test_cancellation_preserves_truthful_state_before_loading(artifact, tmp_path):
+    spec, _ = artifact
+    flag = tmp_path / "cancel"
+    flag.touch()
+    stopped = spec.model_copy(update={"output_path": tmp_path / "cancelled", "cancel_path": flag})
+    result = train(stopped)
+    assert result["status"] == "cancelled"
+    assert not (stopped.output_path / "manifest.json").exists()
+
+
+def test_tampered_artifact_refused(artifact, tmp_path):
+    import shutil
+
+    spec, _ = artifact
+    copied = tmp_path / "artifact"
+    shutil.copytree(spec.output_path, copied)
+    manifest_path = copied / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["relationship_id"] = "unrelated"
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="mismatch"):
+        verify_artifact(copied)
+
+
+def test_interrupted_job_is_not_resumed_or_overwritten(artifact, tmp_path):
+    spec, _ = artifact
+    work = tmp_path / "interrupted"
+    work.mkdir()
+    (work / "status.json").write_text(json.dumps({"status": "running", "step": 3}))
+    with pytest.raises(ValueError, match="no implicit resume"):
+        train(spec.model_copy(update={"output_path": work}))
+    assert json.loads((work / "status.json").read_text())["status"] == "interrupted"
+
+
+def test_imported_synthetic_dataset_enters_real_worker(artifact, tmp_path):
+    from chattwin.importers import DataService
+    from chattwin.storage import Store
+    from chattwin.training.spec import prepare_spec
+
+    tiny, _ = artifact
+    store = Store(tmp_path / "private")
+    store.migrate()
+    service = DataService(store)
+    persona = service.create_persona("Synthetic training integration")
+    relationship = service.create_relationship(persona["id"], "Synthetic friend")
+    fixture = Path(__file__).resolve().parents[1] / "examples/chatlab_wechat.synthetic.jsonl"
+    service.import_file(
+        fixture, persona["id"], relationship["id"], "demo_owner", "demo_source", confirm_human=True
+    )
+    dataset = service.build_dataset(persona["id"], relationship["id"])
+    qwen_spec = prepare_spec(Path(dataset["path"]), tmp_path / "integrated-job")
+    spec = tiny.model_copy(
+        update={
+            "dataset_path": qwen_spec.dataset_path,
+            "dataset_version": qwen_spec.dataset_version,
+            "dataset_hash": qwen_spec.dataset_hash,
+            "persona_id": persona["id"],
+            "relationship_id": relationship["id"],
+            "output_path": qwen_spec.output_path,
+            "max_steps": 2,
+            "epochs": 2,
+        }
+    )
+    result = train(spec)
+    assert result["report"]["max_parameter_update"] > 0
+    assert result["manifest"]["dataset_hash"] == dataset["dataset_hash"]
+    assert result["manifest"]["persona_id"] == persona["id"]
+    store.close()

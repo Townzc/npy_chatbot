@@ -1,0 +1,43 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "confirmed",
+        "rejected",
+        "unknown"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "platform_message_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Platform Message Id"
+    },
+    "detail": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Detail"
+    }
+  },
+  "required": [
+    "status"
+  ],
+  "title": "SendReceipt",
+  "type": "object"
+}

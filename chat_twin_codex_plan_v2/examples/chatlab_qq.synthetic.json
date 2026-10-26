@@ -1,0 +1,41 @@
+{
+  "chatlab": {
+    "version": "0.0.2",
+    "exportedAt": 1792976400,
+    "generator": "ChatTwin synthetic fixture"
+  },
+  "meta": {
+    "name": "虚构QQ私聊",
+    "platform": "qq",
+    "type": "private",
+    "ownerId": "demo_qq_owner"
+  },
+  "members": [
+    {
+      "platformId": "demo_qq_owner",
+      "accountName": "本人示例"
+    },
+    {
+      "platformId": "demo_qq_friend",
+      "accountName": "阿林（虚构）"
+    }
+  ],
+  "messages": [
+    {
+      "sender": "demo_qq_friend",
+      "accountName": "阿林（虚构）",
+      "timestamp": 1792972800,
+      "type": 0,
+      "content": "下次试试橙子味的？",
+      "platformMessageId": "synthetic-qq-1"
+    },
+    {
+      "sender": "demo_qq_owner",
+      "accountName": "本人示例",
+      "timestamp": 1792972820,
+      "type": 0,
+      "content": "可以呀，记下了～",
+      "platformMessageId": "synthetic-qq-2"
+    }
+  ]
+}

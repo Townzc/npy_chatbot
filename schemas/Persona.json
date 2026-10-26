@@ -1,0 +1,33 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "target_identity_id": {
+      "title": "Target Identity Id",
+      "type": "string"
+    },
+    "identity_mapping_version": {
+      "default": 1,
+      "title": "Identity Mapping Version",
+      "type": "integer"
+    },
+    "version": {
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name",
+    "target_identity_id"
+  ],
+  "title": "Persona",
+  "type": "object"
+}

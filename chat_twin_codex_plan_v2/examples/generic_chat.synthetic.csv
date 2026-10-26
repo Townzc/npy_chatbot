@@ -1,0 +1,5 @@
+conversation,sender_id,sender_name,occurred_at,text,message_id
+demo_private,demo_partner,小禾（虚构）,2026-10-26T00:00:00Z,周末想去看展吗？,synthetic-csv-1
+demo_private,demo_owner,本人示例,2026-10-26T00:01:00Z,好呀，先看看有哪些展～,synthetic-csv-2
+demo_private,demo_partner,小禾（虚构）,2026-10-26T00:02:00Z,我想找一个安静一点的。,synthetic-csv-3
+demo_private,demo_owner,本人示例,2026-10-26T00:03:00Z,记住啦，一起挑个不太挤的。,synthetic-csv-4

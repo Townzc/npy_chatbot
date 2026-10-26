@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "purpose": "contract example only",
+  "source_file": "generic_chat.synthetic.csv",
+  "source_file_sha256": "b957f1ac88ae281c34d960082eed2bb765d7dcdb42037fe34c74a8f0f08a95e5",
+  "message_file": "canonical_messages.synthetic.jsonl",
+  "persona": {
+    "id": "demo_persona",
+    "target_identity_id": "demo_target_identity",
+    "identity_mapping_version": 1
+  },
+  "identity_links": [
+    {
+      "identity_id": "demo_target_identity",
+      "participant_id": "demo_owner",
+      "source_account_id": "demo_source_account",
+      "confirmed": true
+    }
+  ],
+  "conversation": {
+    "id": "demo_conversation",
+    "kind": "private",
+    "relationship_id": "demo_relationship"
+  },
+  "count": 4
+}

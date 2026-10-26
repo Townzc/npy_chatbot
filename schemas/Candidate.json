@@ -1,0 +1,63 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "binding_id": {
+      "title": "Binding Id",
+      "type": "string"
+    },
+    "control_epoch": {
+      "title": "Control Epoch",
+      "type": "integer"
+    },
+    "context_seq": {
+      "title": "Context Seq",
+      "type": "integer"
+    },
+    "persona_version": {
+      "default": 1,
+      "title": "Persona Version",
+      "type": "integer"
+    },
+    "memory_version": {
+      "default": 1,
+      "title": "Memory Version",
+      "type": "integer"
+    },
+    "model_deployment_id": {
+      "default": "mock-v1",
+      "title": "Model Deployment Id",
+      "type": "string"
+    },
+    "input_message_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Input Message Ids",
+      "type": "array"
+    },
+    "text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "binding_id",
+    "control_epoch",
+    "context_seq",
+    "text",
+    "expires_at"
+  ],
+  "title": "Candidate",
+  "type": "object"
+}

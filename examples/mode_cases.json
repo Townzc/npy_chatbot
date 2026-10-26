@@ -1,0 +1,156 @@
+{
+  "status": "specification_only_not_executed",
+  "notice_constants": {
+    "enable_notice": "对方已切换为ai模式",
+    "takeover_notice": "本人已接管"
+  },
+  "interpretation": "Behavioral scenarios for future test implementation. Each case has preconditions; final_mode alone does not prove pending notifications were delivered. Existing in-flight notices must remain in the outbox.",
+  "cases": [
+    {
+      "id": "enable_ok",
+      "initial_mode": "HUMAN",
+      "events": [
+        "enable_request",
+        "enable_notice_confirmed"
+      ],
+      "expected_mode": "AI_ACTIVE",
+      "assertion": "No AI before notice confirmation"
+    },
+    {
+      "id": "enable_unknown",
+      "initial_mode": "HUMAN",
+      "events": [
+        "enable_request",
+        "enable_notice_unknown"
+      ],
+      "expected_mode": "PAUSED",
+      "assertion": "No AI; reconcile notice without automatic resend"
+    },
+    {
+      "id": "takeover_during_generation",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "generation_started",
+        "takeover",
+        "generation_returned"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Old candidate is never newly submitted"
+    },
+    {
+      "id": "stale_ui_stop",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "takeover_with_stale_epoch"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Stop is not rejected solely for stale epoch"
+    },
+    {
+      "id": "stale_enable",
+      "initial_mode": "HUMAN",
+      "events": [
+        "enable_with_stale_epoch"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "409; no enable notice"
+    },
+    {
+      "id": "self_echo_first",
+      "initial_mode": "ENABLING",
+      "events": [
+        "enable_notice_echo",
+        "enable_api_ack"
+      ],
+      "expected_mode": "AI_ACTIVE",
+      "assertion": "Echo associates with known outbox; no recursive takeover"
+    },
+    {
+      "id": "takeover_after_claim",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "candidate_claimed",
+        "takeover_before_transport_start"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "No old send after stop barrier"
+    },
+    {
+      "id": "late_enable_ack",
+      "initial_mode": "ENABLING",
+      "events": [
+        "takeover",
+        "late_enable_confirmed"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Late ack cannot reactivate"
+    },
+    {
+      "id": "unknown_enable_takeover",
+      "initial_mode": "ENABLING",
+      "events": [
+        "enable_notice_unknown",
+        "takeover"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Takeover notice waits for previous unknown reconciliation"
+    },
+    {
+      "id": "rebind_generation",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "generation_started",
+        "replace_binding"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Old candidate and notices cannot be retargeted"
+    },
+    {
+      "id": "crash_on_takeover",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "takeover_transaction_commit",
+        "process_crash",
+        "restart"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Pending notice intent remains; no duplicate or automatic AI resume"
+    },
+    {
+      "id": "runtime_fault",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "bridge_disconnect"
+      ],
+      "expected_mode": "PAUSED",
+      "assertion": "Never claim owner takeover due to a fault"
+    },
+    {
+      "id": "duplicate_enable",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "enable_request_same_mode"
+      ],
+      "expected_mode": "AI_ACTIVE",
+      "assertion": "No duplicate mode notification"
+    },
+    {
+      "id": "partner_quotes_notice",
+      "initial_mode": "HUMAN",
+      "events": [
+        "partner_text_equals_enable_notice"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Message text is not an authenticated command"
+    },
+    {
+      "id": "human_already_notified",
+      "initial_mode": "AI_ACTIVE",
+      "events": [
+        "verified_human_message_exact_takeover"
+      ],
+      "expected_mode": "HUMAN",
+      "assertion": "Existing human notice is associated; no second copy"
+    }
+  ]
+}

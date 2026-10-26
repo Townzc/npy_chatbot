@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chattwin"
+version = "0.1.0.dev1"
+description = "Local, scoped personal chat assistant — synthetic demo first"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "pydantic>=2.10,<3",
+  "sqlalchemy>=2.0,<3", "alembic>=1.14,<2", "httpx>=0.28,<1",
+  "typer>=0.15,<1", "websockets>=14,<16", "filelock>=3.17,<4",
+  "python-multipart>=0.0.20,<1",
+]
+
+[project.scripts]
+chattwin = "chattwin.cli:app"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2", "ruff>=0.11,<1", "mypy>=1.15,<2"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chattwin"]
+
+[tool.hatch.build]
+artifacts = ["src/chattwin/web_dist/**"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+check_untyped_defs = true

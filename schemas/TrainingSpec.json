@@ -1,0 +1,212 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "dataset_path": {
+      "format": "path",
+      "title": "Dataset Path",
+      "type": "string"
+    },
+    "dataset_version": {
+      "minLength": 1,
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "dataset_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Hash",
+      "type": "string"
+    },
+    "persona_id": {
+      "minLength": 1,
+      "title": "Persona Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "minLength": 1,
+      "title": "Relationship Id",
+      "type": "string"
+    },
+    "base_model_id": {
+      "default": "Qwen/Qwen3-4B-Instruct-2507",
+      "title": "Base Model Id",
+      "type": "string"
+    },
+    "base_model_revision": {
+      "default": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "title": "Base Model Revision",
+      "type": "string"
+    },
+    "tokenizer_revision": {
+      "default": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "title": "Tokenizer Revision",
+      "type": "string"
+    },
+    "chat_template_hash": {
+      "default": "64f85b198065d0fba2a81f37e10ed68161ce2c19a754c7100e67e0ca2ee9c326",
+      "title": "Chat Template Hash",
+      "type": "string"
+    },
+    "backend": {
+      "const": "transformers-peft",
+      "default": "transformers-peft",
+      "title": "Backend",
+      "type": "string"
+    },
+    "backend_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Backend Version",
+      "type": "string"
+    },
+    "precision": {
+      "default": "bfloat16",
+      "enum": [
+        "float32",
+        "bfloat16",
+        "float16"
+      ],
+      "title": "Precision",
+      "type": "string"
+    },
+    "device": {
+      "default": "cuda",
+      "enum": [
+        "cpu",
+        "cuda"
+      ],
+      "title": "Device",
+      "type": "string"
+    },
+    "target_modules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Target Modules",
+      "type": "array"
+    },
+    "rank": {
+      "default": 8,
+      "maximum": 128,
+      "minimum": 1,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "alpha": {
+      "default": 16,
+      "maximum": 1024,
+      "minimum": 1,
+      "title": "Alpha",
+      "type": "integer"
+    },
+    "dropout": {
+      "default": 0.05,
+      "exclusiveMaximum": 1,
+      "minimum": 0,
+      "title": "Dropout",
+      "type": "number"
+    },
+    "max_sequence_length": {
+      "default": 1024,
+      "maximum": 32768,
+      "minimum": 16,
+      "title": "Max Sequence Length",
+      "type": "integer"
+    },
+    "batch_size": {
+      "default": 1,
+      "maximum": 128,
+      "minimum": 1,
+      "title": "Batch Size",
+      "type": "integer"
+    },
+    "gradient_accumulation": {
+      "default": 4,
+      "maximum": 1024,
+      "minimum": 1,
+      "title": "Gradient Accumulation",
+      "type": "integer"
+    },
+    "learning_rate": {
+      "default": 0.0002,
+      "exclusiveMinimum": 0,
+      "maximum": 0.1,
+      "title": "Learning Rate",
+      "type": "number"
+    },
+    "epochs": {
+      "default": 1,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Epochs",
+      "type": "integer"
+    },
+    "max_steps": {
+      "default": 100,
+      "maximum": 1000000,
+      "minimum": 1,
+      "title": "Max Steps",
+      "type": "integer"
+    },
+    "seed": {
+      "default": 42,
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "output_path": {
+      "format": "path",
+      "title": "Output Path",
+      "type": "string"
+    },
+    "cancel_path": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cancel Path"
+    },
+    "dependency_lock_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dependency Lock Hash",
+      "type": "string"
+    },
+    "code_version": {
+      "default": "working-tree",
+      "title": "Code Version",
+      "type": "string"
+    },
+    "synthetic_smoke": {
+      "default": false,
+      "title": "Synthetic Smoke",
+      "type": "boolean"
+    },
+    "local_files_only": {
+      "default": false,
+      "title": "Local Files Only",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "dataset_path",
+    "dataset_version",
+    "dataset_hash",
+    "persona_id",
+    "relationship_id",
+    "output_path",
+    "dependency_lock_hash"
+  ],
+  "title": "TrainingSpec",
+  "type": "object"
+}

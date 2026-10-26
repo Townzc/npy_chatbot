@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "persona_id": {
+      "title": "Persona Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "title": "Relationship Id",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "channel_account_id": {
+      "title": "Channel Account Id",
+      "type": "string"
+    },
+    "conversation_id": {
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "recipient_id": {
+      "title": "Recipient Id",
+      "type": "string"
+    },
+    "channel": {
+      "default": "fake",
+      "enum": [
+        "fake",
+        "web",
+        "onebot"
+      ],
+      "title": "Channel",
+      "type": "string"
+    }
+  },
+  "required": [
+    "persona_id",
+    "relationship_id",
+    "channel_account_id",
+    "conversation_id",
+    "recipient_id"
+  ],
+  "title": "Binding",
+  "type": "object"
+}

@@ -1,0 +1,38 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "command_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Command Id",
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "enable",
+        "takeover",
+        "pause"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "expected_control_epoch": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expected Control Epoch"
+    }
+  },
+  "required": [
+    "command_id",
+    "action"
+  ],
+  "title": "ModeCommand",
+  "type": "object"
+}
