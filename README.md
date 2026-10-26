@@ -34,7 +34,7 @@ uv run chattwin serve
 | ChatLab v0.0.2 JSON/JSONL | 合成格式、秒级时间、null、未知类型、引用及重复测试通过；实际导出兼容待具体样本 |
 | 通用 CSV | 字段映射、时区、秒/毫秒、BOM/换行；10 万条合成导入已测 |
 | ChatTwin JSONL v1 | 导入/导出回读与 sidecar hash/数量/范围核验；未声明会话类型按 unknown 排除训练 |
-| QCE JSON | 尚无版本明确的真实脱敏样本，不声称兼容 |
+| QCE 单文件 JSON | 参考 v6.3.2 的导出核心 0.1.0 schema；解析/身份/数据集与网页合成验证通过，真实导出及分块 JSONL 未验收；见[兼容边界](docs/qce-compatibility.md) |
 | 手机数据库/备份容器 | 不支持自动解密、提取或假装导入 |
 
 本机 `chat_record` 检查到 8 个无扩展名、未识别格式的容器，约 140 MiB。检查仅输出格式和数量元数据，未把私聊正文放进开发上下文；需要先得到明确的 ChatLab、CSV、规范 JSONL 或版本明确的 QCE 导出。

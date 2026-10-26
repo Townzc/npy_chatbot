@@ -111,6 +111,7 @@ export default function ImportPanel({
                 }}
               >
                 <option value="chatlab">ChatLab JSON / JSONL</option>
+                <option value="qce">QCE 单文件 JSON（参考 v6.3.2）</option>
                 <option value="csv_mapping">通用 CSV</option>
                 <option value="canonical_jsonl">ChatTwin 规范 JSONL</option>
               </select>
@@ -127,6 +128,12 @@ export default function ImportPanel({
               />
             </label>
           </div>
+          {format === 'qce' && (
+            <p className="field-hint">
+              支持导出核心 0.1.0 的单文件 JSON。此字段不是 QCE 产品版本号；请保留导出程序版本。
+              系统、撤回、非文字消息只保留预览，不作为训练目标。分块 JSONL 暂不支持。
+            </p>
+          )}
           <label>
             原会话类型
             <select

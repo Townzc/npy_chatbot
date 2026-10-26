@@ -184,7 +184,9 @@ class DataService:
                 report["scope_excluded"] += not private
                 is_owner = message.sender_id == owner_sender_id
                 policy = UsePolicy(
-                    context=private and message.content.type == "text",
+                    context=private
+                    and message.content.type == "text"
+                    and original_origin not in {"platform_system", "mode_notice"},
                     style=private
                     and is_owner
                     and human_confirmed
@@ -200,7 +202,13 @@ class DataService:
                     persona_id=persona_id,
                     relationship_id=relationship_id if private else None,
                     identity_mapping_version=persona["identity_mapping_version"],
-                    sender_role="owner" if is_owner else "partner" if private else "other",
+                    sender_role="system"
+                    if original_origin == "platform_system"
+                    else "owner"
+                    if is_owner
+                    else "partner"
+                    if private
+                    else "other",
                     use_policy=policy,
                 )
                 identity_key = [

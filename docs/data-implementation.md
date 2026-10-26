@@ -6,6 +6,7 @@
 
 ## 已有本地能力
 
+- QCE 单文件 JSON：按 v6.3.2 固定公开源码定义独立解析导出核心 0.1.0 schema；合成数据→身份→数据集及浏览器通过，真实导出待验收。见 [固定来源与兼容边界](qce-compatibility.md)。
 - ChatLab **v0.0.2** JSON/JSONL：秒级时间、null、未知类型占位、引用、逐行错误、稳定 ID。依据 [上游格式文档](https://github.com/ChatLab/ChatLab/blob/main/docs/cn/standard/chatlab-format.md)，独立实现；随包虚构 fixture 通过，不代表特定真实导出软件兼容已验证。
 - UTF-8/BOM CSV：列映射、ISO/秒/毫秒时间、显式时区；DST 歧义拒绝。保留同秒同文连发，缺 ID 仅做同文件行号幂等。
 - Canonical JSONL v1 导入和带 manifest 导出；拒绝错误主版本；忽略输入文件自带的本人/训练权限，需重新确认。
@@ -36,7 +37,7 @@ service.retrieve_memories(persona_id, relationship_id, query, before=None)
 service.build_dataset(persona_id, relationship_id, gap_seconds=1800, redact=True)
 ```
 
-`format`：`auto`、`chatlab`、`csv`/`csv_mapping`、`canonical`/`canonical_jsonl`。
+`format`：`auto`、`qce`、`chatlab`、`csv`/`csv_mapping`、`canonical`/`canonical_jsonl`。
 
 CSV 默认列：sender_id、occurred_at、text、conversation，message_id/sender_name 可选。映射：
 
@@ -54,7 +55,7 @@ CSV 默认列：sender_id、occurred_at、text、conversation，message_id/sende
 
 对用户提供的 chat_record **仅做本地格式元数据检查**：8 个无扩展名文件，合计 146,747,392 bytes；未识别为 JSON/CSV/SQLite/ZIP/gzip。没有输出文件名、账号、昵称或正文，没有复制入 Git。不能把未知容器当作已支持的导出；需要版本明确的 QCE/ChatLab/CSV 导出文件。
 
-T09：BLOCKED（没有可验证 QCE fixture）。T10/T11/T12：已有上述虚构工程测试、显式身份重映射与 sidecar 验证；真实导出兼容与人工抽样核对仍未验收。10 万条合成 CSV 的预览/导入性能已测，见下文。T13：数据构建已实现，tokenizer mask/模型训练验收由训练线维护；短数据不形成有效质量评测。T14/T25：风格版本确认编辑、记忆纠正、来源删除传播到 adapter/部署/评测已实现，详见数据管理文档。原始文件未托管复制；数据库留来源哈希。未知历史缺口无法推断。
+T09：PARTIAL（单JSON解析器和固定源码契约的虚构fixture已验证，真实导出待验收）。T10/T11/T12：已有上述虚构工程测试、显式身份重映射与 sidecar 验证；真实导出兼容与人工抽样核对仍未验收。10 万条合成 CSV 的预览/导入性能已测，见下文。T13：数据构建已实现，tokenizer mask/模型训练验收由训练线维护；短数据不形成有效质量评测。T14/T25：风格版本确认编辑、记忆纠正、来源删除传播到 adapter/部署/评测已实现，详见数据管理文档。原始文件未托管复制；数据库留来源哈希。未知历史缺口无法推断。
 
 近重复算法为片段文本规范化后 SequenceMatcher 0.9 阈值，复杂度二次；大数据集构建需性能优化和实测。脱敏规则仅处理 email/长数字，不保证清除地址等所有私人信息。已训练权重不自动遗忘。
 
@@ -63,4 +64,4 @@ T09：BLOCKED（没有可验证 QCE fixture）。T10/T11/T12：已有上述虚�
 在当前 Mac/Python 3.12 环境、临时目录（测试结束已清理）生成 100,000 条明确虚构消息：文件 8,377,832 bytes；预览全部记录 0.796 秒；事务导入 100,000 条 16.351 秒；该独立进程峰值 RSS 87,654,400 bytes（macOS resource.ru_maxrss）；SQLite 222,031,872 bytes。无真实数据、模型或外部消息。此证据只覆盖该数据规模与 CSV 导入，不代表近重复数据集算法性能或真实导出兼容。
 
 
-后续实现补充：已加入显式风格确认/编辑、身份重映射、规范 sidecar 验证和来源删除传播，上述对应早期限制已由 [数据管理实现](data-management.md) 更新。真实导出兼容与 QCE 未验证的限制仍保留。
+后续实现补充：已加入显式风格确认/编辑、身份重映射、规范 sidecar 验证和来源删除传播，上述对应早期限制已由 [数据管理实现](data-management.md) 更新。QCE解析器已按固定源码契约补齐，真实导出兼容仍未验证。

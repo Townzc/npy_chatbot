@@ -86,6 +86,36 @@ def test_exporter_is_not_target_and_unknown_cannot_train(service):
     assert rows[1]["use_context"]["use_policy"]["training_target"] is False
 
 
+def test_platform_system_text_stays_system_and_excluded_after_identity_remap(service, tmp_path):
+    records = [
+        json.loads(line)
+        for line in (EXAMPLES / "canonical_messages.synthetic.jsonl").read_text().splitlines()
+    ]
+    records[0]["origin"] = "platform_system"
+    records[0]["sender_id"] = "system-record"
+    path = tmp_path / "system.jsonl"
+    path.write_text("\n".join(json.dumps(row) for row in records))
+    p, r = scope(service)
+    service.import_file(
+        path,
+        p,
+        r,
+        "demo_owner",
+        "demo_source_account",
+        confirm_human=True,
+        mapping={"conversation_kind": "private"},
+    )
+    for version in (1, 2):
+        if version == 2:
+            service.remap_identity(p, "demo_source_account", "demo_owner", confirm_human=True)
+        message = next(
+            row for row in service.list_messages(p, r) if row["sender_id"] == "system-record"
+        )
+        assert message["use_context"]["sender_role"] == "system"
+        assert not any(message["use_context"]["use_policy"].values())
+        assert message["use_context"]["identity_mapping_version"] == version
+
+
 def test_canonical_use_context_untrusted_and_roundtrip(service, tmp_path):
     p, r, _ = imported(service, "canonical_messages.synthetic.jsonl", human=False)
     assert all(

@@ -12,7 +12,7 @@
 | T06 存储迁移 | DONE（当前） | 冻结0001、增量0002部署表；旧备份升级测试 | 新版向旧版不破坏性降级 |
 | T07 无密钥demo | DONE | CLI及真实浏览器→API→SQLite→FakeChannel | 明确虚构；没有个人模型效果声明 |
 | T08 本人认证/API | DONE（本地工程） | Bearer/Host/严格同源、上传限制、短会话/退出/到期/重启失效 | 手机严格session配置待真实TLS设备验收 |
-| T09 QCE | BLOCKED | 不猜字段、不伪造格式支持 | 需要固定QCE版本、真实脱敏导出样本 |
+| T09 QCE | PARTIAL；真实导出 BLOCKED | 按v6.3.2固定源码独立实现单JSON；schema0.1.0/毫秒/UID/UIN/引用/计数/重复/坏行；7测试及网页→数据集通过 | fixture为人工虚构，尚无真实脱敏导出；分块JSONL不支持；不从schema版本冒认产品版本 |
 | T10 ChatLab | DONE（格式工程） | v0.0.2 JSON/JSONL、秒级时间/null/未知/引用/重复 | 用户实际导出兼容仍需样本 |
 | T11 CSV/规范JSONL | DONE（格式工程） | CSV映射/时区/10万条；sidecar哈希/行数/范围/会话类型；回读 | CSV默认unknown，明确私聊才训练；QCE不混同 |
 | T12 身份/关系 | DONE（本地工程） | 稳定ID映射、检查/显式重映射、同名不合并、跨关系隔离 | 真实跨平台导出兼容仍待数据 |
@@ -38,5 +38,7 @@
 最终本地检查：`uv run pytest -q` 125 passed / 1 skipped（未安装可选torch的核心环境跳过runtime训练）；独立training环境13 passed；Ruff、mypy、生产构建通过。详见[第二批报告](evidence/management-milestone-2026-10-26.md)及[浏览器证据](evidence/web-management-2026-10-26.md)。
 
 4090/QQ 接入准备增量：核心 129 passed / 1 skipped，独立训练与硬件契约 16 passed；Ruff 81文件、mypy 60源文件、生产构建及网页预设→实际下载训练包通过。见 [本批证据](evidence/gpu-and-qq-preparation-2026-10-26.md)、[GPU 步骤](gpu-4090.md)、[QQ/QCE 调研与步骤](qq-setup-research.md)。已知GPU资源不等于已连接或完成T24，QCE上游发布包也不等于已验收用户导出。
+
+QCE增量：新增7项QCE和1项系统角色回归后，核心137 passed / 1 skipped；Ruff83文件、mypy61源文件、生产构建通过。网页上传虚构fixture→预览8条/3文本→选择同名稳定UID→2条本人目标→1个连续回复训练窗口通过。发现并修复系统行误标“对方”，导入/重映射现均保持“系统”。详见 [QCE实现与证据](qce-compatibility.md)。真实QQ、真实导出、4090/Qwen与人工质量门槛未因此通过。
 
 下一批：提供Linux/CUDA后先以虚构数据做Qwen显存dry run/真实训练/认证部署，随后足量确认数据与人工B0–B3；提供桥后先只读探针，再由用户自行验证指定原私聊；并行真手机TLS/休眠、实际模型恢复、≥7天试运行和依赖审查。当前内部代码缺口与外部未验收不混写。

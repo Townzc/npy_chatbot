@@ -1,0 +1,254 @@
+{
+  "metadata": {
+    "name": "QQChatExporter",
+    "copyright": "https://github.com/shuakami/qq-chat-exporter",
+    "version": "0.1.0"
+  },
+  "chatInfo": {
+    "name": "完全虚构的QCE兼容样例",
+    "type": "private",
+    "selfUid": "u_demo_owner",
+    "selfUin": "demo_owner_uin",
+    "peerUid": "u_demo_partner",
+    "peerUin": "demo_partner_uin"
+  },
+  "statistics": {
+    "totalMessages": 8
+  },
+  "messages": [
+    {
+      "id": "qce-demo-1",
+      "seq": "1",
+      "timestamp": 1792972800000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_partner",
+        "uin": "demo_partner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "周末去图书馆吗？",
+        "elements": [
+          {
+            "type": "text",
+            "data": {
+              "text": "周末去图书馆吗？"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": false
+    },
+    {
+      "id": "qce-demo-2",
+      "seq": "2",
+      "timestamp": 1792972801000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_owner",
+        "uin": "demo_owner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "好呀\n<b>这只是文字</b>",
+        "elements": [
+          {
+            "type": "text",
+            "data": {
+              "text": "好呀\n<b>这只是文字</b>"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": false
+    },
+    {
+      "id": "qce-demo-3",
+      "seq": "3",
+      "timestamp": 1792972802000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_owner",
+        "uin": "demo_owner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "引用预览：周末去图书馆吗？ 下午三点见。",
+        "elements": [
+          {
+            "type": "reply",
+            "data": {
+              "referencedMessageId": "qce-demo-1",
+              "content": "引用预览：周末去图书馆吗？"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "text": "下午三点见。"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": false
+    },
+    {
+      "id": "qce-demo-4",
+      "seq": "4",
+      "timestamp": 1792972803000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_partner",
+        "uin": "demo_partner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "[图片]",
+        "elements": [
+          {
+            "type": "image",
+            "data": {
+              "url": "https://example.invalid/image.png"
+            }
+          }
+        ],
+        "resources": [
+          {
+            "type": "image",
+            "url": "https://example.invalid/image.png",
+            "localPath": "../../must-not-read.png"
+          }
+        ],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": false
+    },
+    {
+      "id": "qce-demo-5",
+      "seq": "5",
+      "timestamp": 1792972804000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_owner",
+        "uin": "demo_owner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "这条已撤回",
+        "elements": [
+          {
+            "type": "text",
+            "data": {
+              "text": "这条已撤回"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": true
+    },
+    {
+      "id": "qce-demo-6",
+      "seq": "6",
+      "timestamp": 1792972805000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "",
+        "uin": "0",
+        "name": ""
+      },
+      "type": "type_2",
+      "content": {
+        "text": "虚构系统通知",
+        "elements": [
+          {
+            "type": "text",
+            "data": {
+              "text": "虚构系统通知"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": true,
+      "recalled": false
+    },
+    {
+      "id": "qce-demo-7",
+      "seq": "7",
+      "timestamp": 1792972806000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_owner",
+        "uin": "demo_owner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "本人已接管",
+        "elements": [
+          {
+            "type": "text",
+            "data": {
+              "text": "本人已接管"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": false
+    },
+    {
+      "id": "qce-demo-8",
+      "seq": "8",
+      "timestamp": 1792972807000,
+      "time": "2026-10-26 08:00:00",
+      "sender": {
+        "uid": "u_demo_owner",
+        "uin": "demo_owner_uin",
+        "name": "同名 · 虚构"
+      },
+      "type": "type_2",
+      "content": {
+        "text": "[未知消息]",
+        "elements": [
+          {
+            "type": "future-card",
+            "data": {
+              "nested_sender": "other-fictional-speaker",
+              "text": "不能当作本人发言"
+            }
+          }
+        ],
+        "resources": [],
+        "mentions": []
+      },
+      "system": false,
+      "recalled": false,
+      "rawMessage": {
+        "untrusted": "not copied into normalized data"
+      }
+    }
+  ],
+  "synthetic": true
+}

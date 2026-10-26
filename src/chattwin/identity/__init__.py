@@ -152,9 +152,17 @@ def remap_identity(
                             persona_id=persona_id,
                             relationship_id=row["relationship_id"],
                             identity_mapping_version=new_version,
-                            sender_role="owner" if owner else "partner" if private else "other",
+                            sender_role="system"
+                            if message["origin"] == "platform_system"
+                            else "owner"
+                            if owner
+                            else "partner"
+                            if private
+                            else "other",
                             use_policy=UsePolicy(
-                                context=private and text,
+                                context=private
+                                and text
+                                and message["origin"] not in {"platform_system", "mode_notice"},
                                 style=private and owner and human and text,
                                 training_target=private and owner and human and text,
                             ),

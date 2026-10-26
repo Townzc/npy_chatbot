@@ -64,11 +64,17 @@ def detect(path: Path) -> str:
         obj = json.loads(path.read_text(encoding="utf-8-sig"))
         if isinstance(obj, dict) and "chatlab" in obj:
             return "chatlab"
+        if (
+            isinstance(obj, dict)
+            and isinstance(obj.get("metadata"), dict)
+            and obj["metadata"].get("name") == "QQChatExporter"
+        ):
+            return "qce"
     except (ValueError, UnicodeError):
         pass
     raise DomainError(
         "UNSUPPORTED_FORMAT",
-        "Supported: ChatLab v0.0.2 JSON/JSONL, canonical JSONL v1, CSV with mapping. QCE requires a verified fixture.",
+        "Supported: QCE exporter-core 0.1.0 single JSON, ChatLab v0.0.2 JSON/JSONL, canonical JSONL v1, CSV with mapping.",
         422,
     )
 
@@ -137,10 +143,13 @@ def records(path: Path, fmt: str, mapping: dict) -> Iterator[tuple[int, dict, di
         for number, obj, error in _json_lines(path):
             yield number, obj or {}, {}, error
         return
+    if fmt == "qce":
+        from .qce import records as qce_records
+
+        yield from qce_records(path)
+        return
     if fmt != "chatlab":
-        raise DomainError(
-            "UNSUPPORTED_FORMAT", "QCE and native exporter formats are unverified", 422
-        )
+        raise DomainError("UNSUPPORTED_FORMAT", "Unknown importer format", 422)
     with path.open(encoding="utf-8-sig") as handle:
         first = next(
             (line for line in handle if line.strip() and not line.lstrip().startswith("#")), ""
@@ -196,6 +205,10 @@ def normalize(
     record: dict, metadata: dict, fmt: str, number: int, sha: str, mapping: dict
 ) -> Message:
     account = str(mapping.get("source_account_id", "unconfirmed"))
+    if fmt == "qce":
+        from .qce import normalize as normalize_qce
+
+        return normalize_qce(record, metadata, number, sha, mapping)
     if fmt == "canonical":
         message = Message.model_validate(record)
         if (
@@ -380,14 +393,15 @@ def inspect(path: Path | str, format: str = "auto", mapping: dict | None = None)
             references.append((message.conversation_id, message.content.reply_to))
         dates.append(message.occurred_at.isoformat())
         sender_key = f"{message.source.source_account_id}:{message.sender_id}"
-        senders[sender_key] = {
-            "id": message.sender_id,
-            "name": message.provenance.get("display_name", message.sender_id),
-            "source_account_id": message.source.source_account_id,
-        }
+        if message.origin != "platform_system":
+            senders[sender_key] = {
+                "id": message.sender_id,
+                "name": message.provenance.get("display_name", message.sender_id),
+                "source_account_id": message.source.source_account_id,
+            }
         if len(preview) < 20:
             preview.append(message.model_dump(mode="json"))
-    return {
+    result = {
         "filename": path.name,
         "file_sha256": file_hash(path),
         "format": fmt,
@@ -408,3 +422,8 @@ def inspect(path: Path | str, format: str = "auto", mapping: dict | None = None)
         "identity_confirmed": False,
         "manifest_validation": manifest_validation,
     }
+    if fmt == "qce":
+        from .qce import COMPATIBILITY
+
+        result["format_compatibility"] = dict(COMPATIBILITY)
+    return result
