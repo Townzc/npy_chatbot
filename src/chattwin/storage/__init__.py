@@ -87,6 +87,16 @@ styles = scoped_table("style_profiles")
 memories = scoped_table("memory_items")
 datasets = scoped_table("dataset_versions")
 artifacts = scoped_table("model_artifacts")
+model_deployments = Table(
+    "model_deployments",
+    metadata,
+    Column("id", String, primary_key=True),
+    Column("persona_id", ForeignKey("personas.id"), nullable=False),
+    Column("relationship_id", ForeignKey("relationships.id"), nullable=False),
+    Column("artifact_id", ForeignKey("model_artifacts.id")),
+    Column("status", String, nullable=False),
+    Column("payload", JSON, nullable=False),
+)
 bindings = Table(
     "bindings",
     metadata,
@@ -163,7 +173,7 @@ usage = Table(
     Column("persona_id", String, nullable=False),
     Column("payload", JSON, nullable=False),
 )
-for table in (uses, styles, memories, datasets, artifacts, bindings):
+for table in (uses, styles, memories, datasets, artifacts, model_deployments, bindings):
     Index(f"ix_{table.name}_scope", table.c.persona_id, table.c.relationship_id)
 Index("ix_outbox_binding_status", outbox.c.binding_id, outbox.c.status)
 Index("ix_messages_conversation_time", messages.c.conversation_id, messages.c.occurred_at)

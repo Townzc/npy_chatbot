@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from sqlalchemy import select
@@ -11,6 +11,7 @@ from sqlalchemy import select
 from chattwin.domain import DomainError, MessageUse, Persona, UsePolicy, now, uid
 from chattwin.storage import Store, identity_links, imports, messages, personas, relationships, uses
 
+from .guards import source_guard
 from .parsers import digest, file_hash, inspect, parse
 
 
@@ -55,6 +56,7 @@ class DataService:
     def inspect(self, path: Path | str, format: str = "auto", mapping: dict | None = None) -> dict:
         return inspect(path, format, mapping)
 
+    @source_guard
     def import_file(
         self,
         path: Path | str,
@@ -74,6 +76,16 @@ class DataService:
         path = Path(path)
         mapping = {**(mapping or {}), "source_account_id": source_account_id, "_inspect": False}
         report = inspect(path, format, mapping)
+        manifest_validation = report.get("manifest_validation")
+        if manifest_validation and (
+            manifest_validation["persona_id"] != persona_id
+            or manifest_validation["relationship_id"] != relationship_id
+        ):
+            raise DomainError(
+                "MANIFEST_SCOPE",
+                "Canonical manifest scope differs from selected destination; explicit rebinding is not supported",
+                422,
+            )
         if report["bad_rows"] and not skip_errors:
             raise DomainError(
                 "IMPORT_ERRORS",
@@ -103,11 +115,28 @@ class DataService:
                 "skipped": report["bad_rows"] if skip_errors else 0,
                 "candidate_training_targets": 0,
                 "scope_excluded": 0,
+                "message_ids": [],
             }
         )
         # Preview is intentionally not retained in batch logs; raw content is in messages only.
         persisted_report = {key: value for key, value in report.items() if key != "preview"}
         with self.store.transaction() as conn:
+            owners = (
+                conn.execute(
+                    select(identity_links.c.sender_id).where(
+                        identity_links.c.persona_id == persona_id,
+                        identity_links.c.source_account_id == source_account_id,
+                    )
+                )
+                .scalars()
+                .all()
+            )
+            if any(sender_id != owner_sender_id for sender_id in owners):
+                raise DomainError(
+                    "IDENTITY_CONFLICT",
+                    "This source account already has another owner mapping; use explicit identity remapping first",
+                    409,
+                )
             conn.execute(
                 imports.insert().values(
                     id=batch_id, file_sha256=report["file_sha256"], payload=persisted_report
@@ -259,6 +288,7 @@ class DataService:
                             payload=use_payload,
                         )
                     )
+                report["message_ids"].append(message.id)
                 report["candidate_training_targets"] += policy.training_target
             if file_hash(path) != report["file_sha256"]:
                 raise DomainError(
@@ -288,7 +318,9 @@ class DataService:
             )
         )
         if before:
-            query = query.where(messages.c.occurred_at < before.isoformat())
+            if before.tzinfo is None:
+                raise DomainError("CUTOFF_TIMEZONE", "Replay cutoff must include a timezone", 422)
+            query = query.where(messages.c.occurred_at < before.astimezone(UTC).isoformat())
         if limit is not None:
             query = query.limit(limit)
         with self.store.engine.connect() as conn:
@@ -311,6 +343,7 @@ class DataService:
                 result, key=lambda item: (item["occurred_at"], item["sequence"], item["id"])
             )
 
+    @source_guard
     def export_canonical(
         self, persona_id: str, relationship_id: str, destination: Path | str
     ) -> dict:
@@ -328,10 +361,18 @@ class DataService:
             "count": len(content),
             "file_sha256": file_hash(path),
             "created_at": now().isoformat(),
+            "conversations": [
+                {"id": id, "kind": "private"}
+                for id in sorted({message["conversation_id"] for message in content})
+            ],
+            "source_account_ids": sorted(
+                {message["source"]["source_account_id"] for message in content}
+            ),
         }
-        path.with_suffix(path.suffix + ".manifest.json").write_text(
-            json.dumps(manifest, ensure_ascii=False, indent=2)
-        )
+        sidecar = path.with_suffix(path.suffix + ".manifest.json")
+        with sidecar.open("x", encoding="utf-8") as handle:
+            handle.write(json.dumps(manifest, ensure_ascii=False, indent=2))
+        sidecar.chmod(0o600)
         return manifest
 
     def build_dataset(self, persona_id: str, relationship_id: str, **options) -> dict:
@@ -365,11 +406,14 @@ class DataService:
         relationship_id: str,
         text: str | None = None,
         confirmed: bool | None = None,
-        deleted: bool = False,
+        deleted: bool | None = None,
+        **options,
     ) -> dict:
         from chattwin.memory import update_memory
 
-        return update_memory(self, id, persona_id, relationship_id, text, confirmed, deleted)
+        return update_memory(
+            self, id, persona_id, relationship_id, text, confirmed, deleted, **options
+        )
 
     def retrieve_memories(
         self, persona_id: str, relationship_id: str, query: str, before: datetime | None = None
@@ -377,3 +421,72 @@ class DataService:
         from chattwin.memory import retrieve_memories
 
         return retrieve_memories(self, persona_id, relationship_id, query, before)
+
+    def style_state(self, persona_id: str, relationship_id: str) -> dict:
+        from chattwin.personalization import style_state
+
+        return style_state(self, persona_id, relationship_id)
+
+    def save_style(
+        self,
+        persona_id: str,
+        relationship_id: str,
+        rules: str,
+        example_message_ids: list[str],
+        confirmed: bool = False,
+        expected_version: int = 0,
+    ) -> dict:
+        from chattwin.personalization import save_style
+
+        return save_style(
+            self,
+            persona_id,
+            relationship_id,
+            rules,
+            example_message_ids,
+            confirmed,
+            expected_version,
+        )
+
+    def get_approved_style(
+        self, persona_id: str, relationship_id: str, before: datetime | None = None
+    ) -> dict | None:
+        from chattwin.personalization import get_approved_style
+
+        return get_approved_style(self, persona_id, relationship_id, before)
+
+    def identities(self, persona_id: str) -> dict:
+        from chattwin.identity import inspect_identities
+
+        return inspect_identities(self, persona_id)
+
+    def remap_identity(
+        self,
+        persona_id: str,
+        source_account_id: str,
+        owner_sender_id: str,
+        confirm_human: bool = False,
+        expected_mapping_version: int = 1,
+    ) -> dict:
+        from chattwin.identity import remap_identity
+
+        return remap_identity(
+            self,
+            persona_id,
+            source_account_id,
+            owner_sender_id,
+            confirm_human,
+            expected_mapping_version,
+        )
+
+    def deletion_impact(self, batch_id: str, persona_id: str, relationship_id: str) -> dict:
+        from chattwin.importers.management import deletion_impact
+
+        return deletion_impact(self, batch_id, persona_id, relationship_id)
+
+    def delete_import(
+        self, batch_id: str, persona_id: str, relationship_id: str, impact_hash: str
+    ) -> dict:
+        from chattwin.importers.management import delete_import
+
+        return delete_import(self, batch_id, persona_id, relationship_id, impact_hash)

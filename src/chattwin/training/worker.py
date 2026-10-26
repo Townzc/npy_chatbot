@@ -19,12 +19,13 @@ from typing import Any
 
 from filelock import FileLock
 
+from chattwin.runtime_paths import training_code_hash, training_lock_path
+
 from .masking import encode_target, pad_batch
 from .spec import (
     QWEN_REVISION,
     QWEN_TEMPLATE_HASH,
     TrainingSpec,
-    canonical_hash,
     local_model_hash,
     prepare_spec,
     sha256_file,
@@ -135,10 +136,13 @@ def _versions() -> dict[str, str]:
     }
 
 
-def _code_hash() -> str:
-    return canonical_hash(
-        {p.name: sha256_file(p) for p in sorted(Path(__file__).parent.glob("*.py"))}
-    )
+def _require_code_version(spec: TrainingSpec) -> str:
+    actual = training_code_hash()
+    if spec.code_version != "source:" + actual:
+        raise ValueError(
+            "training source code fingerprint mismatch; prepare a new spec with the intended code version"
+        )
+    return actual
 
 
 def train(spec: TrainingSpec) -> dict[str, Any]:
@@ -185,8 +189,9 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
         except ValueError:
             pass  # API runners should spawn a separate worker process.
     try:
+        actual_code_hash = _require_code_version(spec)
         dataset_manifest = validate_dataset(spec)
-        lock = Path(__file__).resolve().parents[3] / "training" / "uv.lock"
+        lock = training_lock_path()
         if not lock.exists() or sha256_file(lock) != spec.dependency_lock_hash:
             raise ValueError("training dependency lock hash mismatch")
         if is_cancelled():
@@ -306,6 +311,8 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
             else None,
             "quality_evaluation": "UNVERIFIED; loss and reload smoke do not establish chat quality",
         }
+        if _require_code_version(spec) != actual_code_hash:
+            raise ValueError("training code changed during execution")
         manifest = {
             "schema_version": "1.0",
             "persona_id": spec.persona_id,
@@ -319,7 +326,7 @@ def _train_locked(spec: TrainingSpec, work: Path) -> dict[str, Any]:
             "chat_template_hash": spec.chat_template_hash,
             "dependency_lock_hash": spec.dependency_lock_hash,
             "code_version": spec.code_version,
-            "training_code_hash": _code_hash(),
+            "training_code_hash": actual_code_hash,
             "evidence": status["evidence"],
             "license": "local synthetic weights"
             if spec.synthetic_smoke
@@ -410,14 +417,18 @@ def verify_artifact(work: Path) -> tuple[TrainingSpec, dict[str, Any]]:
         "base_model_revision",
         "tokenizer_revision",
         "chat_template_hash",
+        "code_version",
     ):
         if manifest[field] != getattr(spec, field):
             raise ValueError(f"adapter manifest/spec mismatch: {field}")
+    if manifest.get("training_code_hash") != spec.code_version.removeprefix("source:"):
+        raise ValueError("adapter manifest/spec training code fingerprint mismatch")
     return spec, manifest
 
 
 def compare(work: Path) -> dict[str, Any]:
     spec, _manifest = verify_artifact(work)
+    _require_code_version(spec)
     torch, base, tokenizer = load_base(spec)
     _, _, peft_model, _, _, _ = _imports()
     model = peft_model.from_pretrained(base, work / "adapter", is_trainable=False)

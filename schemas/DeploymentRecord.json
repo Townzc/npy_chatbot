@@ -1,0 +1,125 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "persona_id": {
+      "title": "Persona Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "title": "Relationship Id",
+      "type": "string"
+    },
+    "artifact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Artifact Id"
+    },
+    "endpoint": {
+      "title": "Endpoint",
+      "type": "string"
+    },
+    "model": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Model",
+      "type": "string"
+    },
+    "key_env": {
+      "default": "CHATTWIN_MODEL_KEY",
+      "pattern": "^CHATTWIN_MODEL_KEY(?:_[A-Z0-9_]+)?$",
+      "title": "Key Env",
+      "type": "string"
+    },
+    "label": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Label",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "verified_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified At"
+    },
+    "probe": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Probe"
+    },
+    "revoked_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revoked At"
+    },
+    "revoked_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revoked Reason"
+    },
+    "restore_requires_verification": {
+      "default": false,
+      "title": "Restore Requires Verification",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "persona_id",
+    "relationship_id",
+    "endpoint",
+    "model",
+    "label",
+    "id",
+    "status",
+    "created_at"
+  ],
+  "title": "DeploymentRecord",
+  "type": "object"
+}

@@ -2,11 +2,17 @@
 
 from datetime import datetime
 
+from sqlalchemy import select
+
 from chattwin.datasets import forbidden_sources
 from chattwin.domain import DomainError, now, uid
+from chattwin.importers.guards import source_guard
 from chattwin.storage import memories
 
+_UNSET = object()
 
+
+@source_guard
 def add_memory(service, persona_id, relationship_id, text, source_message_ids, confirmed=False):
     service.require_scope(persona_id, relationship_id)
     scoped = {
@@ -52,30 +58,68 @@ def add_memory(service, persona_id, relationship_id, text, source_message_ids, c
     return payload
 
 
+@source_guard
 def update_memory(
-    service, id, persona_id, relationship_id, text=None, confirmed=None, deleted=False
+    service,
+    id,
+    persona_id,
+    relationship_id,
+    text=None,
+    confirmed=None,
+    deleted=None,
+    expected_version=None,
+    expires_at=_UNSET,
 ):
     service.require_scope(persona_id, relationship_id)
-    rows = service.store.rows(
-        memories,
-        memories.c.id == id,
-        memories.c.persona_id == persona_id,
-        memories.c.relationship_id == relationship_id,
-    )
-    if not rows:
-        raise DomainError("MEMORY_NOT_FOUND", "Memory not found in this relationship", 404)
-    payload = rows[0]["payload"]
-    if text is not None:
-        if not text.strip():
-            raise DomainError("MEMORY_TEXT", "Memory text cannot be empty", 422)
-        payload["text"] = text
-        payload["confirmed"] = False
-    if confirmed is not None:
-        payload["confirmed"] = confirmed
-    payload["deleted"] = deleted
-    payload["version"] += 1
-    payload["updated_at"] = now().isoformat()
     with service.store.transaction() as conn:
+        rows = (
+            conn.execute(
+                select(memories).where(
+                    memories.c.id == id,
+                    memories.c.persona_id == persona_id,
+                    memories.c.relationship_id == relationship_id,
+                )
+            )
+            .mappings()
+            .all()
+        )
+        if not rows:
+            raise DomainError("MEMORY_NOT_FOUND", "Memory not found in this relationship", 404)
+        payload = dict(rows[0]["payload"])
+        if payload.get("status") == "revoked":
+            raise DomainError(
+                "MEMORY_REVOKED", "Memory source was revoked; create a new sourced memory", 409
+            )
+        if expected_version is not None and expected_version != payload["version"]:
+            raise DomainError("STALE_MEMORY", "Memory changed; refresh before saving")
+        payload["history"] = [
+            *payload.get("history", []),
+            {
+                "version": payload["version"],
+                "text": payload["text"],
+                "confirmed": payload["confirmed"],
+                "updated_at": payload.get("updated_at", payload["created_at"]),
+            },
+        ]
+        if expires_at is not _UNSET:
+            if expires_at is not None:
+                if isinstance(expires_at, str):
+                    expires_at = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+                if expires_at.tzinfo is None:
+                    raise DomainError("MEMORY_EXPIRY", "Expiry must include timezone", 422)
+                expires_at = expires_at.isoformat()
+            payload["expires_at"] = expires_at
+        if text is not None:
+            if not text.strip():
+                raise DomainError("MEMORY_TEXT", "Memory text cannot be empty", 422)
+            payload["text"] = text
+            payload["confirmed"] = False
+        if confirmed is not None:
+            payload["confirmed"] = confirmed
+        if deleted is not None:
+            payload["deleted"] = deleted
+        payload["version"] += 1
+        payload["updated_at"] = now().isoformat()
         conn.execute(memories.update().where(memories.c.id == id).values(payload=payload))
     return payload
 
@@ -89,9 +133,20 @@ def retrieve_memories(service, persona_id, relationship_id, query, before: datet
         memories, memories.c.persona_id == persona_id, memories.c.relationship_id == relationship_id
     ):
         item = row["payload"]
-        if not item["confirmed"] or item["deleted"] or set(item["source_message_ids"]) & excluded:
+        if (
+            not item["confirmed"]
+            or item["deleted"]
+            or item.get("status") == "revoked"
+            or set(item["source_message_ids"]) & excluded
+        ):
             continue
         if datetime.fromisoformat(item["source_time"]) >= cutoff:
+            continue
+        if before and any(
+            datetime.fromisoformat(item[key]) >= cutoff
+            for key in ("created_at", "updated_at")
+            if item.get(key)
+        ):
             continue
         if item.get("expires_at") and datetime.fromisoformat(item["expires_at"]) <= cutoff:
             continue

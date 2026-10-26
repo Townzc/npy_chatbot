@@ -128,7 +128,7 @@ def records(path: Path, fmt: str, mapping: dict) -> Iterator[tuple[int, dict, di
                     {
                         "fields": fields,
                         "platform": mapping.get("platform", "unknown"),
-                        "type": mapping.get("conversation_kind", "private"),
+                        "type": mapping.get("conversation_kind", "unknown"),
                     },
                     None,
                 )
@@ -213,7 +213,10 @@ def normalize(
             **message.provenance,
             "original_source": original_source,
             "conversation_kind": message.provenance.get(
-                "conversation_kind", mapping.get("conversation_kind", "unknown")
+                "conversation_kind",
+                mapping.get("_manifest_conversations", {}).get(
+                    message.conversation_id, mapping.get("conversation_kind", "unknown")
+                ),
             ),
             "ignored_imported_use_context": message.use_context is not None,
         }
@@ -319,6 +322,9 @@ def parse(
         if format == "auto"
         else {"canonical_jsonl": "canonical", "csv_mapping": "csv"}.get(format, format)
     )
+    from .manifests import prepare_manifest
+
+    mapping, _ = prepare_manifest(path, fmt, mapping)
     sha = file_hash(path)
     try:
         for number, record, meta, error in records(path, fmt, mapping):
@@ -348,6 +354,9 @@ def parse(
 def inspect(path: Path | str, format: str = "auto", mapping: dict | None = None) -> dict:
     path = Path(path)
     fmt = detect(path) if format == "auto" else format
+    from .manifests import prepare_manifest
+
+    mapping, manifest_validation = prepare_manifest(path, fmt, mapping or {})
     counts: Counter = Counter()
     senders: dict[str, dict] = {}
     dates: list[str] = []
@@ -397,4 +406,5 @@ def inspect(path: Path | str, format: str = "auto", mapping: dict | None = None)
         "unresolved_references": sum(ref not in source_ids for ref in references),
         "history_completeness": "unknown; parsed records do not prove complete chat history",
         "identity_confirmed": False,
+        "manifest_validation": manifest_validation,
     }

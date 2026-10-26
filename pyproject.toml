@@ -24,6 +24,13 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2", "ruff>=0.11,<1", "mypy>=1.15,
 [tool.hatch.build.targets.wheel]
 packages = ["src/chattwin"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"pyproject.toml" = "chattwin/resources/source/pyproject.toml"
+"uv.lock" = "chattwin/resources/source/uv.lock"
+"LICENSE" = "chattwin/resources/source/LICENSE"
+"training/pyproject.toml" = "chattwin/resources/source/training/pyproject.toml"
+"training/uv.lock" = "chattwin/resources/source/training/uv.lock"
+
 [tool.hatch.build]
 artifacts = ["src/chattwin/web_dist/**"]
 

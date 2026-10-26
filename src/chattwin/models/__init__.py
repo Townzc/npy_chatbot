@@ -3,6 +3,7 @@
 import asyncio
 import os
 from typing import Protocol
+from urllib.parse import urlparse
 
 import httpx
 
@@ -38,6 +39,12 @@ class HTTPProvider:
     ):
         self.base_url, self.model, self.api_key = base_url.rstrip("/"), model, api_key
         self.name = f"http:{model}"
+        self.remote = urlparse(base_url).hostname not in {
+            "localhost",
+            "127.0.0.1",
+            "::1",
+            "testserver",
+        }
         self.remaining = max_calls
         self.lock = asyncio.Lock()
         self.transport = transport
@@ -55,12 +62,17 @@ class HTTPProvider:
             ) as client:
                 response = await client.post(
                     self.base_url + "/chat/completions",
-                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    headers={"Authorization": f"Bearer {self.api_key}"} if self.api_key else {},
                     json={
                         "model": self.model,
                         "messages": request.messages,
                         "max_tokens": request.max_tokens,
                         "stream": False,
+                        **(
+                            {"temperature": request.temperature}
+                            if request.temperature is not None
+                            else {}
+                        ),
                         "metadata": {
                             "persona_id": request.persona_id,
                             "relationship_id": request.relationship_id,
@@ -72,12 +84,16 @@ class HTTPProvider:
             text = data["choices"][0]["message"]["content"]
             if not isinstance(text, str) or not text.strip() or len(text) > 4000:
                 raise ValueError("invalid text")
-            usage = data.get("usage", {})
+            usage = data.get("usage") or {}
+            if not isinstance(usage, dict):
+                raise ValueError("invalid token usage")
             return GenerationResult(
                 text=text,
                 model=self.name,
                 input_tokens=usage.get("prompt_tokens", 0),
                 output_tokens=usage.get("completion_tokens", 0),
+                usage_reported="prompt_tokens" in usage and "completion_tokens" in usage,
+                synthetic=data.get("chattwin_evidence") == "tiny_cpu_smoke",
             )
         except (httpx.HTTPError, KeyError, ValueError, TypeError) as exc:
             # Never log response bodies: they may include private context or credentials.

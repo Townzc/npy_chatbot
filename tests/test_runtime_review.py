@@ -1,6 +1,7 @@
 """Independent adversarial regressions; all channels here are local and never opened."""
 
 import asyncio
+from pathlib import Path
 
 import pytest
 
@@ -67,6 +68,94 @@ async def test_late_model_failure_preserves_owner_takeover_and_notice(runtime):
     await coordinator.settle()
     assert [request.text for request in channel.started] == ["对方已切换为ai模式", "本人已接管"]
     await coordinator.close()
+
+
+async def test_source_revocation_waits_for_http_lease_without_blocking_takeover(runtime):
+    """The deferred HTTP transport is synthetic; exercise the real provider boundary."""
+    import threading
+
+    import httpx
+    from filelock import FileLock, Timeout
+
+    from chattwin.models import HTTPProvider
+
+    store, data, channel, coordinator, persona, relation = runtime
+    p, r = persona["id"], relation["id"]
+    batch = data.import_file(
+        Path(__file__).parents[1] / "examples" / "chatlab_wechat.synthetic.jsonl",
+        p,
+        r,
+        "demo_owner",
+        "synthetic-account",
+        confirm_human=True,
+    )
+    data.add_memory(
+        p, r, "LEASE_SYNTHETIC_CANARY 展览", [data.list_messages(p, r)[0]["id"]], confirmed=True
+    )
+    impact = data.deletion_impact(batch["id"], p, r)
+    await coordinator.command(
+        "review-binding",
+        ModeCommand(command_id="source-start", action="enable", expected_control_epoch=0),
+    )
+    await coordinator.settle()
+    entered, release = asyncio.Event(), asyncio.Event()
+    attempted = threading.Event()
+    observations = []
+
+    class BeforeNetwork:
+        async def __aenter__(self):
+            entered.set()
+            await release.wait()
+
+        async def __aexit__(self, *_):
+            pass
+
+    def transport(request):
+        # Revocation may only commit after this bounded, already-leased request.
+        observations.append(
+            (b"LEASE_SYNTHETIC_CANARY" in request.content, bool(data.list_messages(p, r)))
+        )
+        return httpx.Response(200, json={"choices": [{"message": {"content": "synthetic reply"}}]})
+
+    provider = HTTPProvider(
+        "http://testserver/v1", "synthetic-protocol", "", transport=httpx.MockTransport(transport)
+    )
+    provider.lock = BeforeNetwork()
+    engine = ConversationEngine(coordinator, provider, data)
+    generation = asyncio.create_task(engine.reply("review-binding", "展览", variant="B2"))
+    deletion = None
+
+    def remove():
+        attempted.set()
+        return data.delete_import(batch["id"], p, r, impact["impact_hash"])
+
+    try:
+        await asyncio.wait_for(entered.wait(), 3)
+        with pytest.raises(Timeout):
+            FileLock(store.root / "data-management.lock", timeout=0).acquire()
+        deletion = asyncio.create_task(asyncio.to_thread(remove))
+        assert await asyncio.to_thread(attempted.wait, 3)
+        # Takeover must complete even while provider and deletion are waiting.
+        taken = await asyncio.wait_for(
+            coordinator.command(
+                "review-binding", ModeCommand(command_id="source-stop", action="takeover")
+            ),
+            timeout=1,
+        )
+        assert taken["mode"] == "HUMAN" and not deletion.done()
+        release.set()
+        with pytest.raises(DomainError, match="changed during generation"):
+            await generation
+        await asyncio.wait_for(deletion, 3)
+        assert observations == [(True, True)]
+        assert data.list_messages(p, r) == []
+        assert data.retrieve_memories(p, r, "展览") == []
+        await coordinator.settle()
+        assert [request.text for request in channel.started] == ["对方已切换为ai模式", "本人已接管"]
+    finally:
+        release.set()
+        await asyncio.gather(generation, *([deletion] if deletion else []), return_exceptions=True)
+        await coordinator.close()
 
 
 def test_core_binding_rejects_relationship_owned_by_other_persona(runtime):

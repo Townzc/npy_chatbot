@@ -7,13 +7,14 @@ import json
 import os
 import secrets
 import threading
+from contextlib import nullcontext
 from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
-from .spec import validate_scope
+from .spec import sha256_file, validate_scope
 from .worker import _imports, load_base, verify_artifact
 
 
@@ -39,6 +40,7 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
     if json.loads((artifact / "status.json").read_text()).get("status") != "succeeded":
         raise ValueError("only a successful, reloaded artifact may be served")
     spec, manifest = verify_artifact(artifact)
+    manifest_hash = sha256_file(artifact / "manifest.json")
     torch, base, tokenizer = load_base(spec)
     _, _, peft_model, _, _, _ = _imports()
     model = peft_model.from_pretrained(base, artifact / "adapter", is_trainable=False)
@@ -47,13 +49,27 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
     generation_lock = threading.Lock()
 
     def authenticate(authorization: str | None) -> None:
-        if authorization is None or not secrets.compare_digest(authorization, "Bearer " + token):
+        if authorization is None or not secrets.compare_digest(
+            authorization.encode(), ("Bearer " + token).encode()
+        ):
             raise HTTPException(401, "model endpoint authentication required")
 
     @app.get("/health")
     def health(authorization: str | None = Header(default=None)) -> dict[str, Any]:
         authenticate(authorization)
-        return {"status": "ready", "model": "chattwin-adapter", "evidence": manifest["evidence"]}
+        return {
+            "status": "ready",
+            "model": "chattwin-adapter",
+            "evidence": manifest["evidence"],
+            "persona_id": manifest["persona_id"],
+            "relationship_id": manifest["relationship_id"],
+            "artifact_manifest_hash": manifest_hash,
+            "base_model_id": spec.base_model_id,
+            "base_model_revision": spec.base_model_revision,
+            "tokenizer_revision": spec.tokenizer_revision,
+            "chat_template_hash": spec.chat_template_hash,
+            "models": ["chattwin-base", "chattwin-adapter"],
+        }
 
     @app.post("/v1/chat/completions")
     def generate(
@@ -68,7 +84,7 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
             )
         except ValueError as exc:
             raise HTTPException(403, str(exc)) from exc
-        if body.model != "chattwin-adapter":
+        if body.model not in {"chattwin-adapter", "chattwin-base"}:
             raise HTTPException(400, "unknown model deployment")
         messages = [message.model_dump() for message in body.messages]
         ids = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True)
@@ -77,7 +93,10 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
         if not generation_lock.acquire(blocking=False):
             raise HTTPException(429, "model busy")
         try:
-            with torch.inference_mode():
+            with (
+                torch.inference_mode(),
+                model.disable_adapter() if body.model == "chattwin-base" else nullcontext(),
+            ):
                 inputs = torch.tensor([ids], device=spec.device)
                 kwargs: dict[str, Any] = {"do_sample": body.temperature > 0}
                 if body.temperature > 0:
@@ -91,7 +110,8 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
             generated = output[0, len(ids) :]
             return {
                 "object": "chat.completion",
-                "model": "chattwin-adapter",
+                "chattwin_evidence": manifest["evidence"],
+                "model": body.model,
                 "choices": [
                     {
                         "index": 0,

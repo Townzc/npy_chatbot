@@ -1,38 +1,40 @@
-# 实施状态 — 2026-10-26
+# 实施状态 — 2026-10-26（第二批）
 
-规格来源：[DEVELOPMENT_PLAN.md](../DEVELOPMENT_PLAN.md)，原始计划包保持原样。这里记录实现，不重写规格。DONE 表示所列当前任务门槛有本地证据；PARTIAL 表示有实现但缺部分验收；BLOCKED 表示等待具体外部输入；TODO 仍待实施。工程测试、真实本地训练、真实 QQ 分开计。
+以 DEVELOPMENT_PLAN.md 与原始计划包为规格。DONE 只表示括号内已验收范围；PARTIAL 表示已有功能但仍有验收缺口；BLOCKED 只用于具体外部条件。没有将工程协议测试、tiny 训练或窄屏浏览器当成真实 QQ、Qwen 质量或手机实测。
 
-| 任务 | 状态 | 实现/验证 | 限制及后续 |
+| 任务 | 状态 | 本地交付与证据 | 剩余限制/输入 |
 |---|---|---|---|
-| T01 范围/ADR | DONE | docs/adr/0001-local-core.md、THIRD_PARTY_NOTICES.md | 无公共发布授权，不捆绑桥 |
-| T02 doctor/QQ探针 | PARTIAL / 实机 BLOCKED | CLI doctor、qq probe；docs/preflight.md；test_onebot.py | 无已运行桥/指定实测会话；未真实发送 |
-| T03 训练预检 | DONE（预检） | TrainingSpec 固定 Qwen revision/template/lock；tokenizer 实测 | Linux/CUDA 候选组合仍未测，预检不等于训练 |
-| T04 工程/CI | DONE（本地） | uv.lock、pnpm-lock、lint/type/test、生产构建、CI配置 | GitHub Actions 尚未推送执行；跨系统未承诺 |
-| T05 领域契约 | PARTIAL | domain、schemas、OpenAPI、生成 TS，核心消息/发送契约已测 | 完整 ModelDeployment/来源附件等扩展契约仍需增补 |
-| T06 存储迁移 | DONE（首版） | SQLAlchemy/Alembic 0001冻结快照、FK/唯一键/范围索引；重复升级测试 | 后续训练注册等表按新迁移演进，不改0001 |
-| T07 无密钥demo | DONE | `uv run chattwin demo`；FakeChannel/MockProvider；模式单测 | 明确为虚构工程演示，无真实模型效果声明 |
-| T08 本人认证/API | DONE（本地门槛） | Bearer、Origin/Host、上传限制；test_api.py | 远程会话过期/限流/手机访问由T26补齐 |
-| T09 QCE | BLOCKED | 未伪造兼容解析器；chat_record格式元数据检查 | 需要版本明确的真实脱敏QCE导出 |
-| T10 ChatLab | DONE（格式工程） | JSON/JSONL秒级时间、null/未知/坏行/引用；test_data.py | 实际导出兼容仍待样本，不宣称任意微信提取 |
-| T11 CSV/规范JSONL | PARTIAL | CSV映射/时区/10万条；JSONL回读；unknown/group隔离 | 通用sidecar manifest读入和更多日期歧义仍需补全 |
-| T12 身份/关系 | PARTIAL | Persona独立映射、同名不合并、导出者非目标、core scope guard | 完整跨平台关联/重新映射UI未完成 |
-| T13 数据集 | DONE（合成工程） | 片段先split、回复/近重复聚类、冻结hash、mask真实tokenizer测试 | 少数据训练集无有效测试集时明确低可信；真实质量待T24 |
-| T14 风格/记忆 | PARTIAL | 可追溯风格草稿、确认/删除关系记忆、时间/held-out过滤 | 画像编辑确认UI、记忆纠正UI、完整删除传播未完成 |
-| T15 HTTP/引擎 | PARTIAL | 实际HTTP代码、取消/请求预算、B0/B1/B2、范围metadata | 无供应商付费API实测；月费用预算/对话质量待补 |
-| T16 导入试聊UI | PARTIAL | 浏览器完成新建→预览→确认导入→记忆→试聊→接管 | 完整v0.1格式发布受T09等限制 |
-| T17 模式通知 | PARTIAL | 精确文案、幂等、旧页面接管、迟到失败、重启等回归 | 尚非计划全体40类故障覆盖，实机通知未测 |
-| T18 唯一outbox | PARTIAL | 事务意图、transport-start屏障、跨数据目录真实账号锁、unknown不重发 | 人工可靠核对/完整echo恢复仍缺；跨主机不支持 |
-| T19 OneBot | PARTIAL / 实机 BLOCKED | 真WS客户端、账号验证、文本段、事件过滤/合并/回执；本地协议测试 | 真实桥未安装，echo先到会保守暂停；不能标QQ可用 |
-| T20 移动接管UI | PARTIAL | 窄屏固定接管、通知状态、并发控制，浏览器验证 | 真手机/QQ/离网未验收，无v0.2发布 |
-| T21 LoRA worker | PARTIAL | 真实AdamW/PEFT、cancel/interrupted、独立环境；12训练测试 | tiny CPU通过；正式CUDA配置未验证，无优化器断点恢复 |
-| T22 产物/推理 | PARTIAL | hash/scope manifest、新进程重载、认证推理端点及403隔离 | 完整注册/版本切换/回滚尚待实现 |
-| T23 训练管理 | PARTIAL | 网页数据集报告、训练包准备CLI、job status文件 | 完整异步jobs API/训练管理UI未完成 |
-| T24 正式训练评测 | BLOCKED | tiny真实更新和对照有报告，绝不代替本任务 | 需Linux/CUDA、确认的训练数据、Qwen权重、独立B0–B3评测 |
-| T25 数据/诊断 | PARTIAL | 私有目录、用量记录、记忆删除、长导入不阻断接管 | 来源删除影响预览、adapter失效链、完整诊断未完成 |
-| T26 安装/手机 | PARTIAL | 锁文件、构建/启动脚本、loopback鉴权、核心安装验证 | Mac常驻/休眠、私网TLS、手机离网控制未验证 |
-| T27 备份恢复 | PARTIAL | SQLite/WAL一致快照、引用数据集、校验与空目录恢复；7测试 | 权重/原文件/凭证明确排除；旧应用/模型版本回滚待实现 |
-| T28 独立验收 | PARTIAL / 试运行 BLOCKED | 独立review修复并保留6项竞态回归 | 100场景人工质量与真实≥7天证据尚无 |
-| T29 发布准备 | PARTIAL | README/贡献/许可证/边界/锁文件/合成样例/隐私检查 | SBOM/跨平台安装/完整支持矩阵发布审查待前置任务 |
-| T30 RC审查 | TODO | 本状态表明确不能声称v1完成 | 依赖T24–T29，不创建release、不自动推送 |
+| T01 范围/ADR | DONE | ADR、模块边界、上游许可记录 | 用户后续授权源码推送；未授权发布 release/模型或代发私聊 |
+| T02 doctor/QQ探针 | PARTIAL；实机 BLOCKED | doctor、只读身份/版本/status探针、preflight | 无可连接桥、账号/指定会话配置；未真实发送 |
+| T03 训练预检 | DONE（预检） | 固定 Qwen revision/template/依赖、实际 tokenizer；GPU环境API | 本机 Darwin 无 CUDA；48GB方案仍需实际显存 dry run |
+| T04 工程/CI | DONE（本地）；CI BLOCKED | 两套Python锁、前端锁、lint/type/test/build/wheel | GitHub OAuth缺workflow权限；CI保留为ci/模板，未远程运行 |
+| T05 领域契约 | PARTIAL | 消息/控制/产物/部署/作业/短会话/预算OpenAPI和生成TS | 未承诺所有附件类型；保持不支持类型显式表示 |
+| T06 存储迁移 | DONE（当前） | 冻结0001、增量0002部署表；旧备份升级测试 | 新版向旧版不破坏性降级 |
+| T07 无密钥demo | DONE | CLI及真实浏览器→API→SQLite→FakeChannel | 明确虚构；没有个人模型效果声明 |
+| T08 本人认证/API | DONE（本地工程） | Bearer/Host/严格同源、上传限制、短会话/退出/到期/重启失效 | 手机严格session配置待真实TLS设备验收 |
+| T09 QCE | BLOCKED | 不猜字段、不伪造格式支持 | 需要固定QCE版本、真实脱敏导出样本 |
+| T10 ChatLab | DONE（格式工程） | v0.0.2 JSON/JSONL、秒级时间/null/未知/引用/重复 | 用户实际导出兼容仍需样本 |
+| T11 CSV/规范JSONL | DONE（格式工程） | CSV映射/时区/10万条；sidecar哈希/行数/范围/会话类型；回读 | CSV默认unknown，明确私聊才训练；QCE不混同 |
+| T12 身份/关系 | DONE（本地工程） | 稳定ID映射、检查/显式重映射、同名不合并、跨关系隔离 | 真实跨平台导出兼容仍待数据 |
+| T13 数据集 | DONE（合成工程） | 完整片段split、去重、目标mask、冻结hash、预览、撤销 | 小数据0验证/测试明确低可信，不能作质量验收 |
+| T14 风格/记忆 | DONE（本地工程） | 草稿/批准不可变版本、记忆编辑纠正/失效/出处、heldout与时间过滤 | 画像质量需本人认可；删除不等于权重遗忘 |
+| T15 HTTP/引擎 | DONE（本地工程） | 真HTTP路径、多轮已确认上下文、取消、月预留账目、B0–B3快速试聊 | 正式同pin对照走evaluation；无供应商付费实测，USD为配置价估算 |
+| T16 导入试聊UI | DONE（已支持格式） | 新档案→预览→确认类型/身份→导入→画像/记忆→试聊浏览器通过 | QCE专项完整v0.1格式门槛未过 |
+| T17 模式通知 | DONE（工程）；实机 BLOCKED | 精确通知、命令幂等、旧页面接管、迟到回执、重启/失败竞态回归 | QQ原会话通知顺序仍待实机 |
+| T18 唯一outbox | DONE（工程）；实机 BLOCKED | 最终发送屏障、账号锁、unknown只读/人工审计、不重发、冲突重开unknown | 人工证据为本人声明；真实平台核对能力未验证 |
+| T19 OneBot | PARTIAL；实机 BLOCKED | 真WS客户端、身份核验、选定私聊过滤、防回放/合并、文本段、回执 | 无真实桥；自身echo先到会保守暂停；手机本人发言识别未验收 |
+| T20 移动接管UI | DONE（浏览器工程） | 390×844无横溢、固定接管、通知/unknown状态 | 真手机蜂窝网与QQ未测；不宣称v0.2已验收 |
+| T21 LoRA worker | PARTIAL | 真AdamW/PEFT更新/保存/新进程重载；源码/数据/依赖pin；取消/中断 | 13项独立训练测试；仍需正式Qwen Linux/CUDA训练，无优化器续训 |
+| T22 产物/推理 | DONE（本地工程） | artifact校验/登记、认证base+adapter实际推理、scope/模型hash、部署切换/回滚 | tiny证明执行；Qwen部署与质量未验收；网页未跑有效LoRA成功路径 |
+| T23 训练管理 | DONE（本地工程） | SQLite持久队列/心跳/取消/锁/日志、网页、GPU预检、独立训练包 | 真tiny作业和wheel导出已测；Mac正式任务明确CUDA失败 |
+| T24 正式训练评测 | PARTIAL；GPU/数据 BLOCKED | 真HTTP B0–B3 runner、版本验证、未来/heldout隔离、blind/score工具 | 缺Qwen CUDA训练、足量确认数据和独立人工质量评分；不发v0.3 |
+| T25 数据/诊断 | DONE（本地工程） | 删除影响hash确认、训练/模型/部署/评测撤销、文件清理回滚、预算、脱敏诊断 | 已发HTTP不能撤回；删除等待源租约完成，接管不等网络；旧备份/权重需另处理 |
+| T26 安装/手机 | PARTIAL | 隔离wheel安装实测、短会话、launchd生成+plutil通过、私网TLS操作文档 | 未安装登录项；休眠/唤醒/真手机离网未测 |
+| T27 备份/恢复/回滚 | PARTIAL | 一致快照、UI下载、旧0001恢复升级0002、撤销源不复活、模型回滚 | 权重/原文件/凭证排除；完整旧应用版本回滚和实际模型重部署未验收 |
+| T28 独立验收 | PARTIAL；试运行 BLOCKED | 多代理独立审查与竞态修复；124核心测试、13训练测试、浏览器证据 | 未满100完整人工质量场景、真实≥7天和手机/QQ组合 |
+| T29 发布准备 | PARTIAL | README/贡献/许可证/隐私扫描、225组件锁清单SBOM、合成样例与证据 | 各组件完整许可/漏洞复审、Linux安装矩阵及T28仍缺 |
+| T30 RC审查 | PARTIAL；v1 BLOCKED | release-readiness明确每项支持声明/限制 | 只推送源码；不创建release、不称T01–T30全部完成 |
 
-下一批优先：补齐持久 jobs 与训练UI→模型注册/切换/回滚→来源删除传播；并行拿到可解析真实导出和用户自行配置的QQ桥，建立真实QQ证据；再做Qwen CUDA/B0–B3、手机私网接管、恢复回滚与7日试运行。当前已提供的命令与测试保持可运行，不以空接口占位。
+最终本地检查：`uv run pytest -q` 124 passed / 1 skipped（未安装可选torch的核心环境跳过runtime训练）；独立training环境13 passed；Ruff、mypy、生产构建通过。详见[第二批报告](evidence/management-milestone-2026-10-26.md)及[浏览器证据](evidence/web-management-2026-10-26.md)。
+
+下一批：提供Linux/CUDA后先以虚构数据做Qwen显存dry run/真实训练/认证部署，随后足量确认数据与人工B0–B3；提供桥后先只读探针，再由用户自行验证指定原私聊；并行真手机TLS/休眠、应用版本恢复、≥7天试运行和依赖审查。当前内部代码缺口与外部未验收不混写。

@@ -183,7 +183,6 @@
       "type": "string"
     },
     "code_version": {
-      "default": "working-tree",
       "title": "Code Version",
       "type": "string"
     },
@@ -205,7 +204,8 @@
     "persona_id",
     "relationship_id",
     "output_path",
-    "dependency_lock_hash"
+    "dependency_lock_hash",
+    "code_version"
   ],
   "title": "TrainingSpec",
   "type": "object"

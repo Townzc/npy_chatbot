@@ -66,11 +66,27 @@ def test_endpoint_auth_scope_and_actual_inference(artifact):
     }
     assert client.post("/v1/chat/completions", json=body).status_code == 401
     headers = {"Authorization": "Bearer " + token}
+    from chattwin.training.spec import sha256_file
+
+    health = client.get("/health", headers=headers)
+    assert health.status_code == 200
+    assert health.json()["artifact_manifest_hash"] == sha256_file(
+        spec.output_path / "manifest.json"
+    )
+    assert health.json()["persona_id"] == spec.persona_id
     mismatch = {**body, "metadata": {**body["metadata"], "relationship_id": "another-friend"}}
     assert client.post("/v1/chat/completions", json=mismatch, headers=headers).status_code == 403
     response = client.post("/v1/chat/completions", json=body, headers=headers)
     assert response.status_code == 200
     assert response.json()["usage"]["completion_tokens"] > 0
+    base_response = client.post(
+        "/v1/chat/completions", json={**body, "model": "chattwin-base"}, headers=headers
+    )
+    assert base_response.status_code == 200
+    assert base_response.json()["model"] == "chattwin-base"
+    assert base_response.json()["chattwin_evidence"] == "tiny_cpu_smoke"
+    after_base = client.post("/v1/chat/completions", json=body, headers=headers)
+    assert after_base.json()["choices"] == response.json()["choices"]
 
 
 def test_cancellation_preserves_truthful_state_before_loading(artifact, tmp_path):
@@ -140,4 +156,18 @@ def test_imported_synthetic_dataset_enters_real_worker(artifact, tmp_path):
     assert result["report"]["max_parameter_update"] > 0
     assert result["manifest"]["dataset_hash"] == dataset["dataset_hash"]
     assert result["manifest"]["persona_id"] == persona["id"]
+    from chattwin.models import MockProvider
+    from chattwin.models.registry import ArtifactRegistration, ModelRegistry
+
+    registry = ModelRegistry(store, MockProvider(), lambda: None)
+    registered = registry.register(
+        ArtifactRegistration(
+            persona_id=persona["id"],
+            relationship_id=relationship["id"],
+            artifact_path=str(spec.output_path),
+        )
+    )
+    assert registered.status == "validated"
+    assert registered.manifest["dataset_hash"] == dataset["dataset_hash"]
+    assert registered.manifest["evidence"] == "tiny_cpu_smoke"
     store.close()

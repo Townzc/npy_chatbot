@@ -120,3 +120,19 @@ uv run --project training --locked python -m chattwin.training.serve \
 T21/T22 的 executable worker 与 tiny 证明已具备，但 Linux/CUDA 生产路径仍 UNVERIFIED。T24 需要真实 Qwen 4B 固定底座训练、独立新进程加载、保留测试集及人工场景的 B0–B3 对照、跨关系泄漏评测、网页模型切换/回滚证据。当前 tiny 输出没有质量结论，不应标为完整 v0.3。
 
 上游基础接口：[PEFT 保存/加载](https://github.com/huggingface/peft/blob/v0.18.1/src/peft/peft_model.py) · [固定 Qwen 模型卡](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/blob/cdbee75f17c01a7cc42f958dc650907174af0554/README.md)。实现独立编写，未复制上游代码。
+
+### 已安装 wheel 的冻结资源
+
+训练 spec、worker 与 tiny smoke 通过 `chattwin.runtime_paths.training_lock_path()` 找到发行版自带的 `training/uv.lock`；源码 checkout、pip 安装 wheel、下载的精简训练包都使用相同规则。wheel 内含许可证、主项目与训练项目配置/锁文件，不含模型权重、聊天或凭证。管理应用的独立训练解释器可以通过 `CHATTWIN_TRAINING_PYTHON` 指定绝对路径；该环境需安装完整相同版本 ChatTwin 和锁定训练依赖，详见 `docs/jobs.md`。
+
+2026-10-26 在仓库外新环境安装实际构建 wheel 后，API 下载的精简包重新同步锁文件并执行真实 tiny smoke：8 个 optimizer steps、224 trainable parameters、最大参数更新 0.1608261764；训练 PID 88378、新进程加载 PID 88483、最大 logits 差 0.4429531693。该产物仍为 `tiny_cpu_smoke`，不计入正式 Qwen T24 验收。
+
+### 训练源码指纹与旧 spec
+
+`TrainingSpec.code_version` 现在必须为 `source:<64位SHA-256>`。`prepare_spec` 和 `create_smoke_spec` 自动计算实际训练包全部 `.py` 模块，加上 `runtime_paths.py` 资源解析器的文件哈希；再对“包内相对路径 → 文件 SHA-256”的排序规范 JSON 求 SHA-256。结果与绝对安装位置、Git 是否存在无关，包含 helper 的变化，排除不参与独立训练包的 jobs/UI 等应用代码。Git commit 不能替代这个检查，因为工作区可能尚未提交。
+
+worker 在读取数据或加载模型前核对源码，保存 manifest 前再次核对，新进程比较时也核对；源码发生漂移即失败，不产生可注册的成功训练证据。`ModelManifest.code_version`、`training_code_hash` 与 spec 必须相互一致。导出训练包在压缩之前对复制后的源码重新计算指纹，并写入 `bundle-manifest.json.training_code_version`；复制时发生漂移会拒绝导出。
+
+旧 `code_version: working-tree`、缺少 code_version 或其他无内容 pin 的 spec 不再可执行，也不会自动补写当前版本伪造旧证据。请使用当前代码重新 `prepare` 后创建新的训练作业；旧无 pin 的产物需重新训练、验证、注册才能满足这版可复现要求。原始文件不会被此升级删除。已有合法 `source:` pin 的历史产物仍记录训练时的源码身份；重新执行训练/compare 必须使用匹配的训练源码。
+
+针对性验证：核心训练契约/作业/资源测试 16 项通过；隔离训练环境的契约与真实训练运行时测试 13 项通过。新增回归证明源码漂移在读数据/加载模型前失败、旧 working-tree 被明确拒绝、源码和解压训练包指纹一致、改动导出的 helper 会改变指纹。

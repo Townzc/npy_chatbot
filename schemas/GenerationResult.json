@@ -11,13 +11,20 @@
     },
     "input_tokens": {
       "default": 0,
+      "minimum": 0,
       "title": "Input Tokens",
       "type": "integer"
     },
     "output_tokens": {
       "default": 0,
+      "minimum": 0,
       "title": "Output Tokens",
       "type": "integer"
+    },
+    "usage_reported": {
+      "default": false,
+      "title": "Usage Reported",
+      "type": "boolean"
     },
     "synthetic": {
       "default": false,

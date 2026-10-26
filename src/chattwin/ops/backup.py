@@ -19,10 +19,10 @@ from typing import Any, BinaryIO, Iterator
 from filelock import FileLock
 
 from chattwin.storage import Store
-from chattwin.storage.schema_v1 import metadata
+from chattwin.storage.schema_v1 import metadata as schema_v1
 
 BACKUP_VERSION = "1.0"
-SCHEMA_REVISION = "0001"
+SUPPORTED_REVISIONS = {"0001", "0002"}
 DATASET_FILES = {"manifest.json", "train.jsonl", "validation.jsonl", "test.jsonl"}
 EXCLUSIONS = [
     "owner-token and environment credentials (regenerate owner authentication after restore)",
@@ -145,29 +145,50 @@ def _read_database(path: Path) -> sqlite3.Connection:
     return connection
 
 
-def _validate_database(path: Path) -> dict[str, int]:
+def _database_revision(connection: sqlite3.Connection) -> str:
+    values = connection.execute("SELECT version_num FROM alembic_version").fetchall()
+    if len(values) != 1 or values[0][0] not in SUPPORTED_REVISIONS:
+        raise ValueError("unsupported database schema revision")
+    return values[0][0]
+
+
+def _schema_columns(revision: str) -> dict[str, list[str]]:
+    columns = {name: list(table.columns.keys()) for name, table in schema_v1.tables.items()}
+    if revision == "0002":
+        columns["model_deployments"] = [
+            "id",
+            "persona_id",
+            "relationship_id",
+            "artifact_id",
+            "status",
+            "payload",
+        ]
+    return columns
+
+
+def _validate_database(path: Path, expected_revision: str | None = None) -> dict[str, int]:
     connection = _read_database(path)
     try:
         if connection.execute("PRAGMA quick_check").fetchone() != ("ok",):
             raise ValueError("SQLite integrity check failed")
         if connection.execute("PRAGMA foreign_key_check").fetchall():
             raise ValueError("SQLite foreign key check failed")
-        if connection.execute("SELECT version_num FROM alembic_version").fetchall() != [
-            (SCHEMA_REVISION,)
-        ]:
-            raise ValueError("unsupported database schema revision")
+        revision = _database_revision(connection)
+        if expected_revision and revision != expected_revision:
+            raise ValueError("database schema revision does not match backup manifest")
+        schema = _schema_columns(revision)
         objects = connection.execute(
             "SELECT type, name FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'"
         ).fetchall()
         if any(kind in {"trigger", "view"} for kind, _ in objects):
             raise ValueError("unexpected executable SQLite schema object")
         tables = {name for kind, name in objects if kind == "table"}
-        if tables != set(metadata.tables) | {"alembic_version"}:
+        if tables != set(schema) | {"alembic_version"}:
             raise ValueError("database table schema differs from supported revision")
         counts = {}
-        for name, table in metadata.tables.items():
+        for name, expected_columns in schema.items():
             columns = [row[1] for row in connection.execute(f'PRAGMA table_info("{name}")')]
-            if columns != list(table.columns.keys()):
+            if columns != expected_columns:
                 raise ValueError("database column schema differs from supported revision")
             counts[name] = connection.execute(f'SELECT COUNT(*) FROM "{name}"').fetchone()[0]
         return counts
@@ -182,10 +203,14 @@ def _validate_datasets(root: Path, files: dict[str, Any]) -> None:
             if not re.fullmatch(r"[A-Za-z0-9_-]+", dataset_id):
                 raise ValueError("invalid dataset identifier")
             disk_path = f"datasets/{dataset_id}/manifest.json"
+            stored = json.loads(payload)
+            if stored.get("status") == "revoked":
+                if any(name.startswith(f"datasets/{dataset_id}/") for name in files):
+                    raise ValueError("revoked dataset contents must not be included or restored")
+                continue
             if disk_path not in files:
                 raise ValueError("snapshot references a dataset absent from the backup")
             disk = _read_json(root, disk_path)
-            stored = json.loads(payload)
             if disk != stored or disk.get("id") != dataset_id:
                 raise ValueError("dataset manifest does not match database snapshot")
             if disk.get("dataset_hash") != _digest(
@@ -202,6 +227,12 @@ def _validate_datasets(root: Path, files: dict[str, Any]) -> None:
 
 def create_backup(store: Store, destination: Path | str) -> dict[str, Any]:
     """Create a new backup directory atomically, never overwrite an existing path."""
+    # Deletion/identity changes use this same lock while quarantining datasets.
+    with FileLock(store.root / "data-management.lock", timeout=10):
+        return _create_backup_locked(store, destination)
+
+
+def _create_backup_locked(store: Store, destination: Path | str) -> dict[str, Any]:
     destination = _canonical_location(destination)
     if destination.exists() or destination.is_relative_to(store.root):
         raise ValueError("backup destination must be new and outside the live data directory")
@@ -224,11 +255,20 @@ def create_backup(store: Store, destination: Path | str) -> dict[str, Any]:
         counts = _validate_database(stage / "chattwin.sqlite3")
         files = {"chattwin.sqlite3": _file_info(stage, "chattwin.sqlite3")}
         omitted_models = []
+        revoked_datasets = []
         connection = _read_database(stage / "chattwin.sqlite3")
         try:
-            for (dataset_id,) in connection.execute("SELECT id FROM dataset_versions"):
+            revision = _database_revision(connection)
+            for dataset_id, payload in connection.execute(
+                "SELECT id,payload FROM dataset_versions"
+            ):
                 if not re.fullmatch(r"[A-Za-z0-9_-]+", dataset_id):
                     raise ValueError("invalid dataset identifier")
+                if json.loads(payload).get("status") == "revoked":
+                    revoked_datasets.append(
+                        {"dataset_id": dataset_id, "status": "revoked", "contents_included": False}
+                    )
+                    continue
                 for name in sorted(DATASET_FILES):
                     relative = f"datasets/{dataset_id}/{name}"
                     files[relative] = _copy_regular(store.root, relative, stage)
@@ -238,6 +278,11 @@ def create_backup(store: Store, destination: Path | str) -> dict[str, Any]:
                 row = json.loads(payload)
                 location = row.get("artifact_path") or row.get("path")
                 reason = "model binaries excluded; metadata retained in database"
+                if row.get("status") == "revoked":
+                    omitted_models.append(
+                        {"artifact_id": artifact_id, "reason": "revoked artifact; files excluded"}
+                    )
+                    continue
                 if location and re.fullmatch(r"[A-Za-z0-9_-]+", artifact_id):
                     path = Path(location).expanduser()
                     path = path if path.is_absolute() else store.root / path
@@ -259,12 +304,13 @@ def create_backup(store: Store, destination: Path | str) -> dict[str, Any]:
         _validate_datasets(stage, files)
         manifest = {
             "schema_version": BACKUP_VERSION,
-            "database_revision": SCHEMA_REVISION,
+            "database_revision": revision,
             "created_at": datetime.now(UTC).isoformat(),
             "files": files,
             "row_counts": counts,
             "excluded": EXCLUSIONS,
             "model_artifacts": omitted_models,
+            "revoked_datasets": revoked_datasets,
             "contains_private_chat_data": True,
             "encrypted": False,
             "restore_policy": "empty target; archive bindings; pause sessions; no queued sends",
@@ -286,7 +332,7 @@ def inspect_backup(path: Path | str) -> dict[str, Any]:
     manifest = _read_json(root, "backup-manifest.json")
     if (
         manifest.get("schema_version") != BACKUP_VERSION
-        or manifest.get("database_revision") != SCHEMA_REVISION
+        or manifest.get("database_revision") not in SUPPORTED_REVISIONS
     ):
         raise ValueError("unsupported backup/schema version")
     if manifest.get("manifest_hash") != _digest(
@@ -311,7 +357,7 @@ def inspect_backup(path: Path | str) -> dict[str, Any]:
             found.add(str((Path(current) / name).relative_to(root)))
     if found != set(files) | {"backup-manifest.json"}:
         raise ValueError("backup contains unlisted or missing files")
-    counts = _validate_database(root / "chattwin.sqlite3")
+    counts = _validate_database(root / "chattwin.sqlite3", manifest["database_revision"])
     if counts != manifest.get("row_counts"):
         raise ValueError("backup database counts do not match manifest")
     _validate_datasets(root, files)
@@ -324,6 +370,7 @@ def _pause_restored_database(path: Path) -> None:
         connection.execute("PRAGMA trusted_schema=OFF")
         connection.execute("PRAGMA foreign_keys=ON")
         with connection:
+            revision = _database_revision(connection)
             connection.execute("UPDATE bindings SET active=0")
             connection.execute(
                 "UPDATE mode_sessions SET mode='PAUSED', control_epoch=control_epoch+1"
@@ -349,6 +396,7 @@ def _pause_restored_database(path: Path) -> None:
             ).fetchall():
                 value = json.loads(payload)
                 value.update(
+                    status="revoked" if value.get("status") == "revoked" else "unavailable",
                     deployment_status="unavailable",
                     restore_requires_verification=True,
                     restore_reason="model binaries were not included in this backup",
@@ -357,6 +405,20 @@ def _pause_restored_database(path: Path) -> None:
                     "UPDATE model_artifacts SET payload=? WHERE id=?",
                     (json.dumps(value), artifact_id),
                 )
+            if revision == "0002":
+                for deployment_id, payload in connection.execute(
+                    "SELECT id,payload FROM model_deployments"
+                ).fetchall():
+                    value = json.loads(payload)
+                    value.update(
+                        status="revoked",
+                        restore_requires_verification=True,
+                        revoked_reason="backup_restore_requires_revalidation",
+                    )
+                    connection.execute(
+                        "UPDATE model_deployments SET status='revoked',payload=? WHERE id=?",
+                        (json.dumps(value), deployment_id),
+                    )
             connection.execute(
                 "INSERT INTO audit_events(id,kind,payload) VALUES(?,?,?)",
                 (

@@ -1,0 +1,19 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "binding_id": {
+      "title": "Binding Id",
+      "type": "string"
+    },
+    "expected_control_epoch": {
+      "title": "Expected Control Epoch",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "binding_id",
+    "expected_control_epoch"
+  ],
+  "title": "ActivateDeployment",
+  "type": "object"
+}

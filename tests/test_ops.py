@@ -1,17 +1,35 @@
 import hashlib
+import io
 import json
+import shutil
 import sqlite3
+import zipfile
 from pathlib import Path
 
 import pytest
+from fastapi import FastAPI, Header, HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.testclient import TestClient
 from filelock import FileLock, Timeout
 
+from chattwin.api.ops_routes import ops_router
 from chattwin.channels import FakeChannel
-from chattwin.domain import Binding, ModeCommand
+from chattwin.domain import Binding, DomainError, ModeCommand
 from chattwin.importers import DataService
 from chattwin.ops import create_backup, inspect_backup, restore_backup
+from chattwin.ops.service import OperationsService
 from chattwin.outbox import Coordinator
-from chattwin.storage import Store, artifacts, bindings, messages, outbox, sessions
+from chattwin.storage import (
+    Store,
+    artifacts,
+    bindings,
+    datasets,
+    jobs,
+    messages,
+    model_deployments,
+    outbox,
+    sessions,
+)
 
 
 @pytest.fixture
@@ -229,3 +247,130 @@ def test_model_metadata_included_but_weights_never_claimed_restored(source, tmp_
     target = Store(restored)
     assert all(row["payload"]["restore_requires_verification"] for row in target.rows(artifacts))
     target.close()
+
+
+def test_schema_0002_deployments_revoked_on_restore(source, tmp_path):
+    store, _, persona, relationship, _ = source
+    with store.transaction() as connection:
+        connection.execute(
+            model_deployments.insert().values(
+                id="deployment",
+                persona_id=persona,
+                relationship_id=relationship,
+                status="ready",
+                payload={"status": "ready", "endpoint": "http://127.0.0.1:8766/v1"},
+            )
+        )
+    backup = tmp_path / "backup"
+    assert create_backup(store, backup)["database_revision"] == "0002"
+    target = tmp_path / "restored"
+    restore_backup(backup, target)
+    restored = Store(target)
+    row = restored.rows(model_deployments)[0]
+    assert row["status"] == "revoked" and row["payload"]["status"] == "revoked"
+    assert row["payload"]["restore_requires_verification"]
+    restored.close()
+
+
+def test_legacy_schema_0001_backup_restores_and_upgrades(source, tmp_path):
+    store = source[0]
+    with store.engine.begin() as connection:
+        connection.exec_driver_sql("DROP TABLE model_deployments")
+        connection.exec_driver_sql("UPDATE alembic_version SET version_num='0001'")
+    backup = tmp_path / "legacy"
+    assert create_backup(store, backup)["database_revision"] == "0001"
+    restored_path = tmp_path / "restored"
+    restore_backup(backup, restored_path)
+    restored = Store(restored_path)
+    restored.migrate()
+    assert restored.rows(model_deployments) == []
+    assert len(restored.rows(messages)) == 4
+    restored.close()
+
+
+def test_revoked_dataset_contents_are_not_copied_or_resurrected(source, tmp_path):
+    store, _, _, _, dataset = source
+    with store.transaction() as connection:
+        connection.execute(
+            datasets.update()
+            .where(datasets.c.id == dataset["id"])
+            .values(
+                payload={k: v for k, v in dataset.items() if k != "path"}
+                | {"status": "revoked", "files_removed": True}
+            )
+        )
+    shutil.rmtree(Path(dataset["path"]))
+    backup = tmp_path / "revoked-backup"
+    report = create_backup(store, backup)
+    assert report["revoked_datasets"][0]["contents_included"] is False
+    assert not (backup / "datasets" / dataset["id"]).exists()
+    restored = tmp_path / "restored"
+    restore_backup(backup, restored)
+    target = Store(restored)
+    assert target.rows(datasets)[0]["payload"]["status"] == "revoked"
+    assert not (restored / "datasets" / dataset["id"]).exists()
+    target.close()
+
+
+def test_diagnostics_contains_only_aggregate_counts_not_private_values(source):
+    store, _, persona, relationship, _ = source
+    (store.root / "owner-token").write_text("NEVER_SHOW_THIS_TOKEN")
+    with store.transaction() as connection:
+        connection.execute(
+            jobs.insert().values(
+                id="private-job",
+                kind="training",
+                status="PRIVATE_CHAT_STRING",
+                payload={"private": "NEVER_SHOW_THIS_TOKEN"},
+            )
+        )
+    report = OperationsService(store).diagnostics()
+    text = report.model_dump_json()
+    for private in (
+        "NEVER_SHOW_THIS_TOKEN",
+        "PRIVATE_CHAT_STRING",
+        str(store.root),
+        persona,
+        relationship,
+    ):
+        assert private not in text
+    assert report.counts["messages"] == 4
+    assert report.states["jobs"] == {"other": 1}
+
+
+def test_ops_routes_auth_uuid_and_verified_private_download(source):
+    store = source[0]
+    app = FastAPI()
+
+    async def auth(authorization: str | None = Header(default=None)):
+        if authorization != "Bearer owner":
+            raise HTTPException(401)
+
+    @app.exception_handler(DomainError)
+    async def error(_request, exc):
+        return JSONResponse({"code": exc.code, "detail": exc.detail}, status_code=exc.status)
+
+    app.include_router(ops_router(store, auth))
+    with TestClient(app) as client:
+        assert client.get("/api/v1/diagnostics").status_code == 401
+        headers = {"Authorization": "Bearer owner"}
+        assert (
+            client.get("/api/v1/diagnostics", headers=headers).json()["privacy"][
+                "chat_content_included"
+            ]
+            is False
+        )
+        assert client.get("/api/v1/backups/not-a-uuid/download", headers=headers).status_code == 422
+        response = client.post("/api/v1/backups", headers=headers, json={})
+        assert response.status_code == 201, response.text
+        item = response.json()
+        listing = client.get("/api/v1/backups", headers=headers).json()
+        assert listing[0]["id"] == item["id"] and listing[0]["bytes"] > 0
+        service = OperationsService(store)
+        assert not service.root.is_relative_to(store.root)
+        download = client.get(f"/api/v1/backups/{item['id']}/download", headers=headers)
+        assert download.status_code == 200
+        with zipfile.ZipFile(io.BytesIO(download.content)) as archive:
+            assert "chattwin.sqlite3" in archive.namelist()
+            assert "owner-token" not in archive.namelist()
+        assert not list(service.root.glob(".download-*.zip"))

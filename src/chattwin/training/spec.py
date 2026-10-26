@@ -10,6 +10,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from chattwin.runtime_paths import training_code_hash, training_lock_path
+
 QWEN_REVISION = "cdbee75f17c01a7cc42f958dc650907174af0554"
 QWEN_TEMPLATE_HASH = "64f85b198065d0fba2a81f37e10ed68161ce2c19a754c7100e67e0ca2ee9c326"
 
@@ -74,9 +76,18 @@ class TrainingSpec(BaseModel):
     output_path: Path
     cancel_path: Path | None = None
     dependency_lock_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
-    code_version: str = "working-tree"
+    code_version: str
     synthetic_smoke: bool = False
     local_files_only: bool = False
+
+    @field_validator("code_version")
+    @classmethod
+    def pinned_training_source(cls, value: str) -> str:
+        if not re.fullmatch(r"source:[0-9a-f]{64}", value):
+            raise ValueError(
+                "code_version requires source:<sha256>; legacy working-tree specs must be prepared again"
+            )
+        return value
 
     @field_validator("dataset_path", "output_path", "cancel_path", mode="before")
     @classmethod
@@ -141,7 +152,7 @@ def validate_scope(manifest: dict[str, Any], persona_id: str, relationship_id: s
 def prepare_spec(dataset_path: Path, output_path: Path) -> TrainingSpec:
     """Prepare the pinned Qwen candidate. This does not assert GPU compatibility."""
     manifest = json.loads((dataset_path.expanduser() / "manifest.json").read_text())
-    lock = Path(__file__).resolve().parents[3] / "training/uv.lock"
+    lock = training_lock_path()
     spec = TrainingSpec(
         dataset_path=dataset_path,
         dataset_version=manifest["id"],
@@ -151,6 +162,7 @@ def prepare_spec(dataset_path: Path, output_path: Path) -> TrainingSpec:
         output_path=output_path,
         cancel_path=output_path / "cancel.requested",
         dependency_lock_hash=sha256_file(lock),
+        code_version="source:" + training_code_hash(),
     )
     validate_dataset(spec)
     return spec

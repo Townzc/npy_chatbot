@@ -6,9 +6,11 @@ from pathlib import Path
 
 import typer
 
+from chattwin.host.cli import app as host_app
 from chattwin.storage import Store, default_data_dir
 
 app = typer.Typer(help="ChatTwin 本地个人 AI；默认无真实发送")
+app.add_typer(host_app, name="host")
 imports_app = typer.Typer()
 app.add_typer(imports_app, name="import")
 dataset_app = typer.Typer()

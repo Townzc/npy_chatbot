@@ -1,0 +1,47 @@
+{
+  "$defs": {
+    "JobLogEvent": {
+      "properties": {
+        "at": {
+          "title": "At",
+          "type": "string"
+        },
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "at",
+        "event",
+        "detail"
+      ],
+      "title": "JobLogEvent",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "events": {
+      "items": {
+        "$ref": "#/$defs/JobLogEvent"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "raw_logs_exposed": {
+      "const": false,
+      "default": false,
+      "title": "Raw Logs Exposed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "events"
+  ],
+  "title": "JobLogs",
+  "type": "object"
+}

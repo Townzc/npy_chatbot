@@ -1,0 +1,143 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "validating",
+        "running",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "interrupted"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "persona_id": {
+      "title": "Persona Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "title": "Relationship Id",
+      "type": "string"
+    },
+    "dataset_id": {
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "title": "Updated At",
+      "type": "string"
+    },
+    "phase": {
+      "default": "queued",
+      "title": "Phase",
+      "type": "string"
+    },
+    "step": {
+      "default": 0,
+      "title": "Step",
+      "type": "integer"
+    },
+    "progress": {
+      "default": 0,
+      "title": "Progress",
+      "type": "number"
+    },
+    "heartbeat": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Heartbeat"
+    },
+    "cancel_requested": {
+      "default": false,
+      "title": "Cancel Requested",
+      "type": "boolean"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Code"
+    },
+    "error_summary": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Summary"
+    },
+    "output_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Output Path"
+    },
+    "artifact_ready": {
+      "default": false,
+      "title": "Artifact Ready",
+      "type": "boolean"
+    },
+    "loss": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Loss"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "status",
+    "persona_id",
+    "relationship_id",
+    "dataset_id",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "JobView",
+  "type": "object"
+}

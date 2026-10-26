@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from chattwin.runtime_paths import training_code_hash
 from chattwin.training.masking import encode_target, pad_batch
 from chattwin.training.spec import TrainingSpec, canonical_hash, validate_dataset, validate_scope
 from chattwin.training.worker import worker_environment
@@ -64,6 +65,7 @@ def make_spec(tmp_path: Path, **updates):
         relationship_id="r",
         output_path=tmp_path / "job",
         dependency_lock_hash="b" * 64,
+        code_version="source:" + training_code_hash(),
     )
     return TrainingSpec(**(values | updates))
 
@@ -121,3 +123,17 @@ def test_worker_child_does_not_inherit_channel_or_admin_secrets(monkeypatch):
         & environment.keys()
     )
     assert environment["HF_HUB_DISABLE_IMPLICIT_TOKEN"] == "1"
+
+
+def test_worker_refuses_source_drift_before_loading_data_or_model(tmp_path, monkeypatch):
+    from chattwin.training.worker import train
+
+    spec = make_spec(tmp_path)
+    monkeypatch.setattr("chattwin.training.worker.training_code_hash", lambda: "f" * 64)
+    with pytest.raises(ValueError, match="source code fingerprint mismatch"):
+        train(spec)
+    state = json.loads((spec.output_path / "status.json").read_text())
+    assert state["status"] == "failed" and "fingerprint mismatch" in state["error"]
+    assert not (spec.output_path / "adapter").exists()
+    with pytest.raises(ValueError, match="prepared again"):
+        make_spec(tmp_path, code_version="working-tree")

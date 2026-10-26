@@ -1,7 +1,6 @@
 """Authenticated local owner API. Live QQ is configured separately from sandbox."""
 
 import asyncio
-import hmac
 import json
 import os
 import secrets
@@ -18,14 +17,22 @@ from pydantic import Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from chattwin import __version__
+from chattwin.api.control_routes import control_router
+from chattwin.api.data_routes import data_router
+from chattwin.api.job_routes import job_router
+from chattwin.api.ops_routes import ops_router
+from chattwin.auth import OwnerAuth, auth_router
 from chattwin.channels import FakeChannel
 from chattwin.channels.onebot import OneBotAdapter
 from chattwin.conversation import ConversationEngine
 from chattwin.domain import Binding, Contract, DomainError, ModeCommand, Scope, uid
 from chattwin.importers import DataService
+from chattwin.jobs import JobManager
 from chattwin.models import configured_provider
+from chattwin.models.registry import ModelRegistry, model_router
 from chattwin.outbox import Coordinator
 from chattwin.storage import Store, bindings, memories, personas, relationships
+from chattwin.usage import BudgetService, usage_router
 
 
 class NamedInput(Contract):
@@ -39,7 +46,7 @@ class RelationshipInput(NamedInput):
 class SandboxInput(Contract):
     binding_id: str
     text: str = Field(min_length=1, max_length=4000)
-    variant: Literal["B0", "B1", "B2"] = "B2"
+    variant: Literal["B0", "B1", "B2", "B3"] = "B2"
 
 
 class MemoryInput(Scope):
@@ -123,8 +130,13 @@ def create_app(
     store = Store(data_dir)
     store.migrate()
     secret = token or owner_token(store.root)
+    owner_auth = OwnerAuth(
+        secret, require_session=os.environ.get("CHATTWIN_REQUIRE_SESSION") == "1"
+    )
     data = DataService(store)
     provider = configured_provider()
+    manager = JobManager(store)
+    budget = BudgetService(store)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -153,7 +165,16 @@ def create_app(
                 await channel.open()
             coordinator = Coordinator(store, channel)
             app.state.coordinator = coordinator
-            app.state.conversation = ConversationEngine(coordinator, provider, data)
+            app.state.conversation = ConversationEngine(
+                coordinator, provider, data, registry, budget
+            )
+
+            async def sources_revoked(result):
+                for job_id in result.get("cancel_job_ids", []):
+                    manager.cancel(job_id)
+
+            coordinator.on_sources_revoked = sources_revoked
+            await manager.startup()
             app.state.generations = {}
             if live_config:
                 existing = store.rows(
@@ -179,6 +200,7 @@ def create_app(
         finally:
             if live:
                 await live.close()
+            await manager.close()
             if coordinator:
                 await coordinator.close()
             if isinstance(channel, OneBotAdapter):
@@ -188,6 +210,9 @@ def create_app(
 
     app = FastAPI(title="ChatTwin", version=__version__, lifespan=lifespan)
     app.state.store = store
+    registry = ModelRegistry(store, provider, lambda: app.state.coordinator, budget=budget)
+    app.state.registry = registry
+    app.state.jobs = manager
     app.add_middleware(
         TrustedHostMiddleware,
         allowed_hosts=["localhost", "127.0.0.1", "[::1]", "testserver"]
@@ -198,7 +223,10 @@ def create_app(
     @app.middleware("http")
     async def boundaries(request: Request, call_next):
         origin = request.headers.get("origin")
-        if origin and urlparse(origin).netloc != request.headers.get("host"):
+        if origin and (
+            urlparse(origin).netloc != request.headers.get("host")
+            or urlparse(origin).scheme != request.url.scheme
+        ):
             return JSONResponse(
                 {"code": "ORIGIN_REJECTED", "detail": "Cross-origin control is disabled"},
                 status_code=403,
@@ -219,7 +247,7 @@ def create_app(
         return response
 
     async def authenticate(credentials: HTTPAuthorizationCredentials | None = Depends(bearer)):
-        if not credentials or not hmac.compare_digest(credentials.credentials, secret):
+        if not credentials or not owner_auth.valid(credentials.credentials):
             raise DomainError("UNAUTHENTICATED", "本人访问凭证无效", 401)
 
     @app.exception_handler(DomainError)
@@ -241,8 +269,8 @@ def create_app(
                 )
             ],
             training={
-                "available": False,
-                "detail": "独立 LoRA worker 可从 CLI 运行；本机尚无生产底座 GPU 训练验收，tiny smoke 不代表训练效果。",
+                "available": manager.python.is_file(),
+                "detail": "持久训练队列已接入；提交后先校验环境。正式 Qwen 需要 Linux/CUDA；tiny 验证不代表个人模型质量。",
             },
             provider={"name": provider.name, "remote": provider.remote},
             version=__version__,
@@ -298,6 +326,14 @@ def create_app(
     async def mode(binding_id: str, body: ModeCommand) -> ModeStatus:
         if body.action == "enable" and live_config and not app.state.coordinator.channel.verified:
             raise DomainError("BRIDGE_UNAVAILABLE", "Bridge identity is not verified", 503)
+        if body.action == "enable":
+            current = app.state.coordinator.status(binding_id)
+            active_binding = store.rows(bindings, bindings.c.id == binding_id)[0]["payload"]
+            registry.provider(
+                current["payload"]["model_deployment_id"],
+                active_binding["persona_id"],
+                active_binding["relationship_id"],
+            )
         await app.state.coordinator.command(binding_id, body)
         if body.action != "enable":
             for task in list(app.state.generations.get(binding_id, set())):
@@ -449,6 +485,15 @@ def create_app(
         async with app.state.coordinator.scope_update(body.persona_id, body.relationship_id):
             return await complete_thread(data.build_dataset, body.persona_id, body.relationship_id)
 
+    app.include_router(data_router(store, lambda: app.state.coordinator, authenticate))
+    app.include_router(
+        job_router(store, lambda: app.state.coordinator, authenticate, manager=manager)
+    )
+    app.include_router(model_router(registry, authenticate))
+    app.include_router(ops_router(store, authenticate))
+    app.include_router(usage_router(budget, authenticate))
+    app.include_router(control_router(store, lambda: app.state.coordinator, authenticate))
+    app.include_router(auth_router(owner_auth))
     static = Path(__file__).parents[1] / "web_dist"
     if static.exists():
         app.mount("/", StaticFiles(directory=static, html=True), name="web")

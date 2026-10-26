@@ -152,13 +152,15 @@ class GenerationRequest(Scope):
     messages: list[dict[str, str]]
     max_tokens: int = Field(default=256, ge=1, le=4096)
     model: str = "mock"
+    temperature: float | None = Field(default=None, ge=0, le=2, allow_inf_nan=False)
 
 
 class GenerationResult(Contract):
     text: str
     model: str
-    input_tokens: int = 0
-    output_tokens: int = 0
+    input_tokens: int = Field(default=0, ge=0)
+    output_tokens: int = Field(default=0, ge=0)
+    usage_reported: bool = False
     synthetic: bool = False
 
 

@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "at": {
+      "title": "At",
+      "type": "string"
+    },
+    "event": {
+      "title": "Event",
+      "type": "string"
+    },
+    "detail": {
+      "title": "Detail",
+      "type": "string"
+    }
+  },
+  "required": [
+    "at",
+    "event",
+    "detail"
+  ],
+  "title": "JobLogEvent",
+  "type": "object"
+}

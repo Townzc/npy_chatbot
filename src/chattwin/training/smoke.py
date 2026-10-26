@@ -9,6 +9,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from chattwin.runtime_paths import training_code_hash, training_lock_path
+
 from .spec import TrainingSpec, canonical_hash, local_model_hash, private_output, sha256_file
 from .worker import train, write_json
 
@@ -142,7 +144,8 @@ def create_smoke_spec(root: Path) -> TrainingSpec:
         epochs=8,
         max_steps=8,
         output_path=root / "job",
-        dependency_lock_hash=sha256_file(Path(__file__).resolve().parents[3] / "training/uv.lock"),
+        dependency_lock_hash=sha256_file(training_lock_path()),
+        code_version="source:" + training_code_hash(),
         synthetic_smoke=True,
         local_files_only=True,
     )

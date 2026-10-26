@@ -152,7 +152,10 @@ def test_csv_mapping_bom_newline_and_repeat_text(service, tmp_path):
         '\ufeffconv,who,when,body\nc,p,2026-10-26T00:00:00Z,"你好\n世界"\nc,o,2026-10-26T00:00:01Z,好\nc,o,2026-10-26T00:00:01Z,好\n'
     )
     p, r = scope(service)
-    mapping = {"fields": {"conversation": "conv", "sender": "who", "time": "when", "text": "body"}}
+    mapping = {
+        "conversation_kind": "private",
+        "fields": {"conversation": "conv", "sender": "who", "time": "when", "text": "body"},
+    }
     report = service.import_file(path, p, r, "o", "a", mapping=mapping, confirm_human=True)
     assert report["inserted"] == 3
     assert service.list_messages(p, r)[0]["content"]["text"] == "你好\n世界"
@@ -168,6 +171,21 @@ def test_time_units_and_dst():
         parse_time("2026-11-01T01:30:00", "America/Los_Angeles")
     with pytest.raises(ValueError):
         parse_time("2026-03-08T02:30:00", "America/Los_Angeles")
+
+
+def test_csv_missing_conversation_kind_keeps_unknown_outside_relationship(service):
+    p, r = scope(service)
+    report = service.import_file(
+        EXAMPLES / "generic_chat.synthetic.csv",
+        p,
+        r,
+        "demo_owner",
+        "synthetic-account",
+        confirm_human=True,
+    )
+    assert report["inserted"] > 0 and report["candidate_training_targets"] == 0
+    assert report["scope_excluded"] == report["inserted"]
+    assert service.list_messages(p, r) == []
 
 
 def test_memory_scope_confirmation_correction_and_delete(service):
@@ -215,7 +233,9 @@ def test_dataset_freeze_split_and_retrieval_holdout(service, tmp_path):
         ]
     path.write_text("\n".join(rows))
     p, r = scope(service)
-    service.import_file(path, p, r, "owner", "account", confirm_human=True)
+    service.import_file(
+        path, p, r, "owner", "account", confirm_human=True, mapping={"conversation_kind": "private"}
+    )
     manifest = service.build_dataset(p, r)
     directory = Path(manifest["path"])
     disk = json.loads((directory / "manifest.json").read_text())

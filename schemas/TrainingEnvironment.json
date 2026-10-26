@@ -1,0 +1,83 @@
+{
+  "properties": {
+    "python_available": {
+      "title": "Python Available",
+      "type": "boolean"
+    },
+    "dependencies_available": {
+      "title": "Dependencies Available",
+      "type": "boolean"
+    },
+    "platform": {
+      "title": "Platform",
+      "type": "string"
+    },
+    "python_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Python Version"
+    },
+    "dependencies": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Dependencies",
+      "type": "object"
+    },
+    "cuda_available": {
+      "default": false,
+      "title": "Cuda Available",
+      "type": "boolean"
+    },
+    "cuda_bf16_supported": {
+      "default": false,
+      "title": "Cuda Bf16 Supported",
+      "type": "boolean"
+    },
+    "supports_reference_training": {
+      "default": false,
+      "title": "Supports Reference Training",
+      "type": "boolean"
+    },
+    "tiny_available": {
+      "default": false,
+      "title": "Tiny Available",
+      "type": "boolean"
+    },
+    "blockers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Blockers",
+      "type": "array"
+    },
+    "reference_model": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Reference Model",
+      "type": "object"
+    },
+    "download_default_disabled": {
+      "const": true,
+      "default": true,
+      "title": "Download Default Disabled",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "python_available",
+    "dependencies_available",
+    "platform",
+    "reference_model"
+  ],
+  "title": "TrainingEnvironment",
+  "type": "object"
+}

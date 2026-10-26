@@ -10,6 +10,7 @@ from datetime import datetime
 from difflib import SequenceMatcher
 
 from chattwin.domain import DomainError, now, uid
+from chattwin.importers.guards import source_guard
 from chattwin.importers.parsers import digest, file_hash
 from chattwin.storage import datasets
 
@@ -31,6 +32,7 @@ def _redact(text: str) -> str:
     return re.sub(r"(?<!\d)(?:\+?\d[\d -]{8,}\d)(?!\d)", "[NUMBER]", text)
 
 
+@source_guard
 def build_dataset(
     service, persona_id: str, relationship_id: str, gap_seconds: int = 1800, redact: bool = True
 ) -> dict:

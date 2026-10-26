@@ -1,0 +1,112 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "dataset_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "persona_id": {
+      "minLength": 1,
+      "title": "Persona Id",
+      "type": "string"
+    },
+    "relationship_id": {
+      "minLength": 1,
+      "title": "Relationship Id",
+      "type": "string"
+    },
+    "precision": {
+      "default": "bfloat16",
+      "enum": [
+        "bfloat16",
+        "float16"
+      ],
+      "title": "Precision",
+      "type": "string"
+    },
+    "rank": {
+      "default": 8,
+      "maximum": 128,
+      "minimum": 1,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "alpha": {
+      "default": 16,
+      "maximum": 1024,
+      "minimum": 1,
+      "title": "Alpha",
+      "type": "integer"
+    },
+    "dropout": {
+      "default": 0.05,
+      "exclusiveMaximum": 1,
+      "minimum": 0,
+      "title": "Dropout",
+      "type": "number"
+    },
+    "max_sequence_length": {
+      "default": 1024,
+      "maximum": 32768,
+      "minimum": 16,
+      "title": "Max Sequence Length",
+      "type": "integer"
+    },
+    "batch_size": {
+      "default": 1,
+      "maximum": 128,
+      "minimum": 1,
+      "title": "Batch Size",
+      "type": "integer"
+    },
+    "gradient_accumulation": {
+      "default": 4,
+      "maximum": 1024,
+      "minimum": 1,
+      "title": "Gradient Accumulation",
+      "type": "integer"
+    },
+    "learning_rate": {
+      "default": 0.0002,
+      "exclusiveMinimum": 0,
+      "maximum": 0.1,
+      "title": "Learning Rate",
+      "type": "number"
+    },
+    "epochs": {
+      "default": 1,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Epochs",
+      "type": "integer"
+    },
+    "max_steps": {
+      "default": 100,
+      "maximum": 1000000,
+      "minimum": 1,
+      "title": "Max Steps",
+      "type": "integer"
+    },
+    "seed": {
+      "default": 42,
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "allow_model_download": {
+      "default": false,
+      "title": "Allow Model Download",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "dataset_id",
+    "persona_id",
+    "relationship_id"
+  ],
+  "title": "TrainingJobRequest",
+  "type": "object"
+}

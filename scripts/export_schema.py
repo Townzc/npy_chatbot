@@ -6,6 +6,19 @@ from tempfile import TemporaryDirectory
 
 from chattwin import domain
 from chattwin.api import create_app
+from chattwin.jobs.models import (
+    JobLogEvent,
+    JobLogs,
+    JobView,
+    TrainingEnvironment,
+    TrainingJobRequest,
+)
+from chattwin.models.registry import (
+    ActivateDeployment,
+    ArtifactRecord,
+    DeploymentInput,
+    DeploymentRecord,
+)
 from chattwin.training.spec import TrainingSpec
 
 root = Path(__file__).resolve().parents[1] / "schemas"
@@ -34,3 +47,17 @@ for name in (
 (root / "TrainingSpec.json").write_text(
     json.dumps(TrainingSpec.model_json_schema(), ensure_ascii=False, indent=2) + "\n"
 )
+for contract in (
+    TrainingJobRequest,
+    JobView,
+    JobLogEvent,
+    JobLogs,
+    TrainingEnvironment,
+    ArtifactRecord,
+    DeploymentRecord,
+    DeploymentInput,
+    ActivateDeployment,
+):
+    (root / f"{contract.__name__}.json").write_text(
+        json.dumps(contract.model_json_schema(), ensure_ascii=False, indent=2) + "\n"
+    )

@@ -30,6 +30,20 @@
       "default": "mock",
       "title": "Model",
       "type": "string"
+    },
+    "temperature": {
+      "anyOf": [
+        {
+          "maximum": 2,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temperature"
     }
   },
   "required": [
