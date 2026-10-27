@@ -56,19 +56,28 @@ class OneBotAdapter:
                 raise DomainError(
                     "ACCOUNT_MISMATCH", "Bridge login identity does not match configured account"
                 )
-            self.verified = True
             version = await self.call("get_version_info", {})
             self.version = (
                 str(version.get("app_name", "unknown"))
                 + ":"
                 + str(version.get("app_version", "unknown"))
             )
+            status = await self.call("get_status", {})
+            if (
+                not isinstance(status, dict)
+                or status.get("online") is not True
+                or status.get("good") is not True
+            ):
+                raise DomainError("BRIDGE_NOT_READY", "Bridge is offline or not healthy", 503)
+            self.verified = True
         except BaseException:
             await self.close()
             raise
         return {
             "identity_verified": True,
             "bridge_version": self.version,
+            "online": True,
+            "healthy": True,
             "send_enabled": self.allow_send,
             "real_conversation_verified": False,
         }

@@ -314,6 +314,85 @@ def test_canonical_missing_conversation_kind_never_grants_private_use(service):
     )
 
 
+@pytest.mark.parametrize("segment_count", [5, 6, 20, 80])
+def test_dataset_reserves_both_heldout_partitions(service, tmp_path, segment_count):
+    path = tmp_path / "independent-sessions.csv"
+    rows = ["conversation,sender_id,occurred_at,text,message_id"]
+    base = datetime(2026, 1, 1, tzinfo=UTC)
+    for index in range(segment_count):
+        date = base + timedelta(days=index)
+        rows.extend(
+            [
+                f"conv,friend,{date.isoformat()},{digest(['question', index])},q{index}",
+                f"conv,owner,{(date + timedelta(seconds=30)).isoformat()},{digest(['answer', index])},a{index}",
+            ]
+        )
+    path.write_text("\n".join(rows))
+    p, r = scope(service)
+    service.import_file(
+        path, p, r, "owner", "account", confirm_human=True, mapping={"conversation_kind": "private"}
+    )
+    manifest = service.build_dataset(p, r)
+    assert all(manifest["counts"].values())
+    assert manifest["counts"]["test"] >= (2 if segment_count >= 20 else 1)
+    assert abs(manifest["counts"]["test"] - manifest["counts"]["validation"]) <= 1
+    assert sum(segment["split"] == "embargo" for segment in manifest["segments"]) == 2
+    assert sum(manifest["counts"].values()) == segment_count - 2
+
+
+@pytest.mark.parametrize("unusable_tail", [1, 2])
+def test_dataset_discloses_empty_filtered_test_and_preserves_frozen_holdout(
+    service, tmp_path, unusable_tail
+):
+    path = tmp_path / "owner-only-tail.csv"
+    rows = ["conversation,sender_id,occurred_at,text,message_id"]
+    base = datetime(2026, 1, 1, tzinfo=UTC)
+    for index in range(20):
+        date = base + timedelta(days=index)
+        if index < 20 - unusable_tail:
+            rows.append(f"conv,friend,{date.isoformat()},{digest(['question', index])},q{index}")
+        rows.append(
+            f"conv,owner,{(date + timedelta(seconds=30)).isoformat()},{digest(['answer', index])},a{index}"
+        )
+    path.write_text("\n".join(rows))
+    p, r = scope(service)
+    service.import_file(
+        path, p, r, "owner", "account", confirm_human=True, mapping={"conversation_kind": "private"}
+    )
+    first = service.build_dataset(p, r)
+    assert first["counts"]["test"] == 2 - unusable_tail
+    assert first["confidence"].startswith("low:") is (unusable_tail == 2)
+    frozen = {
+        value
+        for segment in first["segments"]
+        if segment["split"] != "train"
+        for value in segment["source_message_ids"]
+    }
+    original_manifest = (Path(first["path"]) / "manifest.json").read_bytes()
+    # A new history version would otherwise move old held-out records into train.
+    for index in range(20, 40):
+        date = base + timedelta(days=index)
+        rows.extend(
+            [
+                f"conv,friend,{date.isoformat()},{digest(['question', index])},q{index}",
+                f"conv,owner,{(date + timedelta(seconds=30)).isoformat()},{digest(['answer', index])},a{index}",
+            ]
+        )
+    path.write_text("\n".join(rows))
+    service.import_file(
+        path, p, r, "owner", "account", confirm_human=True, mapping={"conversation_kind": "private"}
+    )
+    second = service.build_dataset(p, r)
+    train = {
+        value
+        for segment in second["segments"]
+        if segment["split"] == "train"
+        for value in segment["source_message_ids"]
+    }
+    assert not train & frozen
+    assert (Path(first["path"]) / "manifest.json").read_bytes() == original_manifest
+
+
 def test_canonical_inspect_discloses_account_without_trusting_ui_default(service):
     report = service.inspect(
         EXAMPLES / "canonical_messages.synthetic.jsonl", mapping={"source_account_id": "preview"}

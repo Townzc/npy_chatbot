@@ -123,8 +123,12 @@ def build_dataset(
                 assignments[index] = "train"
     else:
         # Hold one cluster out at each split boundary as an embargo.
-        train_count = max(1, int((len(groups) - 2) * 0.8))
-        validation_count = max(1, len(groups) - train_count - 3)
+        available = len(groups) - 2
+        # Reserve both held-out partitions, even at the five-cluster minimum.
+        # Split the remaining budget between validation and final test instead
+        # of assigning all but one cluster to validation.
+        train_count = max(1, min(available - 2, int(available * 0.8)))
+        validation_count = max(1, (available - train_count) // 2)
         labels = (
             ["train"] * train_count + ["embargo"] + ["validation"] * validation_count + ["embargo"]
         )
@@ -132,9 +136,7 @@ def build_dataset(
         for group, split in zip(groups, labels, strict=True):
             for index in group:
                 assignments[index] = split
-        confidence = (
-            "synthetic/engineering split only; quality requires independent human evaluation"
-        )
+        confidence = "engineering split only; quality requires independent human evaluation"
     # Never promote a frozen held-out source into training when new history arrives.
     old_excluded = forbidden_sources(service, persona_id, relationship_id)
     for group in groups:
@@ -248,6 +250,11 @@ def build_dataset(
             "NO_TRAINING_TARGETS",
             "Confirm human origin of selected owner messages and provide preceding partner context",
             422,
+        )
+    if len(groups) >= 5 and (not examples["validation"] or not examples["test"]):
+        confidence = (
+            "low: validation or test has no usable owner reply examples after filtering; "
+            "no valid held-out evaluation"
         )
     dataset_id = uid()
     parent = service.store.root / "datasets"
