@@ -37,7 +37,7 @@ uv run chattwin serve
 | QCE 单文件 JSON | 参考 v6.3.2 的导出核心 0.1.0 schema；解析/身份/数据集与网页合成验证通过，真实导出及分块 JSONL 未验收；见[兼容边界](docs/qce-compatibility.md) |
 | QQ .bak / 数据库容器 | 只读识别 MSG0、QQ_NT DB、普通 SQLite/ZIP；不支持自动解密、提取或假装导入 |
 
-本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；后续头部检查识别出其中 4 个为 MSG0，另外 4 个仍未识别。用户又提供了一份电脑 QQ“导出聊天记录”生成的 `.bak`：外层 ZIP 内有 4 个 MSG0 数据库，归档 CRC 通过，聊天内容仍未解密。用户最新确认导出时电脑 QQ 能看到所需旧记录，接下来从保存记录的电脑导出可读 JSON；仍需确认具体是哪台电脑。没有把文件名、账号或正文写入 Git。见 [备份与可读导出的边界](docs/qq-setup-research.md)。
+本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；后续头部检查识别出其中 4 个为 MSG0，另外 4 个仍未识别。用户又提供了一份电脑 QQ“导出聊天记录”生成的 `.bak`：外层 ZIP 内有 4 个 MSG0 数据库，归档 CRC 通过，聊天内容仍未解密。用户最新确认当前这台 Mac 的 QQ 能看到所需旧记录，接下来从本机导出可读 JSON。没有把文件名、账号或正文写入 Git。见 [备份与可读导出的边界](docs/qq-setup-research.md)。
 
 可用 `uv run chattwin import probe /absolute/path/to/export.bak` 只读诊断文件类型。命令不显示文件名、密钥或正文，不解包、不创建聊天数据库；识别成功也不表示已导入。见 [本次检查证据与限制](docs/evidence/qq-bak-inspection-2026-10-27.md)。
 
