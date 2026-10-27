@@ -88,8 +88,12 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
             raise HTTPException(400, "unknown model deployment")
         messages = [message.model_dump() for message in body.messages]
         ids = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True)
-        if len(ids) + body.max_tokens > spec.max_sequence_length:
+        available_tokens = spec.max_sequence_length - len(ids)
+        if available_tokens <= 0:
             raise HTTPException(413, "context exceeds this deployment's validated token budget")
+        # max_tokens is an upper bound; preserve the full prompt and cap generation
+        # to this deployment's budget instead of rejecting a short valid prompt.
+        generation_limit = min(body.max_tokens, available_tokens)
         if not generation_lock.acquire(blocking=False):
             raise HTTPException(429, "model busy")
         try:
@@ -103,11 +107,14 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
                     kwargs["temperature"] = body.temperature
                 output = model.generate(
                     input_ids=inputs,
-                    max_new_tokens=body.max_tokens,
+                    max_new_tokens=generation_limit,
                     pad_token_id=tokenizer.pad_token_id,
                     **kwargs,
                 )
             generated = output[0, len(ids) :]
+            eos = model.generation_config.eos_token_id
+            eos_ids = set(eos if isinstance(eos, (list, tuple)) else [eos])
+            ended_with_eos = bool(len(generated) and generated[-1].item() in eos_ids)
             return {
                 "object": "chat.completion",
                 "chattwin_evidence": manifest["evidence"],
@@ -119,7 +126,11 @@ def create_inference_app(artifact: Path, token: str) -> FastAPI:
                             "role": "assistant",
                             "content": tokenizer.decode(generated, skip_special_tokens=True),
                         },
-                        "finish_reason": "stop",
+                        "finish_reason": (
+                            "length"
+                            if len(generated) >= generation_limit and not ended_with_eos
+                            else "stop"
+                        ),
                     }
                 ],
                 "usage": {

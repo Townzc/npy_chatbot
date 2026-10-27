@@ -82,7 +82,13 @@ class HTTPProvider:
                 response.raise_for_status()
                 data = response.json()
             text = data["choices"][0]["message"]["content"]
-            if not isinstance(text, str) or not text.strip() or len(text) > 4000:
+            if isinstance(text, str) and not text.strip():
+                raise DomainError(
+                    "MODEL_EMPTY_RESPONSE",
+                    "模型返回了空文本，未取得有效回复。请检查模型、adapter 和生成参数后重新测试。",
+                    503,
+                )
+            if not isinstance(text, str) or len(text) > 4000:
                 raise ValueError("invalid text")
             usage = data.get("usage") or {}
             if not isinstance(usage, dict):
@@ -95,7 +101,7 @@ class HTTPProvider:
                 usage_reported="prompt_tokens" in usage and "completion_tokens" in usage,
                 synthetic=data.get("chattwin_evidence") == "tiny_cpu_smoke",
             )
-        except (httpx.HTTPError, KeyError, ValueError, TypeError) as exc:
+        except (httpx.HTTPError, KeyError, ValueError, TypeError, IndexError) as exc:
             # Never log response bodies: they may include private context or credentials.
             raise DomainError(
                 "MODEL_UNAVAILABLE", "Model request failed or returned an invalid response", 503

@@ -52,6 +52,34 @@ def create_deployment(client, scope):
     return response.json()["id"]
 
 
+@pytest.mark.parametrize(
+    ("body", "code"),
+    [
+        ({"choices": [{"message": {"content": ""}}]}, "MODEL_EMPTY_RESPONSE"),
+        ({"choices": [{"message": {"content": " \n "}}]}, "MODEL_EMPTY_RESPONSE"),
+        ({"choices": []}, "MODEL_UNAVAILABLE"),
+    ],
+)
+def test_empty_or_malformed_reply_does_not_verify_deployment(registry_client, body, code):
+    app, client, scope, _ = registry_client
+    app.state.registry.transport = httpx.MockTransport(lambda _: httpx.Response(200, json=body))
+    deployment_id = create_deployment(client, scope)
+    response = client.post(f"/api/v1/model-deployments/{deployment_id}/test")
+    assert response.status_code == 503
+    assert response.json()["code"] == code
+    saved = client.get("/api/v1/model-deployments", params=scope).json()
+    assert next(item for item in saved if item["id"] == deployment_id)["status"] == "unverified"
+    status = client.get("/api/v1/conversations/demo-binding/status").json()
+    activated = client.post(
+        f"/api/v1/model-deployments/{deployment_id}/activate",
+        json={"binding_id": "demo-binding", "expected_control_epoch": status["control_epoch"]},
+    )
+    assert activated.status_code == 409
+    after = client.get("/api/v1/conversations/demo-binding/status").json()
+    assert after["payload"]["model_deployment_id"] == status["payload"]["model_deployment_id"]
+    assert after["ai_stopped"] is True
+
+
 def test_verified_model_switch_stops_old_generation_and_rolls_back(registry_client):
     app, client, scope, calls = registry_client
     dep = create_deployment(client, scope)

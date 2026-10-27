@@ -28,6 +28,13 @@ const deploymentLabels: Record<string, string> = {
   revoked: '已失效',
 };
 
+function artifactEvidence(artifact?: Artifact) {
+  if (!artifact) return '';
+  return artifact.manifest.evidence === 'tiny_cpu_smoke'
+    ? 'CPU tiny：仅验证执行链，未验证聊天质量'
+    : '训练产物的聊天质量需单独评测；连接成功不代表质量通过';
+}
+
 export default function ModelsPanel({
   token,
   binding,
@@ -220,6 +227,7 @@ export default function ModelsPanel({
                       ? artifact.manifest.base_model_id
                       : '关系专用 adapter'}
                   </strong>
+                  <small>{artifactEvidence(artifact)}</small>
                   <code>{artifact.artifact_path}</code>
                   <small>{new Date(artifact.created_at).toLocaleString('zh-CN')}</small>
                 </li>
@@ -330,6 +338,11 @@ export default function ModelsPanel({
                     <small>
                       {deployment.model} · {deployment.artifact_id ? '关系专用 LoRA' : '基础模型'}
                     </small>
+                    {deployment.artifact_id && (
+                      <small>
+                        {artifactEvidence(artifacts.find((item) => item.id === deployment.artifact_id))}
+                      </small>
+                    )}
                   </div>
                   <Badge
                     tone={

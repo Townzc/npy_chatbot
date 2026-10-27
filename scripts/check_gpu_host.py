@@ -92,8 +92,8 @@ def inspect_host(storage: Path) -> dict:
         issues.append("STORAGE_PATH_UNAVAILABLE")
     memory = read_memory()
     bound = memory["known_capacity_bound_bytes"]
-    if bound is None or bound < 64 * GIB:
-        warnings.append("CHECK_RECOMMENDED_64_GIB_RAM_IN_RENTAL_CONSOLE")
+    if bound is None or bound < 32 * GIB:
+        warnings.append("CHECK_STARTING_32_GIB_RAM_IN_RENTAL_CONSOLE")
     if memory["visible_cgroup_limit_bytes"] is None:
         warnings.append("CONTAINER_MEMORY_LIMIT_UNKNOWN")
     devices = []

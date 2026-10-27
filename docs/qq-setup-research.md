@@ -2,6 +2,8 @@
 
 核查日期 2026-10-26。用户尚无 OneBot 桥；已确认现有 8 个无扩展名文件来自 QQ“聊天记录管理 → 备份聊天记录到电脑”。来源是用户确认的事实，容器内部尚未解析。下面依据上游说明准备接入，不表示本机已安装、已登录或真实 QQ 测试通过。
 
+2026-10-27 补充：用户确认**旧记录只有手机可见，电脑 QQ 没有**，因此当前走下面的第 2 分支。QCE 的本地导出不能直接证明这些旧记录可取；仍可独立验证新消息与原私聊桥。
+
 ## 现有 QQ 备份怎么处理
 
 先保留现有备份原样。它们未被识别为 JSON/CSV/SQLite/ZIP/gzip；改名为 `.json` 不会产生结构化导出。当前 QCE 指南描述的是读取当前电脑客户端已经同步到本机的记录，没有给出直接打开这些官方备份容器的方法。[固定 QCE 指南](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/docs/guide.md)
@@ -15,6 +17,10 @@
 这些分支是在核查数据在哪里，不要求用户在对话发送私聊正文。完整度报告保留请求范围、实际首末时间/条数和未知缺口；解析成功不声明全量。
 
 也检查了 QQBackup 的 iOS 提取说明：旧 iOS 教程已标为不再维护，NTQQ iOS 教程明确标为近期版本未确认；其离线推导段需要原始 `nt_msg.db` 和相关账号元数据，不能据此断言能读取这 8 个官方备份容器。未运行提取工具、修改手机或取得密钥。[旧 iOS 状态](https://github.com/QQBackup/QQDecrypt/blob/main/docs/decrypt/extract/IOSQQ.md) · [NTQQ iOS 状态及输入要求](https://github.com/QQBackup/QQDecrypt/blob/main/docs/decrypt/extract/NTQQ%20%28iOS%29.md)
+
+下一项候选是 **Finder/iTunes 的 iPhone 整机本地备份**，与 QQ 内的电脑备份分开。Apple 说明电脑备份包含设备大部分数据和设置；这不能证明当前 QQ 的数据库一定包含其中。第三方 `iphone_backup_decrypt` 公开了只按备份目录索引筛选文件的接口，但解开 iOS 备份层也不等于解开 QQ 数据库层。先确认 iOS/QQ 版本及是否有这类备份，再只检查 QQ 对应的目录项和数据库是否存在；在得到可验证的数据库前，不承诺能导出全部旧聊天。[Apple 备份说明](https://support.apple.com/zh-cn/108771) · [备份工具的输入与筛选接口](https://github.com/jsharkey13/iphone_backup_decrypt)
+
+本机只检查了默认 `~/Library/Application Support/MobileSync/Backup` 是否存在，结果不存在；未扫描其他磁盘、未读取手机备份正文。尚未安装或运行上述工具，也没有要求取消备份加密、越狱或覆盖手机数据。若后续需要备份密码，由本人在本机输入，不贴到对话或写入 Git。
 
 ## QQ 历史记录：QCE 固定版本
 

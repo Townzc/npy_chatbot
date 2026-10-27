@@ -8,13 +8,13 @@
 |---|---|
 | 计费 | 按量计费，先做小步验收；价格以选择主机时的控制台为准 |
 | GPU | 1 × RTX 4090 24GB |
-| CPU / 主存 | 建议至少 8 核、单卡分配至少 64GB 主存；不是整个物理主机的总内存 |
+| CPU / 主存 | 建议至少 8 核，可先选单卡分配 32GB 主存做小步试跑，64GB 留更多余量；不是 GPU 显存 |
 | 磁盘 | 数据盘至少 60GiB **可用**；可选 100GB 容量留余量 |
 | 系统 | Linux x86_64，优先 Ubuntu 22.04/24.04 官方基础 PyTorch 镜像 |
 | 驱动 | 优先平台标示可支持 CUDA 12.8 或更高的主机；安装后核对 `nvidia-smi` |
 | Python / 框架 | 用项目独立环境安装 Python 3.12、torch 2.9.1 等锁定依赖；镜像自带版本无需恰好一致 |
 
-64GB 主存和 60GiB 空间是规划余量，未测出最低需求。AutoDL 的 CPU/内存按每张 GPU 分配，因此单卡也要选择主存足够的主机；不应只为了内存默认加租第二张。[资源分配与目录](https://www.autodl.com/docs/env/)
+2026-10-27 澄清：**无需 A800；24GB 是 GPU 显存，32/64GB 是主机 RAM**。32GB 可以作为首轮小步试跑的选项，64GB 是较宽松的余量建议；两者都没有在本项目实机测出最低要求。若内存不足，保留失败证据后再决定调整。AutoDL 的 CPU/内存按每张 GPU 分配，因此要看单卡实际分配额度，不默认加租第二张。[资源分配与目录](https://www.autodl.com/docs/env/)
 
 当前 Linux x86_64 训练锁含 CUDA runtime 12.8.90。优先选 NVIDIA 570.124.06 或更新驱动，这是 CUDA 12.8 Update 1 对应版本；较老驱动可能存在有限的 minor compatibility，但本项目未验收，不能仅凭 CUDA 12.x 字样判定通过。`nvidia-smi` 顶部 CUDA Version 表示驱动能力，`train doctor` 的 `cuda_runtime` 才是该 PyTorch 环境实际运行库版本。无需在实例中另装主机驱动。[NVIDIA 12.8.1](https://docs.nvidia.com/cuda/archive/12.8.1/cuda-toolkit-release-notes/index.html) · [AutoDL CUDA 说明](https://www.autodl.com/docs/cuda/)
 

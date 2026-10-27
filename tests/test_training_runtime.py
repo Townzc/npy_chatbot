@@ -118,6 +118,35 @@ def test_cancellation_preserves_truthful_state_before_loading(artifact, tmp_path
     assert not (stopped.output_path / "manifest.json").exists()
 
 
+def test_inference_caps_output_without_truncating_prompt(artifact):
+    spec, _ = artifact
+    client = TestClient(create_inference_app(spec.output_path, "synthetic-budget-" + "x" * 32))
+    headers = {"Authorization": "Bearer synthetic-budget-" + "x" * 32}
+    messages = [{"role": "user", "content": "hello friend"}]
+    body = {
+        "model": "chattwin-adapter",
+        "messages": messages,
+        "max_tokens": 1024,
+        "metadata": {"persona_id": spec.persona_id, "relationship_id": spec.relationship_id},
+    }
+    tokenizer = AutoTokenizer.from_pretrained(spec.base_model_id, local_files_only=True)
+    prompt_size = len(
+        tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True)
+    )
+    response = client.post("/v1/chat/completions", json=body, headers=headers)
+    assert response.status_code == 200
+    result = response.json()
+    assert result["usage"]["prompt_tokens"] == prompt_size
+    assert 0 < result["usage"]["completion_tokens"] <= spec.max_sequence_length - prompt_size
+    assert result["usage"]["total_tokens"] <= spec.max_sequence_length
+    assert result["choices"][0]["finish_reason"] in {"stop", "length"}
+    overflow = {
+        **body,
+        "messages": [{"role": "user", "content": "hello " * spec.max_sequence_length}],
+    }
+    assert client.post("/v1/chat/completions", json=overflow, headers=headers).status_code == 413
+
+
 def test_tampered_artifact_refused(artifact, tmp_path):
     import shutil
 
