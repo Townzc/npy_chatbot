@@ -36,6 +36,42 @@ def test_real_lora_updates_saves_and_reloads_in_new_process(artifact):
     assert result["manifest"]["relationship_id"] == spec.relationship_id
 
 
+@pytest.mark.parametrize("injection", ["kernel", "template_path", "custom_generation"])
+def test_local_model_config_rejected_before_model_or_tokenizer_constructor(
+    tmp_path, monkeypatch, injection
+):
+    from transformers import AutoModelForCausalLM
+
+    from chattwin.training.spec import local_model_hash
+    from chattwin.training.worker import load_base
+
+    spec = create_smoke_spec(tmp_path)
+    path = Path(spec.base_model_id) / (
+        "config.json" if injection == "kernel" else "tokenizer_config.json"
+    )
+    config = json.loads(path.read_text())
+    if injection == "kernel":
+        config["_attn_implementation_internal"] = "fictional/remote-kernel"
+    elif injection == "template_path":
+        config["chat_template"] = {"../outside": "synthetic template"}
+    else:
+        custom = Path(spec.base_model_id) / "custom_generate"
+        custom.mkdir()
+        (custom / "generate.py").write_text("raise AssertionError('must never be imported')")
+    path.write_text(json.dumps(config))
+    revision = "local:" + local_model_hash(Path(spec.base_model_id))
+    spec = spec.model_copy(update={"base_model_revision": revision, "tokenizer_revision": revision})
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("A model library constructor must not see rejected configuration")
+
+    monkeypatch.setattr(AutoTokenizer, "from_pretrained", forbidden)
+    monkeypatch.setattr(AutoModelForCausalLM, "from_pretrained", forbidden)
+    with pytest.raises(ValueError, match="kernel selector|string chat template|custom model code"):
+        load_base(spec)
+    assert not (tmp_path / "outside").exists()
+
+
 def test_checkpointed_lora_recomputes_without_losing_frozen_input_gradients(artifact, tmp_path):
     from safetensors.torch import load_file
 

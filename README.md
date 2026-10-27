@@ -96,3 +96,5 @@ uv run --project training --locked pytest -q tests/test_training_contracts.py te
 已有画像确认、记忆纠正、身份重映射、来源删除传播、预算/诊断和模型作业管理；真实私有数据备份及隔离恢复也已通过。浏览器使用短期登录；私网/常驻配置见 [手机与主机](docs/access-and-hosting.md)。仍待 QQ 原私聊收发、Qwen CUDA 和人工质量评测、手机离网/休眠组合、7 天试运行及跨平台发布审查。锁文件清单见 [SBOM](docs/sbom.cdx.json)，它不替代逐项许可和漏洞审查。具体顺序与验收记录统一维护于 [任务状态](docs/tasks.md)。
 
 新核心 Apache-2.0；上游组件各自保留许可。按用户后续明确指令，源码已推送 GitHub；没有创建 release，没有上传真实聊天、数据库、密钥或私人模型。
+
+锁定依赖的 OSV 与许可元数据检查已完成：更新 Vite/filelock，并增加模型配置加载前检查；训练栈仍有 3 个包命中公告，正式发布未放行。复现命令与具体剩余项见 [依赖检查报告](docs/evidence/dependency-review-2026-10-27.md)。

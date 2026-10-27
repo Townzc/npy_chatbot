@@ -2,6 +2,8 @@
 
 已实现可执行的 Transformers + PEFT LoRA worker：真实反向传播、参数更新、safetensors 保存、新进程重新加载，以及带独立认证和关系范围校验的推理端点。核心安装不依赖 PyTorch。**当前实测证据是 CPU tiny 模型执行链；Qwen 4B Linux/CUDA 训练和聊天质量验收尚未通过。**
 
+2026-10-27 依赖检查仍发现 torch/transformers/accelerate 公告，正式发布未放行。已增加模型加载前检查：当前仅接受固定 Qwen 仓库/revision及无自定义代码的本地 tiny Qwen3；拒绝内部 kernel 配置、代码映射、命名模板路径与其他未经核验的模型。配置防护与实际 tiny 更新/重载/认证推理共29项独立测试通过，不等于全部上游问题已修复。见 [依赖检查与剩余限制](evidence/dependency-review-2026-10-27.md)。
+
 ## 当前交付边界
 
 | 能力 | 实现与证据 | 限制 |

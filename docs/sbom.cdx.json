@@ -2,7 +2,7 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:84809621-be84-5832-9966-e257e2883b57",
+  "serialNumber": "urn:uuid:32659068-e215-5a87-a481-63b83c285b66",
   "metadata": {
     "component": {
       "type": "application",
@@ -12,15 +12,15 @@
     "properties": [
       {
         "name": "chattwin:lock:uv.lock",
-        "value": "17aba13e0c7f7ba3687163460b6ba988cd47fa4b2125f7dbfe07981c446565bb"
+        "value": "3b747cc58978ae2650cc650d6982155b9e0accd946f0f8bb74a86770e233a350"
       },
       {
         "name": "chattwin:lock:training/uv.lock",
-        "value": "cce2d01f6ba3720b1aec1445c62e6ac41e81799efad4db1eaf0021fc9f3e51c7"
+        "value": "70702bac5fccd143da9299d7f4220d4e0d8e025b35ade5d8691cb53abed665ba"
       },
       {
         "name": "chattwin:lock:apps/web/pnpm-lock.yaml",
-        "value": "5916db6468521463df905b2a6c82b1e4a5978d2b9a4456e5c39edc9c71759308"
+        "value": "ab8865795eff7dde1c3c24bf80813ab92ecb3c1d7e6e8a7b7bbf24b8e611a096"
       },
       {
         "name": "chattwin:inventory-scope",
@@ -278,10 +278,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/aix-ppc64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
       "name": "@esbuild/aix-ppc64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/aix-ppc64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -291,10 +291,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/android-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/android-arm64@0.28.2",
       "name": "@esbuild/android-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/android-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -304,10 +304,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/android-arm@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/android-arm@0.28.2",
       "name": "@esbuild/android-arm",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/android-arm@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-arm@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -317,10 +317,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/android-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/android-x64@0.28.2",
       "name": "@esbuild/android-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/android-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -330,10 +330,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/darwin-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
       "name": "@esbuild/darwin-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -343,10 +343,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/darwin-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
       "name": "@esbuild/darwin-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/darwin-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -356,10 +356,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/freebsd-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
       "name": "@esbuild/freebsd-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/freebsd-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -369,10 +369,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/freebsd-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
       "name": "@esbuild/freebsd-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/freebsd-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -382,10 +382,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
       "name": "@esbuild/linux-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -395,10 +395,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-arm@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-arm@0.28.2",
       "name": "@esbuild/linux-arm",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-arm@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-arm@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -408,10 +408,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-ia32@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
       "name": "@esbuild/linux-ia32",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-ia32@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -421,10 +421,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-loong64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
       "name": "@esbuild/linux-loong64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-loong64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -434,10 +434,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-mips64el@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
       "name": "@esbuild/linux-mips64el",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-mips64el@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -447,10 +447,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-ppc64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
       "name": "@esbuild/linux-ppc64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-ppc64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -460,10 +460,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-riscv64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
       "name": "@esbuild/linux-riscv64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-riscv64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -473,10 +473,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-s390x@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
       "name": "@esbuild/linux-s390x",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-s390x@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -486,10 +486,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/linux-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/linux-x64@0.28.2",
       "name": "@esbuild/linux-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/linux-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -499,10 +499,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/netbsd-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
       "name": "@esbuild/netbsd-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/netbsd-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -512,10 +512,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/netbsd-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
       "name": "@esbuild/netbsd-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/netbsd-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -525,10 +525,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/openbsd-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
       "name": "@esbuild/openbsd-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/openbsd-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -538,10 +538,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/openbsd-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
       "name": "@esbuild/openbsd-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/openbsd-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -551,10 +551,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/openharmony-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
       "name": "@esbuild/openharmony-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/openharmony-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -564,10 +564,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/sunos-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
       "name": "@esbuild/sunos-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/sunos-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -577,10 +577,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/win32-arm64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
       "name": "@esbuild/win32-arm64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/win32-arm64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -590,10 +590,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/win32-ia32@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
       "name": "@esbuild/win32-ia32",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/win32-ia32@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -603,10 +603,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40esbuild/win32-x64@0.25.12",
+      "bom-ref": "pkg:npm/%40esbuild/win32-x64@0.28.2",
       "name": "@esbuild/win32-x64",
-      "version": "0.25.12",
-      "purl": "pkg:npm/%40esbuild/win32-x64@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-x64@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -1357,10 +1357,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/esbuild@0.25.12",
+      "bom-ref": "pkg:npm/esbuild@0.28.2",
       "name": "esbuild",
-      "version": "0.25.12",
-      "purl": "pkg:npm/esbuild@0.25.12",
+      "version": "0.28.2",
+      "purl": "pkg:npm/esbuild@0.28.2",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -1877,10 +1877,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/vite@7.1.12",
+      "bom-ref": "pkg:npm/vite@7.3.7",
       "name": "vite",
-      "version": "7.1.12",
-      "purl": "pkg:npm/vite@7.1.12",
+      "version": "7.3.7",
+      "purl": "pkg:npm/vite@7.3.7",
       "properties": [
         {
           "name": "chattwin:source-lock",
@@ -2091,10 +2091,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:pypi/filelock@3.32.7",
+      "bom-ref": "pkg:pypi/filelock@4.2.4",
       "name": "filelock",
-      "version": "3.32.7",
-      "purl": "pkg:pypi/filelock@3.32.7",
+      "version": "4.2.4",
+      "purl": "pkg:pypi/filelock@4.2.4",
       "properties": [
         {
           "name": "chattwin:source-lock",

@@ -1,0 +1,4437 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-10-27T21:53:03.980695+00:00",
+  "source": "https://api.osv.dev/v1",
+  "lock_hashes": {
+    "uv.lock": "3b747cc58978ae2650cc650d6982155b9e0accd946f0f8bb74a86770e233a350",
+    "training/uv.lock": "70702bac5fccd143da9299d7f4220d4e0d8e025b35ade5d8691cb53abed665ba",
+    "apps/web/pnpm-lock.yaml": "ab8865795eff7dde1c3c24bf80813ab92ecb3c1d7e6e8a7b7bbf24b8e611a096"
+  },
+  "scope": "all locked packages including development and conditional platforms",
+  "status": "findings",
+  "components_checked": 225,
+  "limitations": [
+    "OSV findings may alias one another; identifiers are not independent vulnerability counts",
+    "No findings is not proof of safety or an application security review",
+    "Registry license metadata is not a redistribution or legal compatibility approval",
+    "External QQ/QCE binaries and model weights are outside this lockfile inventory"
+  ],
+  "advisories": {
+    "GHSA-29pf-2h5f-8g72": {
+      "id": "GHSA-29pf-2h5f-8g72",
+      "aliases": [
+        "CVE-2026-4372",
+        "PYSEC-2026-2289"
+      ],
+      "modified": "2026-09-10T03:50:45.254378086Z",
+      "withdrawn": null,
+      "severity": "HIGH",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.3.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4372"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/a7f8e7ff37d87d1a1a0c8cf607971c607741452f"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://huntr.com/bounties/1f693a6e-6836-4b8b-a0bd-ca036fba8884"
+        }
+      ]
+    },
+    "GHSA-4j2p-28q2-5m79": {
+      "id": "GHSA-4j2p-28q2-5m79",
+      "aliases": [
+        "CVE-2026-69112",
+        "PYSEC-2026-3804"
+      ],
+      "modified": "2026-09-10T12:25:52.792193450Z",
+      "withdrawn": null,
+      "severity": "MODERATE",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:H"
+        },
+        {
+          "type": "CVSS_V4",
+          "score": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:H/VI:N/VA:H/SC:N/SI:N/SA:N"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "accelerate",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/accelerate"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "1.14.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-69112"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/accelerate/issues/4067"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/accelerate/pull/4070"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/accelerate/pull/4138"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/accelerate"
+        },
+        {
+          "type": "WEB",
+          "url": "https://www.vulncheck.com/advisories/hugging-face-accelerate-path-traversal-and-dos-via-weight-map"
+        }
+      ]
+    },
+    "GHSA-69w3-r845-3855": {
+      "id": "GHSA-69w3-r845-3855",
+      "aliases": [
+        "CVE-2026-1839",
+        "PYSEC-2026-2288"
+      ],
+      "modified": "2026-09-10T03:50:43.300048881Z",
+      "withdrawn": null,
+      "severity": "MODERATE",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.0.0rc3"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1839"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/03c8082ba4594c9b8d6fe190ca9bed0e5f8ca396"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/releases/tag/v5.0.0rc3"
+        },
+        {
+          "type": "WEB",
+          "url": "https://huntr.com/bounties/3c77bb97-e493-493d-9a88-c57f5c536485"
+        }
+      ]
+    },
+    "GHSA-fgcw-684q-jj6r": {
+      "id": "GHSA-fgcw-684q-jj6r",
+      "aliases": [
+        "CVE-2026-5241",
+        "PYSEC-2026-2290"
+      ],
+      "modified": "2026-09-10T03:50:49.345942449Z",
+      "withdrawn": null,
+      "severity": "HIGH",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:N"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.5.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5241"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/676559d5022b74aaa0cee1cee0842b7f27c5320e"
+        },
+        {
+          "type": "WEB",
+          "url": "https://access.redhat.com/errata/RHSA-2026:34456"
+        },
+        {
+          "type": "WEB",
+          "url": "https://access.redhat.com/errata/RHSA-2026:37275"
+        },
+        {
+          "type": "WEB",
+          "url": "https://access.redhat.com/errata/RHSA-2026:42644"
+        },
+        {
+          "type": "WEB",
+          "url": "https://access.redhat.com/security/cve/CVE-2026-5241"
+        },
+        {
+          "type": "WEB",
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2484384"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/transformers/PYSEC-2026-2290.yaml"
+        },
+        {
+          "type": "WEB",
+          "url": "https://huntr.com/bounties/ceb3ce1a-4c45-497a-b25e-cb9a7685e619"
+        },
+        {
+          "type": "WEB",
+          "url": "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-5241.json"
+        }
+      ]
+    },
+    "GHSA-qfhq-4f3w-5fph": {
+      "id": "GHSA-qfhq-4f3w-5fph",
+      "aliases": [
+        "BIT-pytorch-2025-3001",
+        "CVE-2025-3001",
+        "PYSEC-2025-195"
+      ],
+      "modified": "2026-06-10T18:26:26.736808954Z",
+      "withdrawn": null,
+      "severity": "LOW",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "type": "CVSS_V4",
+          "score": "CVSS:4.0/AV:L/AC:L/AT:N/PR:L/UI:N/VC:L/VI:L/VA:L/SC:N/SI:N/SA:N/E:P"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "torch",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/torch"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "2.10.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-3001"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/issues/149626"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/issues/149626#issue-2935860995"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/commit/999d94b5ede5f4ec111ba7dd144129e2c2725b03"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/torch/PYSEC-2025-195.yaml"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/pytorch/pytorch"
+        },
+        {
+          "type": "WEB",
+          "url": "https://vuldb.com/?ctiid.302050"
+        },
+        {
+          "type": "WEB",
+          "url": "https://vuldb.com/?id.302050"
+        },
+        {
+          "type": "WEB",
+          "url": "https://vuldb.com/?submit.524212"
+        }
+      ]
+    },
+    "GHSA-rrmf-rvhw-rf47": {
+      "id": "GHSA-rrmf-rvhw-rf47",
+      "aliases": [
+        "BIT-pytorch-2025-3000",
+        "CVE-2025-3000",
+        "PYSEC-2025-194"
+      ],
+      "modified": "2026-09-10T03:49:48.419046410Z",
+      "withdrawn": null,
+      "severity": "LOW",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "type": "CVSS_V4",
+          "score": "CVSS:4.0/AV:L/AC:L/AT:N/PR:L/UI:N/VC:L/VI:L/VA:L/SC:N/SI:N/SA:N/E:P"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "torch",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/torch"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "2.13.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-3000"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/issues/149623"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/issues/149623#issue-2935703015"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/commit/b90c94991cdf8b87c8f7439f79518e0ef2c4ca4f"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/torch/PYSEC-2025-194.yaml"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/pytorch/pytorch"
+        },
+        {
+          "type": "WEB",
+          "url": "https://vuldb.com/?ctiid.302049"
+        },
+        {
+          "type": "WEB",
+          "url": "https://vuldb.com/?id.302049"
+        },
+        {
+          "type": "WEB",
+          "url": "https://vuldb.com/?submit.524197"
+        }
+      ]
+    },
+    "GHSA-x9r9-c232-4q39": {
+      "id": "GHSA-x9r9-c232-4q39",
+      "aliases": [
+        "CVE-2026-80047",
+        "PYSEC-2026-4174"
+      ],
+      "modified": "2026-10-01T17:55:55.397425521Z",
+      "withdrawn": null,
+      "severity": "HIGH",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "4.49.0"
+                },
+                {
+                  "last_affected": "5.8.1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80047"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/pull/48620"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/cbc1651a032b923da7f4b44b3d0e6f68e6ba6b55"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://kb.cert.org/vuls/id/456290"
+        },
+        {
+          "type": "WEB",
+          "url": "https://www.kb.cert.org/vuls/id/456290"
+        }
+      ]
+    },
+    "GHSA-xrqw-3rrv-vx5w": {
+      "id": "GHSA-xrqw-3rrv-vx5w",
+      "aliases": [
+        "CVE-2026-9856",
+        "PYSEC-2026-3929"
+      ],
+      "modified": "2026-09-10T12:25:36.528730268Z",
+      "withdrawn": null,
+      "severity": "HIGH",
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:L"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.10.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9856"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/pull/46191"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/eaaaf8494dd5386634ae37d1d122212fdc315be5"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://huntr.com/bounties/362824d5-fe18-40e8-a6cf-62277f97a170"
+        }
+      ]
+    },
+    "PYSEC-2025-217": {
+      "id": "PYSEC-2025-217",
+      "aliases": [
+        "CVE-2025-14929"
+      ],
+      "modified": "2026-05-21T15:00:24.271970226Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "5.0.0-rc0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://www.zerodayinitiative.com/advisories/ZDI-25-1144/"
+        }
+      ]
+    },
+    "PYSEC-2026-139": {
+      "id": "PYSEC-2026-139",
+      "aliases": [
+        "BIT-pytorch-2026-4538",
+        "CVE-2026-4538"
+      ],
+      "modified": "2026-05-21T15:00:31.962442644Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "torch",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/torch"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "2.10.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/pytorch/pytorch/"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://vuldb.com/?id.352326"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://vuldb.com/?submit.774681"
+        },
+        {
+          "type": "REPORT",
+          "url": "https://vuldb.com/?ctiid.352326"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/pytorch/pytorch/pull/176791"
+        }
+      ]
+    },
+    "PYSEC-2026-2286": {
+      "id": "PYSEC-2026-2286",
+      "aliases": [
+        "BIT-pytorch-2026-24747",
+        "CVE-2026-24747",
+        "GHSA-63cw-57p8-fm3p",
+        "PYSEC-2026-1856"
+      ],
+      "modified": "2026-07-13T07:26:23.701611780Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "torch",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/torch"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "2.10.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://access.redhat.com/security/cve/CVE-2026-24747"
+        },
+        {
+          "type": "WEB",
+          "url": "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-24747.json"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://access.redhat.com/errata/RHSA-2026:24977"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/pytorch/pytorch/releases/tag/v2.10.0"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/pytorch/pytorch/security/advisories/GHSA-63cw-57p8-fm3p"
+        },
+        {
+          "type": "REPORT",
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2433612"
+        },
+        {
+          "type": "REPORT",
+          "url": "https://github.com/pytorch/pytorch/issues/163105"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/pytorch/pytorch/163122/commit/954dc5183ee9205cbe79876ad05dd2d9ae752139"
+        }
+      ]
+    },
+    "PYSEC-2026-2288": {
+      "id": "PYSEC-2026-2288",
+      "aliases": [
+        "CVE-2026-1839",
+        "GHSA-69w3-r845-3855"
+      ],
+      "modified": "2026-07-13T16:45:06.516869221Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.0.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/huggingface/transformers/commit/03c8082ba4594c9b8d6fe190ca9bed0e5f8ca396"
+        },
+        {
+          "type": "EVIDENCE",
+          "url": "https://huntr.com/bounties/3c77bb97-e493-493d-9a88-c57f5c536485"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-69w3-r845-3855"
+        }
+      ]
+    },
+    "PYSEC-2026-2289": {
+      "id": "PYSEC-2026-2289",
+      "aliases": [
+        "CVE-2026-4372",
+        "GHSA-29pf-2h5f-8g72"
+      ],
+      "modified": "2026-07-13T16:45:06.535860363Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.3.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/huggingface/transformers/commit/a7f8e7ff37d87d1a1a0c8cf607971c607741452f"
+        },
+        {
+          "type": "EVIDENCE",
+          "url": "https://huntr.com/bounties/1f693a6e-6836-4b8b-a0bd-ca036fba8884"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-29pf-2h5f-8g72"
+        }
+      ]
+    },
+    "PYSEC-2026-2290": {
+      "id": "PYSEC-2026-2290",
+      "aliases": [
+        "CVE-2026-5241",
+        "GHSA-fgcw-684q-jj6r"
+      ],
+      "modified": "2026-07-23T15:00:26.322865889Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "5.2.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://access.redhat.com/security/cve/CVE-2026-5241"
+        },
+        {
+          "type": "WEB",
+          "url": "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-5241.json"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://access.redhat.com/errata/RHSA-2026:34456"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://access.redhat.com/errata/RHSA-2026:37275"
+        },
+        {
+          "type": "REPORT",
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2484384"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/huggingface/transformers/commit/676559d5022b74aaa0cee1cee0842b7f27c5320e"
+        },
+        {
+          "type": "EVIDENCE",
+          "url": "https://huntr.com/bounties/ceb3ce1a-4c45-497a-b25e-cb9a7685e619"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-fgcw-684q-jj6r"
+        }
+      ]
+    },
+    "PYSEC-2026-3804": {
+      "id": "PYSEC-2026-3804",
+      "aliases": [
+        "CVE-2026-69112",
+        "GHSA-4j2p-28q2-5m79"
+      ],
+      "modified": "2026-09-10T12:15:02.997766943Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:H"
+        },
+        {
+          "type": "CVSS_V4",
+          "score": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:H/VI:N/VA:H/SC:N/SI:N/SA:N"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "accelerate",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/accelerate"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "1.14.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-69112"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/accelerate/issues/4067"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/accelerate/pull/4070"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/accelerate/pull/4138"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/accelerate"
+        },
+        {
+          "type": "WEB",
+          "url": "https://www.vulncheck.com/advisories/hugging-face-accelerate-path-traversal-and-dos-via-weight-map"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://pypi.org/project/accelerate"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-4j2p-28q2-5m79"
+        }
+      ]
+    },
+    "PYSEC-2026-3929": {
+      "id": "PYSEC-2026-3929",
+      "aliases": [
+        "CVE-2026-9856",
+        "GHSA-xrqw-3rrv-vx5w"
+      ],
+      "modified": "2026-09-10T12:15:13.263552340Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:L"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "5.10.0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9856"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/pull/46191"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/eaaaf8494dd5386634ae37d1d122212fdc315be5"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://huntr.com/bounties/362824d5-fe18-40e8-a6cf-62277f97a170"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://pypi.org/project/transformers"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-xrqw-3rrv-vx5w"
+        }
+      ]
+    },
+    "PYSEC-2026-4174": {
+      "id": "PYSEC-2026-4174",
+      "aliases": [
+        "CVE-2026-80047",
+        "GHSA-x9r9-c232-4q39"
+      ],
+      "modified": "2026-10-01T17:45:18.547440485Z",
+      "withdrawn": null,
+      "severity": null,
+      "severity_vectors": [
+        {
+          "type": "CVSS_V3",
+          "score": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "affected": [
+        {
+          "package": {
+            "name": "transformers",
+            "ecosystem": "PyPI",
+            "purl": "pkg:pypi/transformers"
+          },
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "4.49.0"
+                },
+                {
+                  "last_affected": "5.8.1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80047"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/pull/48620"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/huggingface/transformers/commit/cbc1651a032b923da7f4b44b3d0e6f68e6ba6b55"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/huggingface/transformers"
+        },
+        {
+          "type": "WEB",
+          "url": "https://kb.cert.org/vuls/id/456290"
+        },
+        {
+          "type": "WEB",
+          "url": "https://www.kb.cert.org/vuls/id/456290"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://pypi.org/project/transformers"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-x9r9-c232-4q39"
+        }
+      ]
+    }
+  },
+  "packages": [
+    {
+      "purl": "pkg:npm/%40babel/code-frame@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fcode-frame/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/compat-data@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fcompat-data/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/core@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fcore/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/generator@7.29.8",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fgenerator/7.29.8",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-compilation-targets@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-compilation-targets/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-globals@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-globals/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-module-imports@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-module-imports/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-module-transforms@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-module-transforms/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-plugin-utils@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-plugin-utils/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-string-parser@7.29.11",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-string-parser/7.29.11",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-validator-identifier@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-validator-identifier/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helper-validator-option@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelper-validator-option/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/helpers@7.29.10",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fhelpers/7.29.10",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/parser@7.29.11",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fparser/7.29.11",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/plugin-transform-react-jsx-self@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fplugin-transform-react-jsx-self/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/plugin-transform-react-jsx-source@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Fplugin-transform-react-jsx-source/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/template@7.29.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Ftemplate/7.29.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/traverse@7.29.10",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Ftraverse/7.29.10",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40babel/types@7.29.11",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40babel%2Ftypes/7.29.11",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Faix-ppc64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fandroid-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fandroid-arm/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fandroid-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fdarwin-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fdarwin-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Ffreebsd-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Ffreebsd-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-arm/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-ia32/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-loong64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-mips64el/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-ppc64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-riscv64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-s390x/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Flinux-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fnetbsd-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fnetbsd-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fopenbsd-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fopenbsd-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fopenharmony-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fsunos-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fwin32-arm64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fwin32-ia32/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40esbuild%2Fwin32-x64/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40jridgewell/gen-mapping@0.3.13",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40jridgewell%2Fgen-mapping/0.3.13",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40jridgewell/remapping@2.3.5",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40jridgewell%2Fremapping/2.3.5",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40jridgewell/resolve-uri@3.1.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40jridgewell%2Fresolve-uri/3.1.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40jridgewell/sourcemap-codec@1.6.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40jridgewell%2Fsourcemap-codec/1.6.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40jridgewell/trace-mapping@0.3.31",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40jridgewell%2Ftrace-mapping/0.3.31",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40napi-rs/lzma-linux-x64-gnu@1.5.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40napi-rs%2Flzma-linux-x64-gnu/1.5.1",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40redocly/ajv@8.11.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40redocly%2Fajv/8.11.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40redocly/config@0.22.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40redocly%2Fconfig/0.22.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40redocly/openapi-core@1.34.22",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40redocly%2Fopenapi-core/1.34.22",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rolldown/pluginutils@1.0.0-beta.27",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rolldown%2Fpluginutils/1.0.0-beta.27",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-android-arm-eabi@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-android-arm-eabi/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-android-arm64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-android-arm64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-darwin-arm64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-darwin-x64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-darwin-x64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-freebsd-arm64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-freebsd-arm64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-freebsd-x64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-freebsd-x64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm-gnueabihf@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-arm-gnueabihf/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm-musleabihf@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-arm-musleabihf/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm64-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-arm64-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm64-musl@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-arm64-musl/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-loong64-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-loong64-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-loong64-musl@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-loong64-musl/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-ppc64-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-ppc64-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-ppc64-musl@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-ppc64-musl/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-riscv64-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-riscv64-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-riscv64-musl@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-riscv64-musl/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-s390x-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-s390x-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-x64-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-linux-x64-musl/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-openbsd-x64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-openbsd-x64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-openharmony-arm64@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-openharmony-arm64/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-win32-arm64-msvc@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-win32-arm64-msvc/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-win32-ia32-msvc@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-win32-ia32-msvc/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-win32-x64-gnu@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-win32-x64-gnu/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40rollup/rollup-win32-x64-msvc@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40rollup%2Frollup-win32-x64-msvc/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/babel__core@7.20.5",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Fbabel__core/7.20.5",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/babel__generator@7.27.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Fbabel__generator/7.27.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/babel__template@7.4.4",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Fbabel__template/7.4.4",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/babel__traverse@7.28.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Fbabel__traverse/7.28.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/estree@1.0.9",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Festree/1.0.9",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/react-dom@19.1.9",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Freact-dom/19.1.9",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40types/react@19.1.16",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40types%2Freact/19.1.16",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/%40vitejs/plugin-react@4.7.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/%40vitejs%2Fplugin-react/4.7.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/agent-base@7.1.4",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/agent-base/7.1.4",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/ansi-colors@4.1.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/ansi-colors/4.1.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/argparse@2.0.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/argparse/2.0.1",
+        "declared_license": "Python-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/balanced-match@1.0.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/balanced-match/1.0.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/baseline-browser-mapping@2.11.32",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/baseline-browser-mapping/2.11.32",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/brace-expansion@2.1.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/brace-expansion/2.1.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/browserslist@4.29.4",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/browserslist/4.29.4",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/caniuse-lite@1.0.30001819",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/caniuse-lite/1.0.30001819",
+        "declared_license": "CC-BY-4.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/change-case@5.4.4",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/change-case/5.4.4",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/colorette@1.4.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/colorette/1.4.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/convert-source-map@2.0.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/convert-source-map/2.0.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/csstype@3.2.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/csstype/3.2.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/debug@4.4.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/debug/4.4.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/electron-to-chromium@1.5.464",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/electron-to-chromium/1.5.464",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/esbuild@0.28.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/esbuild/0.28.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/escalade@3.2.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/escalade/3.2.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/fast-deep-equal@3.1.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/fast-deep-equal/3.1.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/fdir@6.5.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/fdir/6.5.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/fsevents@2.3.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/fsevents/2.3.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/gensync@1.0.0-beta.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/gensync/1.0.0-beta.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/https-proxy-agent@7.0.6",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/https-proxy-agent/7.0.6",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/index-to-position@1.2.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/index-to-position/1.2.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/js-levenshtein@1.1.6",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/js-levenshtein/1.1.6",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/js-tokens@4.0.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/js-tokens/4.0.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/js-yaml@4.3.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/js-yaml/4.3.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/jsesc@3.1.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/jsesc/3.1.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/json-schema-traverse@1.0.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/json-schema-traverse/1.0.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/json5@2.2.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/json5/2.2.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/lru-cache@5.1.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/lru-cache/5.1.1",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/minimatch@5.1.9",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/minimatch/5.1.9",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/ms@2.1.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/ms/2.1.3",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/nanoid@3.3.20",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/nanoid/3.3.20",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/node-releases@2.0.60",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/node-releases/2.0.60",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/openapi-typescript@7.9.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/openapi-typescript/7.9.1",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/parse-json@8.3.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/parse-json/8.3.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/picocolors@1.1.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/picocolors/1.1.1",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/picomatch@4.0.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/picomatch/4.0.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/pluralize@8.0.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/pluralize/8.0.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/postcss@8.5.31",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/postcss/8.5.31",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/prettier@3.6.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/prettier/3.6.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/react-dom@19.1.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/react-dom/19.1.1",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/react-refresh@0.17.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/react-refresh/0.17.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/react@19.1.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/react/19.1.1",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/require-from-string@2.0.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/require-from-string/2.0.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/rollup@4.65.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/rollup/4.65.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/scheduler@0.26.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/scheduler/0.26.0",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/semver@6.3.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/semver/6.3.1",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/source-map-js@1.2.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/source-map-js/1.2.2",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/supports-color@10.2.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/supports-color/10.2.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/tinyglobby@0.2.17",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/tinyglobby/0.2.17",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/type-fest@4.41.0",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/type-fest/4.41.0",
+        "declared_license": "(MIT OR CC0-1.0)",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/typescript@5.9.3",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/typescript/5.9.3",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/update-browserslist-db@1.3.4",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/update-browserslist-db/1.3.4",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/uri-js-replace@1.0.2",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/uri-js-replace/1.0.2",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/vite@7.3.7",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/vite/7.3.7",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/yallist@3.1.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/yallist/3.1.1",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/yaml-ast-parser@0.0.43",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/yaml-ast-parser/0.0.43",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:npm/yargs-parser@21.1.1",
+      "source_locks": [
+        "apps/web/pnpm-lock.yaml"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://registry.npmjs.org/yargs-parser/21.1.1",
+        "declared_license": "ISC",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/accelerate@1.12.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [
+        "GHSA-4j2p-28q2-5m79",
+        "PYSEC-2026-3804"
+      ],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/accelerate/1.12.0/json",
+        "declared_license": "Apache",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/alembic@1.20.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/alembic/1.20.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/annotated-doc@0.0.5",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/annotated-doc/0.0.5/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/annotated-types@0.8.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/annotated-types/0.8.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/anyio@4.15.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/anyio/4.15.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/certifi@2026.10.23",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/certifi/2026.10.23/json",
+        "declared_license": "MPL-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/charset-normalizer@3.5.2",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/charset-normalizer/3.5.2/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/click@8.5.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/click/8.5.0/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/colorama@0.4.6",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/colorama/0.4.6/json",
+        "declared_license": "",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/fastapi@0.162.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/fastapi/0.162.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/filelock@4.2.4",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/filelock/4.2.4/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/fsspec@2026.9.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/fsspec/2026.9.0/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/h11@0.16.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/h11/0.16.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/hf-xet@1.7.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/hf-xet/1.7.0/json",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/httpcore@1.0.9",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/httpcore/1.0.9/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/httpx@0.28.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/httpx/0.28.1/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/huggingface-hub@0.36.2",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/huggingface-hub/0.36.2/json",
+        "declared_license": "Apache",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/idna@3.20",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/idna/3.20/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/iniconfig@2.3.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/iniconfig/2.3.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/jinja2@3.1.6",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/jinja2/3.1.6/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/librt@0.16.0",
+      "source_locks": [
+        "uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/librt/0.16.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/mako@1.4.3",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/mako/1.4.3/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/markdown-it-py@4.2.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/markdown-it-py/4.2.0/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/markupsafe@3.0.4",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/markupsafe/3.0.4/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/mdurl@0.1.2",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/mdurl/0.1.2/json",
+        "declared_license": "",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/mpmath@1.3.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/mpmath/1.3.0/json",
+        "declared_license": "BSD",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/mypy-extensions@1.1.0",
+      "source_locks": [
+        "uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/mypy-extensions/1.1.0/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/mypy@1.20.2",
+      "source_locks": [
+        "uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/mypy/1.20.2/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/networkx@3.7",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/networkx/3.7/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/numpy@2.5.4",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/numpy/2.5.4/json",
+        "declared_license": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cublas-cu12@12.8.4.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cublas-cu12/12.8.4.1/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cuda-cupti-cu12@12.8.90",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cuda-cupti-cu12/12.8.90/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cuda-nvrtc-cu12@12.8.93",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cuda-nvrtc-cu12/12.8.93/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cuda-runtime-cu12@12.8.90",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cuda-runtime-cu12/12.8.90/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cudnn-cu12@9.10.2.21",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cudnn-cu12/9.10.2.21/json",
+        "declared_license": "LicenseRef-NVIDIA-Proprietary",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cufft-cu12@11.3.3.83",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cufft-cu12/11.3.3.83/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cufile-cu12@1.13.1.3",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cufile-cu12/1.13.1.3/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-curand-cu12@10.3.9.90",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-curand-cu12/10.3.9.90/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cusolver-cu12@11.7.3.90",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cusolver-cu12/11.7.3.90/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cusparse-cu12@12.5.8.93",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cusparse-cu12/12.5.8.93/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-cusparselt-cu12@0.7.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-cusparselt-cu12/0.7.1/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-nccl-cu12@2.27.5",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-nccl-cu12/2.27.5/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-nvjitlink-cu12@12.8.93",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-nvjitlink-cu12/12.8.93/json",
+        "declared_license": "NVIDIA Proprietary Software",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-nvshmem-cu12@3.3.20",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-nvshmem-cu12/3.3.20/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/nvidia-nvtx-cu12@12.8.90",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/nvidia-nvtx-cu12/12.8.90/json",
+        "declared_license": "Apache 2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: Other/Proprietary License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/opentelemetry-api@1.45.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/opentelemetry-api/1.45.1/json",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/packaging@26.3",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/packaging/26.3/json",
+        "declared_license": "Apache-2.0 OR BSD-2-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pathspec@1.1.1",
+      "source_locks": [
+        "uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pathspec/1.1.1/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/peft@0.18.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/peft/0.18.1/json",
+        "declared_license": "Apache",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pluggy@1.7.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pluggy/1.7.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/psutil@7.2.2",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/psutil/7.2.2/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pydantic-core@2.50.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pydantic-core/2.50.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pydantic@2.14.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pydantic/2.14.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pygments@2.21.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pygments/2.21.0/json",
+        "declared_license": "BSD-2-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pytest-asyncio@1.4.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pytest-asyncio/1.4.1/json",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pytest@9.1.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pytest/9.1.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/python-multipart@0.0.32",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/python-multipart/0.0.32/json",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/pyyaml@6.0.3",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/pyyaml/6.0.3/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/regex@2026.9.29",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/regex/2026.9.29/json",
+        "declared_license": "Apache-2.0 AND CNRI-Python",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/requests@2.34.2",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/requests/2.34.2/json",
+        "declared_license": "Apache-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/rich@15.0.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/rich/15.0.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/ruff@0.17.2",
+      "source_locks": [
+        "uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/ruff/0.17.2/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/safetensors@0.7.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/safetensors/0.7.0/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/setuptools@84.2.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/setuptools/84.2.1/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/shellingham@1.5.4",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/shellingham/1.5.4/json",
+        "declared_license": "ISC License",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: ISC License (ISCL)"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/sqlalchemy@2.1.6",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/sqlalchemy/2.1.6/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/starlette@1.10.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/starlette/1.10.0/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/sympy@1.14.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/sympy/1.14.0/json",
+        "declared_license": "BSD",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/tokenizers@0.22.2",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/tokenizers/0.22.2/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/torch@2.9.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [
+        "GHSA-qfhq-4f3w-5fph",
+        "GHSA-rrmf-rvhw-rf47",
+        "PYSEC-2026-139",
+        "PYSEC-2026-2286"
+      ],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/torch/2.9.1/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/tqdm@4.70.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/tqdm/4.70.1/json",
+        "declared_license": "MPL-2.0 AND MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/transformers@4.57.6",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [
+        "GHSA-29pf-2h5f-8g72",
+        "GHSA-69w3-r845-3855",
+        "GHSA-fgcw-684q-jj6r",
+        "GHSA-x9r9-c232-4q39",
+        "GHSA-xrqw-3rrv-vx5w",
+        "PYSEC-2025-217",
+        "PYSEC-2026-2288",
+        "PYSEC-2026-2289",
+        "PYSEC-2026-2290",
+        "PYSEC-2026-3929",
+        "PYSEC-2026-4174"
+      ],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/transformers/4.57.6/json",
+        "declared_license": "Apache 2.0 License",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: Apache Software License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/triton@3.5.1",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/triton/3.5.1/json",
+        "declared_license": null,
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/typer@0.27.3",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/typer/0.27.3/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/typing-extensions/4.16.0/json",
+        "declared_license": "PSF-2.0",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/typing-inspection@0.4.4",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/typing-inspection/0.4.4/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/urllib3@2.8.0",
+      "source_locks": [
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/urllib3/2.8.0/json",
+        "declared_license": "MIT",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/uvicorn@0.54.0",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/uvicorn/0.54.0/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [],
+        "reviewed_for_redistribution": false
+      }
+    },
+    {
+      "purl": "pkg:pypi/websockets@15.0.1",
+      "source_locks": [
+        "uv.lock",
+        "training/uv.lock"
+      ],
+      "advisories": [],
+      "license_metadata": {
+        "source": "https://pypi.org/pypi/websockets/15.0.1/json",
+        "declared_license": "BSD-3-Clause",
+        "full_license_text_in_registry": false,
+        "classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "reviewed_for_redistribution": false
+      }
+    }
+  ],
+  "affected_packages": 3
+}

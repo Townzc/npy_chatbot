@@ -23,6 +23,7 @@ from filelock import FileLock
 from chattwin.runtime_paths import training_code_hash, training_lock_path
 
 from .hardware import inspect_cuda
+from .loading import validate_loading_inputs
 from .masking import encode_target, pad_batch
 from .spec import (
     QWEN_REVISION,
@@ -107,6 +108,7 @@ def load_base(spec: TrainingSpec) -> tuple[Any, Any, Any]:
         and not torch.cuda.is_bf16_supported(including_emulation=False)
     ):
         raise ValueError("CUDA device does not support bf16")
+    validate_loading_inputs(spec)
     tokenizer = auto_tokenizer.from_pretrained(
         spec.base_model_id,
         revision=None if local else spec.tokenizer_revision,

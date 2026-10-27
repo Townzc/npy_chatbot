@@ -158,7 +158,7 @@ def data_router(store, get_coordinator, authenticate):
     @router.get("/datasets")
     def list_datasets(persona_id: str, relationship_id: str) -> list[dict]:
         data.require_scope(persona_id, relationship_id)
-        return [
+        result = [
             {
                 **row["payload"],
                 "status": row["payload"].get("status", "ready"),
@@ -170,6 +170,11 @@ def data_router(store, get_coordinator, authenticate):
                 datasets.c.relationship_id == relationship_id,
             )
         ]
+        # Initial page selection should use the newest valid snapshot, while
+        # retaining old versions for provenance and explicit comparison.
+        return sorted(
+            result, key=lambda item: (item.get("created_at", ""), item["id"]), reverse=True
+        )
 
     @router.get("/datasets/{dataset_id}/preview")
     def preview_dataset(dataset_id: str, persona_id: str, relationship_id: str) -> dict:

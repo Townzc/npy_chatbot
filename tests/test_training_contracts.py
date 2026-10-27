@@ -127,6 +127,36 @@ def test_worker_child_does_not_inherit_channel_or_admin_secrets(monkeypatch):
     assert environment["CUDA_VISIBLE_DEVICES"] == "1"
 
 
+@pytest.mark.parametrize(
+    "injected",
+    [
+        {"_attn_implementation_internal": "fictional/remote-kernel"},
+        {"_attn_implementation": "fictional/remote-kernel"},
+        {"subconfig": {"_experts_implementation_internal": "fictional/remote-kernel"}},
+        {"attn_implementation": "fictional/remote-kernel"},
+        {"auto_map": {"AutoModel": "untrusted.Model"}},
+        {"custom_generate": "fictional/generation"},
+        {"custom_pipelines": {"task": "untrusted.Pipeline"}},
+    ],
+)
+def test_model_config_rejects_custom_code_before_library_loading(injected):
+    from chattwin.training.loading import validate_config
+
+    with pytest.raises(ValueError, match="kernel|custom"):
+        validate_config(injected)
+    validate_config({"model_type": "qwen3", "attn_implementation": "sdpa"})
+
+
+@pytest.mark.parametrize(
+    "changed", [{"base_model_id": "fictional/other-base"}, {"base_model_revision": "b" * 40}]
+)
+def test_unreviewed_remote_repository_rejected_before_any_download(tmp_path, changed):
+    from chattwin.training.loading import validate_loading_inputs
+
+    with pytest.raises(ValueError, match="fixed reference"):
+        validate_loading_inputs(make_spec(tmp_path, **changed))
+
+
 def test_worker_refuses_source_drift_before_loading_data_or_model(tmp_path, monkeypatch):
     from chattwin.training.worker import train
 
