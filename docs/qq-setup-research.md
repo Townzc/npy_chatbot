@@ -30,7 +30,7 @@ MSG0 与 `QQ_NT DB` 是不同标记，不能把“裁掉 1024 字节，再用 NT
 
 ## QQ 历史记录：QCE 固定版本
 
-本次 releases API 返回 QCE **v6.3.2**（2026-10-03），Apple Silicon 包为 `NapCat-QCE-macOS-arm64-v6.3.2.tar.gz`，41,924,485 bytes。2026-10-27 已下载至仓库外私有工具目录，本地 SHA-256 与发布值 `a241a2a694edb317fa494e9f9a0bda79284937be97afa7bfea269741b7f15a9a` 一致；994 个归档条目路径与类型检查通过，启动脚本与固定源码一致且语法检查通过。实际包内是 QCE 6.3.2 / NapCat 4.18.28。尚未启动、登录或真实导出；[准备证据](evidence/qce-preparation-2026-10-27.md) 与运行验收分开。[固定发布页](https://github.com/shuakami/qq-chat-exporter/releases/tag/v6.3.2)
+本次 releases API 返回 QCE **v6.3.2**（2026-10-03），Apple Silicon 包为 `NapCat-QCE-macOS-arm64-v6.3.2.tar.gz`，41,924,485 bytes。2026-10-27 已下载至仓库外私有工具目录，本地 SHA-256 与发布值 `a241a2a694edb317fa494e9f9a0bda79284937be97afa7bfea269741b7f15a9a` 一致；994 个归档条目路径与类型检查通过，启动脚本与固定源码一致且语法检查通过。实际包内是 QCE 6.3.2 / NapCat 4.18.28。用户明确授权后已启动专用 QQ 副本，当前等待手机扫码，尚无真实导出；[准备证据](evidence/qce-preparation-2026-10-27.md) 与[实际启动证据](evidence/qce-runtime-2026-10-27.md) 分开。[固定发布页](https://github.com/shuakami/qq-chat-exporter/releases/tag/v6.3.2)
 
 按[固定 macOS 指南](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/docs/macos-deploy.md)：
 
@@ -41,7 +41,7 @@ MSG0 与 `QQ_NT DB` 是不同标记，不能把“裁掉 1024 字节，再用 NT
 5. 选择一个明确的私聊和时间范围，导出 JSON；保存 QCE/QQ 版本、选择范围、导出统计和文件摘要。先不导出全部联系人。
 6. 导出结束停止 QCE，再重新打开原桌面 QQ。`start-standalone.sh` 只能查看已有导出，不能替代登录导出。
 
-启动前还要核对实际网络配置。该版本 QCE Rust HTTP 服务硬编码监听 `0.0.0.0:40653`，`security.json` 的 `serverHost` 不能改变监听地址。已准备随机令牌和 loopback API 白名单、NapCat WebUI 绑定 `127.0.0.1` 的配置草案，但尚未应用，运行时鉴权未验证；不能称为所有端口都只在本机监听。OneBot 服务保持关闭，先完成导出后再单独配置桥。原 QQ 与专用副本共享真实数据库的安全边界变化需要用户确认后再执行。不要公开管理端口或带令牌链接。
+该版本 QCE Rust HTTP 服务硬编码监听 `0.0.0.0:40653`，`security.json` 的 `serverHost` 不能改变监听地址。随机令牌、loopback API 白名单和 NapCat WebUI 绑定 `127.0.0.1` 的配置已应用。WebUI 实际监听与有/无凭证请求验证通过；QCE 40653 要在 QQ 登录后再验证，不能称为所有端口都只在本机监听。OneBot 服务保持关闭，先完成导出后再单独配置桥。用户已明确确认原 QQ 与专用副本共享真实数据库的安全边界变化；启动前数据库副本哈希核验通过。不要公开管理端口或带令牌链接。
 
 历史完整度以实际可取得记录为准：普通导出读取本地已有/已同步消息，实验性漫游导出也有日期和平台限制，不能保证取回手机上全部旧记录。[QCE 使用手册](https://github.com/shuakami/qq-chat-exporter/blob/master/docs/guide.md)
 
@@ -78,4 +78,4 @@ uv run chattwin qq probe --url ws://127.0.0.1:3001 --account EXPECTED_ACCOUNT_ID
 
 ## 与 GPU 任务的关系
 
-首次 AutoDL 训练只使用随包虚构数据，QQ 登录、历史导出和原私聊桥留在本机处理。QQ 原会话的连接探针也不依赖历史导出成功，可以在桥可用时先验收。现有备份不上传 AutoDL 或 GitHub；本次没有访问真实消息数据库、改写 QQ 安装或登录任何账号。
+首次 AutoDL 训练只使用随包虚构数据，QQ 登录、历史导出和原私聊桥留在本机处理。QQ 原会话的连接探针也不依赖历史导出成功，可以在桥可用时先验收。现有备份不上传 AutoDL 或 GitHub；本机已在用户授权后复制真实数据库作保护，并让专用 QQ 副本使用原数据库链接。原 QQ 安装保持签名有效，当前仍等待本人扫码登录。
