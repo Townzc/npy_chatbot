@@ -37,7 +37,7 @@ uv run chattwin serve
 | QCE 单文件 JSON | 参考 v6.3.2 的导出核心 0.1.0 schema；解析/身份/数据集与网页合成验证通过，真实导出及分块 JSONL 未验收；见[兼容边界](docs/qce-compatibility.md) |
 | QQ .bak / 数据库容器 | 只读识别 MSG0、QQ_NT DB、普通 SQLite/ZIP；不支持自动解密、提取或假装导入 |
 
-本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；后续头部检查识别出其中 4 个为 MSG0，另外 4 个仍未识别。用户又提供了一份电脑 QQ“导出聊天记录”生成的 `.bak`：外层 ZIP 内有 4 个 MSG0 数据库，归档 CRC 通过，聊天内容仍未解密。它们不等于 QCE JSON；没有把文件名、账号或正文写入 Git。按 [备份与可读导出的边界](docs/qq-setup-research.md) 核对电脑可见历史，再取得支持的导出。
+本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；后续头部检查识别出其中 4 个为 MSG0，另外 4 个仍未识别。用户又提供了一份电脑 QQ“导出聊天记录”生成的 `.bak`：外层 ZIP 内有 4 个 MSG0 数据库，归档 CRC 通过，聊天内容仍未解密。用户最新确认导出时电脑 QQ 能看到所需旧记录，接下来从保存记录的电脑导出可读 JSON；仍需确认具体是哪台电脑。没有把文件名、账号或正文写入 Git。见 [备份与可读导出的边界](docs/qq-setup-research.md)。
 
 可用 `uv run chattwin import probe /absolute/path/to/export.bak` 只读诊断文件类型。命令不显示文件名、密钥或正文，不解包、不创建聊天数据库；识别成功也不表示已导入。见 [本次检查证据与限制](docs/evidence/qq-bak-inspection-2026-10-27.md)。
 
@@ -68,7 +68,7 @@ CLI 同时提供 `chattwin train prepare/run/cancel` 和 `chattwin model serve`�
 
 已有自写 OneBot v11 正向 WS 适配器、选定私聊接收循环、账号核验、纯文本消息段、唯一发送器和断连暂停。协议测试使用本地测试服务，**不是 QQ 实机测试**。
 
-本机 QQ 7.0.2 已存在，但未找到已连接的桥。项目不下载或捆绑 NapCat；其许可证与安装器许可不同，详见 [环境预检](docs/preflight.md)。
+本机 QQ 7.0.2 已存在，但没有已连接的桥。已在仓库外下载官方 QCE v6.3.2 Mac 包并核验 SHA-256，包内 NapCat 为 4.18.28；尚未启动 QQ 副本或登录。项目不捆绑或再分发这些上游程序。启动会改变 QQ 副本的沙箱保护并共享真实数据库，QCE HTTP 默认监听所有网卡；准备状态和边界见 [本机 QCE 准备](docs/evidence/qce-preparation-2026-10-27.md)。
 
 只读探针：
 
