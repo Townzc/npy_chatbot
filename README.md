@@ -2,7 +2,7 @@
 
 本地个人 AI 工作台。导入已经导出的聊天记录，明确确认本人身份，建立关系内的风格与记忆，在网页试聊，或通过独立 worker 训练 LoRA。
 
-**当前是可运行的开发版，不是完整 QQ v1。** 无账号、无模型密钥即可运行虚构 demo；已实现真实 LoRA 训练代码并完成 CPU tiny 参数更新及新进程重载。真实 QQ 原会话、正式 Qwen CUDA 训练、手机离网控制及 7 天试运行仍未验收。逐项状态见 [docs/tasks.md](docs/tasks.md)，首批证据见 [docs/evidence/milestone-2026-10-26.md](docs/evidence/milestone-2026-10-26.md)，管理闭环见 [第二批报告](docs/evidence/management-milestone-2026-10-26.md)。
+**当前是可运行的开发版，不是完整 QQ v1。** 无账号、无模型密钥即可运行虚构 demo；已完成真实 QQ 登录、选定私聊 QCE 导出/身份确认/导入和 OneBot 只读探针。真实 LoRA 代码已通过 CPU tiny 参数更新及新进程重载；QQ 原会话收发、正式 Qwen CUDA 训练、手机离网控制及 7 天试运行仍未验收。逐项状态见 [docs/tasks.md](docs/tasks.md)，最新进展见 [真实导出与私有工作台证据](docs/evidence/real-qq-export-and-probe-2026-10-27.md)。
 
 ## 快速开始
 
@@ -34,10 +34,10 @@ uv run chattwin serve
 | ChatLab v0.0.2 JSON/JSONL | 合成格式、秒级时间、null、未知类型、引用及重复测试通过；实际导出兼容待具体样本 |
 | 通用 CSV | 字段映射、时区、秒/毫秒、BOM/换行；10 万条合成导入已测 |
 | ChatTwin JSONL v1 | 导入/导出回读与 sidecar hash/数量/范围核验；未声明会话类型按 unknown 排除训练 |
-| QCE 单文件 JSON | 参考 v6.3.2 的导出核心 0.1.0 schema；解析/身份/数据集与网页合成验证通过，真实导出及分块 JSONL 未验收；见[兼容边界](docs/qce-compatibility.md) |
+| QCE 单文件 JSON | v6.3.2 实际导出、578 条导入、稳定身份与网页数据集通过；仅此固定环境，历史完整度未知、分块 JSONL 不支持；见[兼容边界](docs/qce-compatibility.md) |
 | QQ .bak / 数据库容器 | 只读识别 MSG0、QQ_NT DB、普通 SQLite/ZIP；不支持自动解密、提取或假装导入 |
 
-本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；后续头部检查识别出其中 4 个为 MSG0，另外 4 个仍未识别。用户又提供了一份电脑 QQ“导出聊天记录”生成的 `.bak`：外层 ZIP 内有 4 个 MSG0 数据库，归档 CRC 通过，聊天内容仍未解密。用户最新确认当前这台 Mac 的 QQ 能看到所需旧记录，接下来从本机导出可读 JSON。没有把文件名、账号或正文写入 Git。见 [备份与可读导出的边界](docs/qq-setup-research.md)。
+本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；其中 4 个为 MSG0，另外 4 个仍未识别。另有一份电脑 QQ 导出的 `.bak`，外层 ZIP 内含 4 个 MSG0，未解密。本次通过当前 Mac 可见历史和 QCE 另行取得可读 JSON，已导入选定私聊的 578 条记录。本人明确选择当前扫码账号的真人发言作为目标；209 条本人文字为候选，最新快照为训练 37 / 验证 14 / 测试 5 个回复样本。数量不代表历史完整或个人模型质量。原始文件、账号、正文、数据集及备份均在仓库外。见 [备份与可读导出的边界](docs/qq-setup-research.md)。
 
 可用 `uv run chattwin import probe /absolute/path/to/export.bak` 只读诊断文件类型。命令不显示文件名、密钥或正文，不解包、不创建聊天数据库；识别成功也不表示已导入。见 [本次检查证据与限制](docs/evidence/qq-bak-inspection-2026-10-27.md)。
 
@@ -68,7 +68,7 @@ CLI 同时提供 `chattwin train prepare/run/cancel` 和 `chattwin model serve`�
 
 已有自写 OneBot v11 正向 WS 适配器、选定私聊接收循环、账号核验、纯文本消息段、唯一发送器和断连暂停。协议测试使用本地测试服务，**不是 QQ 实机测试**。
 
-本机 QQ 7.0.2 已存在。用户明确授权后，已启动仓库外的官方 QCE v6.3.2 Mac 包及 NapCat 4.18.28，浏览器停在手机扫码入口；QQ 登录、真实导出及 OneBot 桥仍未验收。启动前已保存私有数据库副本，原 QQ 应用签名保持有效。WebUI 实际监听 `127.0.0.1:6099` 且鉴权通过；QCE 导出 HTTP 服务要在登录后另验，已知其默认监听所有网卡。项目不捆绑或再分发上游程序；实际结果和限制见 [本机启动证据](docs/evidence/qce-runtime-2026-10-27.md)。
+本机 QQ 7.0.2 / QCE v6.3.2 / NapCat 4.18.28 已在本人授权、扫码后通过真实导出和只读桥连接。探针核验账号、版本、在线与健康状态，并验证错误凭证/账号拒绝；临时 WS 服务已关闭。没有向联系人发送消息。QCE HTTP 实际监听 `*:40653`，受保护 API 的令牌与 loopback 白名单检查通过；管理页为 `127.0.0.1:6099`。原 QQ 应用签名有效，启动前数据库副本已保存。项目不捆绑上游程序，见 [实机证据与限制](docs/evidence/real-qq-export-and-probe-2026-10-27.md)。
 
 只读探针：
 
@@ -93,6 +93,6 @@ uv run --project training --locked pytest -q tests/test_training_contracts.py te
 
 备份命令：`chattwin backup create DESTINATION`、`backup inspect BACKUP`、`backup restore BACKUP EMPTY_DESTINATION`。备份包含一致数据库和引用数据集；不含凭证、原始上传或模型权重。恢复后归档绑定、停止 AI，需重新确认。详见 [operations.md](docs/operations.md)。
 
-已有画像确认、记忆纠正、身份重映射、来源删除传播、预算/诊断和模型作业管理。浏览器使用短期登录；私网/常驻配置见 [手机与主机](docs/access-and-hosting.md)。仍待真实 QQ/QCE 导出、Qwen CUDA 和人工质量评测、手机离网/休眠组合、7 天试运行及跨平台发布审查。锁文件清单见 [SBOM](docs/sbom.cdx.json)，它不替代逐项许可和漏洞审查。具体顺序与验收记录统一维护于 [任务状态](docs/tasks.md)。
+已有画像确认、记忆纠正、身份重映射、来源删除传播、预算/诊断和模型作业管理；真实私有数据备份及隔离恢复也已通过。浏览器使用短期登录；私网/常驻配置见 [手机与主机](docs/access-and-hosting.md)。仍待 QQ 原私聊收发、Qwen CUDA 和人工质量评测、手机离网/休眠组合、7 天试运行及跨平台发布审查。锁文件清单见 [SBOM](docs/sbom.cdx.json)，它不替代逐项许可和漏洞审查。具体顺序与验收记录统一维护于 [任务状态](docs/tasks.md)。
 
 新核心 Apache-2.0；上游组件各自保留许可。按用户后续明确指令，源码已推送 GitHub；没有创建 release，没有上传真实聊天、数据库、密钥或私人模型。

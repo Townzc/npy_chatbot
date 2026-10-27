@@ -1,13 +1,13 @@
 # QQ 受控实测步骤与当前边界
 
-状态：代码与本地 OneBot 测试服务可运行；真实原账号/好友窗口仍 UNVERIFIED。当前 Mac 的 QQ/桥事实和固定许可来源见 preflight.md。
+状态：2026-10-27 已在真实 NapCat 4.18.28 完成只读账号/版本/在线/健康探针与错误凭证拒绝；真实原账号/好友窗口收发仍 UNVERIFIED。实机结果见 [本批证据](evidence/real-qq-export-and-probe-2026-10-27.md)，固定许可来源见 preflight.md。
 
-从零准备桥和 QCE 导出的具体步骤、端口区别、macOS 登录影响及已查明限制，见 [qq-setup-research.md](qq-setup-research.md)。本次未安装桥或连接真实会话。
+从零准备桥和 QCE 导出的步骤、端口区别、macOS 登录影响及限制，见 [qq-setup-research.md](qq-setup-research.md)。本机已按本人明确授权运行官方QCE专用副本并完成导入；探针后恢复桥配置，临时WS服务已关闭。没有执行真实发送。
 
-需要用户提供/自行配置：允许使用的外部桥及版本、WS 端点、独立 token、期望登录 QQ 的稳定 ID、唯一指定好友 ID、档案与关系 ID、实际模型端点。先保持其他自动回复程序关闭。不要把凭证写入 Git、URL、截图或公开报告。
+实际收发前需具备：允许使用的外部桥及版本、WS 端点、独立 token、期望登录 QQ 的稳定 ID、唯一指定好友 ID、档案与关系 ID、实际模型端点。本次账号/好友/身份映射已在私有目录核对，尚无已验收的实际个人模型。先保持其他自动回复程序关闭。不要把凭证写入 Git、URL、截图或公开报告。
 
 1. 用户独立核对桥许可并安装、启动。开发助手不自动安装受限桥程序。
-2. `chattwin qq probe --url ... --account ...` 只请求登录身份和版本；身份不符必须失败。无发送、无好友正文留存。
+2. `chattwin qq probe --url ... --account ...` 只请求登录身份、版本与在线/健康状态；身份不符、离线或健康状态不明必须失败。无发送、无好友正文留存。
 3. 确认导入身份和所选关系；用实际模型在网页试聊。MockProvider 禁止用于 live QQ 启动。
 4. 用户自行运行 `chattwin qq serve --url ... --account ... --recipient ... --persona ... --scope ... --allow-send`。启动仍是 HUMAN/PAUSED，不自动恢复 AI。
 5. 在指定原私聊中验证开启原文、接口回执、对方新来信、AI 回复的顺序；留存脱敏平台时间和消息 ID 摘要，确认来自原账号。

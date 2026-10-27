@@ -1,8 +1,8 @@
 # QQ 桥与聊天导出：可执行路径和未验证项
 
-核查日期 2026-10-26。用户尚无 OneBot 桥；已确认现有 8 个无扩展名文件来自 QQ“聊天记录管理 → 备份聊天记录到电脑”。来源是用户确认的事实，容器内部尚未解析。下面依据上游说明准备接入，不表示本机已安装、已登录或真实 QQ 测试通过。
+最初核查日期 2026-10-26：当时用户尚无 OneBot 桥，现有8个文件来自 QQ“备份聊天记录到电脑”，不能直接当作JSON导入。以下保留容器和接入路径的调研依据；当前进展以本节更新为准。
 
-2026-10-27 最新补充：用户进一步确认，**当前这台 Mac 的 QQ 能看到所需旧记录**。因此针对这部分历史改走下面的第 1 分支，在本机进行导出。先前“仅手机可见”的答复不再作为这部分历史的当前前提，实际导出范围仍需核验。
+2026-10-27 最新进展：用户确认当前 Mac 可见旧记录，授权启动QCE专用QQ副本并亲自扫码。已实际导出指定私聊578条、按当前扫码账号的真人发言确认身份并导入；网页数据集37/14/5。真实OneBot只读探针通过，临时WS恢复关闭，没有发送消息。历史完整度、原私聊收发、手机接管和正式Qwen仍未验收。见 [实际证据](evidence/real-qq-export-and-probe-2026-10-27.md)。
 
 ## 现有 QQ 备份怎么处理
 
@@ -12,7 +12,7 @@
 
 MSG0 与 `QQ_NT DB` 是不同标记，不能把“裁掉 1024 字节，再用 NTQQ 的 UID/盐值推导”当成可用转换。上游 PCQQ 文档已经标为不再维护，建议先将旧数据库导入 QQNT；旧脚本依赖 Windows 客户端及运行时 key，不是独立读取任意 `.bak` 的工具。本项目没有运行注入、重设数据库密钥或恢复覆盖操作。[PCQQ 提取边界](https://github.com/QQBackup/QQDecrypt/blob/0dba968ebcb9ba23a68571780eb6b53687f77493/docs/decrypt/extract/PCQQ%20%28Windows%29.md) · [上游旧版导出脚本](https://github.com/QQBackup/qq-win-db-key/blob/5c643c39bdc65a7ce3ecc414052fdfd93d5f9107/scripts/windows/pcqq/pcqq_dump.py)
 
-当前下一步是在**实际保存所需历史的电脑**运行 QCE，取得单文件 JSON，再核验具体首末时间和缺口。若保存记录的是另一台电脑，不能仅在当前 Mac 登录就假设历史会迁移过来，也不能假设 `.bak` 是手机全部历史的副本。只读诊断可运行 `chattwin import probe /absolute/path/to/export.bak`；[检查报告](evidence/qq-bak-inspection-2026-10-27.md) 区分真实文件头验证与合成导入错误回归。
+可读导出路径是在**实际保存所需历史的电脑**运行 QCE，取得单文件 JSON，再核验首末时间和缺口；当前Mac的选定会话已走通此路径。若记录在另一台电脑，不能仅在当前 Mac 登录就假设历史会迁移过来，也不能假设 `.bak` 是手机全部历史的副本。只读诊断可运行 `chattwin import probe /absolute/path/to/export.bak`；[检查报告](evidence/qq-bak-inspection-2026-10-27.md) 区分真实文件头验证与合成导入错误回归。
 
 接下来按实际可见记录分支：
 
@@ -30,7 +30,7 @@ MSG0 与 `QQ_NT DB` 是不同标记，不能把“裁掉 1024 字节，再用 NT
 
 ## QQ 历史记录：QCE 固定版本
 
-本次 releases API 返回 QCE **v6.3.2**（2026-10-03），Apple Silicon 包为 `NapCat-QCE-macOS-arm64-v6.3.2.tar.gz`，41,924,485 bytes。2026-10-27 已下载至仓库外私有工具目录，本地 SHA-256 与发布值 `a241a2a694edb317fa494e9f9a0bda79284937be97afa7bfea269741b7f15a9a` 一致；994 个归档条目路径与类型检查通过，启动脚本与固定源码一致且语法检查通过。实际包内是 QCE 6.3.2 / NapCat 4.18.28。用户明确授权后已启动专用 QQ 副本，当前等待手机扫码，尚无真实导出；[准备证据](evidence/qce-preparation-2026-10-27.md) 与[实际启动证据](evidence/qce-runtime-2026-10-27.md) 分开。[固定发布页](https://github.com/shuakami/qq-chat-exporter/releases/tag/v6.3.2)
+本次 releases API 返回 QCE **v6.3.2**（2026-10-03），Apple Silicon 包为 `NapCat-QCE-macOS-arm64-v6.3.2.tar.gz`，41,924,485 bytes。2026-10-27 已下载至仓库外私有工具目录，本地 SHA-256 与发布值 `a241a2a694edb317fa494e9f9a0bda79284937be97afa7bfea269741b7f15a9a` 一致；994 个归档条目路径与类型检查通过，启动脚本与固定源码一致且语法检查通过。实际包内是 QCE 6.3.2 / NapCat 4.18.28。用户明确授权后已启动专用QQ副本，现已扫码并完成选定私聊导出和只读桥探针；[准备证据](evidence/qce-preparation-2026-10-27.md) 与[实际启动证据](evidence/qce-runtime-2026-10-27.md) 分开。[固定发布页](https://github.com/shuakami/qq-chat-exporter/releases/tag/v6.3.2)
 
 按[固定 macOS 指南](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/docs/macos-deploy.md)：
 
@@ -41,17 +41,17 @@ MSG0 与 `QQ_NT DB` 是不同标记，不能把“裁掉 1024 字节，再用 NT
 5. 选择一个明确的私聊和时间范围，导出 JSON；保存 QCE/QQ 版本、选择范围、导出统计和文件摘要。先不导出全部联系人。
 6. 导出结束停止 QCE，再重新打开原桌面 QQ。`start-standalone.sh` 只能查看已有导出，不能替代登录导出。
 
-该版本 QCE Rust HTTP 服务硬编码监听 `0.0.0.0:40653`，`security.json` 的 `serverHost` 不能改变监听地址。随机令牌、loopback API 白名单和 NapCat WebUI 绑定 `127.0.0.1` 的配置已应用。WebUI 实际监听与有/无凭证请求验证通过；QCE 40653 要在 QQ 登录后再验证，不能称为所有端口都只在本机监听。OneBot 服务保持关闭，先完成导出后再单独配置桥。用户已明确确认原 QQ 与专用副本共享真实数据库的安全边界变化；启动前数据库副本哈希核验通过。不要公开管理端口或带令牌链接。
+该版本 QCE Rust HTTP 服务硬编码监听 `0.0.0.0:40653`，`security.json` 的 `serverHost` 不能改变监听地址。实际监听和保护已验：QCE为`*:40653`，受保护API缺令牌401、错误令牌403、有效令牌localhost200、非loopback有效令牌403/IP_NOT_ALLOWED；这不覆盖公开健康页/静态页面。NapCat WebUI为`127.0.0.1:6099`且鉴权通过。真实只读探针使用的临时OneBot WS已关闭。用户已明确确认专用副本共享真实数据库的边界变化；启动前数据库副本哈希通过。不要公开管理端口或带令牌链接。
 
 历史完整度以实际可取得记录为准：普通导出读取本地已有/已同步消息，实验性漫游导出也有日期和平台限制，不能保证取回手机上全部旧记录。[QCE 使用手册](https://github.com/shuakami/qq-chat-exporter/blob/master/docs/guide.md)
 
-ChatTwin 的 ChatLab/CSV/规范 JSONL 和 QCE 单 JSON 解析器已实现；QCE 使用固定源码契约的人工虚构样例验证，尚未通过真实导出验收。拿到导出后在本机核对结构、发送者稳定 ID 与历史边界；结果见 [兼容范围](qce-compatibility.md)。导出与后续训练数据保存在私有目录，不上传 GitHub。
+ChatTwin 的 ChatLab/CSV/规范 JSONL 和 QCE 单 JSON 解析器已实现；QCE已有虚构契约测试及v6.3.2固定环境真实578条导入验证，结构、发送者稳定ID、当前范围与去重已核对；结果见 [兼容范围](qce-compatibility.md)。导出与后续训练数据保存在私有目录，不上传 GitHub。
 
 ## QQ 原私聊：NapCat 的 OneBot v11 正向 WS
 
 桥接与历史导出分开验收。NapCat 有 Mac 安装器和 Linux/Docker 路径；Mac 安装器会改变 QQ 启动入口，与 QCE 专用副本不是同一种安装方式。先选定一种运行部署和一个账号的唯一桥进程。核心仍独立实现 OneBot 客户端，不捆绑桥程序。[NapCat 部署](https://napneko.github.io/guide/boot/Shell) · [Mac 安装器](https://github.com/NapNeko/NapCat-Mac-Installer)
 
-NapCat 本体的自定义许可与安装器 MIT 不同；其 README 推荐 QCE，并限制未经授权基于 NapCat 代码开发。当前只准备官方发布包在用户电脑独立运行，ChatTwin 不复制其实现或重新分发；不把本项目 Apache-2.0 扩展到上游，也不将静态说明当成所有用途的许可结论。[NapCat LICENSE](https://github.com/NapNeko/NapCatQQ/blob/main/LICENSE) · [上游 README](https://github.com/NapNeko/NapCatQQ/blob/main/README.md)
+NapCat 本体的自定义许可与安装器 MIT 不同；其 README 推荐 QCE，并限制未经授权基于 NapCat 代码开发。当前仅使用官方发布包在用户电脑独立运行，ChatTwin 不复制其实现或重新分发；不把本项目 Apache-2.0 扩展到上游，也不将静态说明当成所有用途的许可结论。[NapCat LICENSE](https://github.com/NapNeko/NapCatQQ/blob/main/LICENSE) · [上游 README](https://github.com/NapNeko/NapCatQQ/blob/main/README.md)
 
 NapCat WebUI 中建立网络配置：
 
@@ -78,4 +78,4 @@ uv run chattwin qq probe --url ws://127.0.0.1:3001 --account EXPECTED_ACCOUNT_ID
 
 ## 与 GPU 任务的关系
 
-首次 AutoDL 训练只使用随包虚构数据，QQ 登录、历史导出和原私聊桥留在本机处理。QQ 原会话的连接探针也不依赖历史导出成功，可以在桥可用时先验收。现有备份不上传 AutoDL 或 GitHub；本机已在用户授权后复制真实数据库作保护，并让专用 QQ 副本使用原数据库链接。原 QQ 安装保持签名有效，当前仍等待本人扫码登录。
+首次 AutoDL 训练只使用随包虚构数据，QQ 登录、历史导出和桥留在本机处理。现有备份不上传 AutoDL 或 GitHub；私人训练数据的云端使用范围另行确认。本机已在用户授权后复制真实数据库作保护，并让专用QQ副本使用原数据库链接。原QQ安装保持签名有效，当前已登录并完成选定私聊导入及只读桥探针；原私聊收发仍未验收。

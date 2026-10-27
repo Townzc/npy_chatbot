@@ -1,10 +1,10 @@
 # QCE 单文件 JSON：实现与验收边界
 
-当前已实现独立解析器、网页入口与合成数据闭环。**未运行 QCE 导出器、未使用真实聊天导出验证，不宣称已兼容用户当前备份或任意 QCE 版本。**
+当前已实现独立解析器、网页入口与合成数据闭环；2026-10-27 已在官方 QCE v6.3.2 / NapCat 4.18.28 实际运行环境导出用户指定私聊，50 条小范围及 578 条扩大导出解析通过、0 坏行。**这不证明任意 QCE 版本、官方备份容器或所有历史完整度均受支持。** 真实记录留在仓库外，见 [真实导出证据](evidence/real-qq-export-and-probe-2026-10-27.md)。
 
 ## 固定参考
 
-按 QCE v6.3.2 的提交 `7d154b847a0cb3f9cffbdb126598c4d1434995ba` 阅读公开数据定义后独立实现，未复制、运行或捆绑其 GPL 实现。
+按 QCE v6.3.2 的提交 `7d154b847a0cb3f9cffbdb126598c4d1434995ba` 阅读公开数据定义后独立实现解析器，不复制或捆绑其 GPL 实现。经用户授权在仓库外运行官方导出器，仅用于本机兼容验证。
 
 | 事实 | 固定上游依据 |
 |---|---|
@@ -14,7 +14,7 @@
 | 正文元素 text/data.text，引用 referencedMessageId | [解析器](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/qq-chat-export-server/src/parser/simple_parser.rs) |
 | statistics.totalMessages 为写出消息数量 | [stats.rs](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/qq-chat-export-core/src/stats.rs) |
 
-`metadata.version=0.1.0` 无法证明用户使用的是 QCE v6.3.2。报告单独列出参考 release、schema 版本、`actual_release_verified=false` 和 `real_export_validated=false`；不要把参考版本写成实测版本。
+`metadata.version=0.1.0` 无法证明任意输入使用的是 QCE v6.3.2。输入报告仍单独列出参考 release、schema 版本、`actual_release_verified=false` 和 `real_export_validated=false`，不因本次实机验收便给其他上传文件加上已验证声明。本次实际运行版本、任务、文件与解析结果另行核对，证据只适用于这次导出。
 
 ## 当前行为
 
@@ -44,4 +44,4 @@ fixture 完全虚构，按固定契约人工构造，**不是 QCE 实际导出�
 
 ![虚构QCE导入后的身份表，系统行单独标记](evidence/web-qce-import.png)
 
-下一步：按 [QCE 导出步骤](qq-setup-research.md) 取得明确版本导出，在本机核对时间、UID/UIN、类型、数量和历史边界。只把脱敏统计与结论写入证据，真实导出留私有目录。T09 保持 PARTIAL，真实导出验收仍待完成。
+后续真实验证已完成文件获取、运行版本、UID/UIN 作用域、类型、数量与解析检查。本人明确选择当前扫码账号的真人发言后，正式导入 578 条、0 坏行；再次导入新增 0 / 重复 578；209 条本人文字为候选。网页生成最新快照为训练 37 / 验证 14 / 测试 5，标签、时间顺序、冻结保留集与风格隔离核验通过。T09 的 v6.3.2 单 JSON 范围完成，分块 JSONL、其他版本和历史完整度不在本次通过声明内；实际模型训练及质量另行验收。只有统计与结论进入证据，真实导出、身份映射、截图和数据集均留私有目录。
