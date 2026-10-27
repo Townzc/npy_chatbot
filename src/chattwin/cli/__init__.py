@@ -128,6 +128,20 @@ def inspect_file(file: Path, format: str = "auto"):
     typer.echo(json.dumps(inspect(file, format), ensure_ascii=False, indent=2))
 
 
+@imports_app.command("probe")
+def probe_import_file(file: Path):
+    """只读识别文件/备份类型，不显示文件名、账号、密钥或聊天正文，不解包。"""
+    from chattwin.domain import DomainError
+    from chattwin.importers.probe import probe
+
+    try:
+        result = probe(file)
+    except DomainError as exc:
+        typer.echo(json.dumps({"error": exc.code, "message": str(exc)}, ensure_ascii=False))
+        raise typer.Exit(2) from None
+    typer.echo(json.dumps(result, ensure_ascii=False, indent=2))
+
+
 @imports_app.command("run")
 def import_file(file: Path, mapping: Path):
     from chattwin.importers import DataService

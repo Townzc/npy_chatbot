@@ -13,6 +13,8 @@ from zoneinfo import ZoneInfo
 
 from chattwin.domain import Content, DomainError, Message, Source, uid
 
+from .probe import reject_unsupported_container
+
 MAX_FILE_BYTES = 64 * 1024 * 1024
 MAX_LINE_BYTES = 1024 * 1024
 VERSION = "0.1.0"
@@ -44,10 +46,14 @@ def validate_path(path: Path) -> None:
 
 def detect(path: Path) -> str:
     validate_path(path)
+    reject_unsupported_container(path)
     if path.suffix.lower() == ".csv":
         return "csv"
-    with path.open(encoding="utf-8-sig") as handle:
-        head = handle.read(MAX_LINE_BYTES)
+    try:
+        with path.open(encoding="utf-8-sig") as handle:
+            head = handle.read(MAX_LINE_BYTES)
+    except UnicodeError:
+        raise DomainError("INVALID_FILE", "聊天导出需要 UTF-8 编码", 422) from None
     first = next(
         (line for line in head.splitlines() if line.strip() and not line.lstrip().startswith("#")),
         "",
@@ -329,6 +335,8 @@ def parse(
 ) -> Iterator[tuple[int, Message | None, str | None]]:
     path = Path(path)
     validate_path(path)
+    if format != "auto":
+        reject_unsupported_container(path)
     mapping = mapping or {}
     fmt = (
         detect(path)

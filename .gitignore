@@ -16,6 +16,7 @@ dist/
 build/
 *.egg-info/
 *.db*
+*.bak
 *.sqlite*
 *.safetensors
 *.bin

@@ -6,7 +6,13 @@
 
 ## 现有 QQ 备份怎么处理
 
-先保留现有备份原样。它们未被识别为 JSON/CSV/SQLite/ZIP/gzip；改名为 `.json` 不会产生结构化导出。当前 QCE 指南描述的是读取当前电脑客户端已经同步到本机的记录，没有给出直接打开这些官方备份容器的方法。[固定 QCE 指南](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/docs/guide.md)
+先保留现有备份原样。初次检查未识别为 JSON/CSV/标准 SQLite/ZIP/gzip，2026-10-27 进一步检查确认原 8 个文件中有 4 个带 `SQLite header 3\0` / `MSG0` 自定义头，其余 4 个仍未识别。注意 `SQLite header 3` 与标准 `SQLite format 3` 不同；改名为 `.json` 不会产生结构化导出。当前 QCE 指南描述的是读取当前电脑客户端已经同步到本机的记录，没有给出直接打开这些官方备份容器的方法。[固定 QCE 指南](https://github.com/shuakami/qq-chat-exporter/blob/7d154b847a0cb3f9cffbdb126598c4d1434995ba/docs/guide.md)
+
+用户随后提供一份**电脑 QQ → 导出聊天记录**产生的 `.bak`。实际文件为 17,388,206 bytes 的 ZIP，4 个内部文件均为 MSG0，外层没有 ZIP 加密；逐成员完整读取的 CRC 通过，原文件前后 SHA-256 相同。数据库层尚未解密，不能得出双方身份、日期、消息数或完整度。导出 QQ 的版本与电脑可见历史范围仍待确认，不能根据文件类型反推用户使用了某个旧版本。
+
+MSG0 与 `QQ_NT DB` 是不同标记，不能把“裁掉 1024 字节，再用 NTQQ 的 UID/盐值推导”当成可用转换。上游 PCQQ 文档已经标为不再维护，建议先将旧数据库导入 QQNT；旧脚本依赖 Windows 客户端及运行时 key，不是独立读取任意 `.bak` 的工具。本项目没有运行注入、重设数据库密钥或恢复覆盖操作。[PCQQ 提取边界](https://github.com/QQBackup/QQDecrypt/blob/0dba968ebcb9ba23a68571780eb6b53687f77493/docs/decrypt/extract/PCQQ%20%28Windows%29.md) · [上游旧版导出脚本](https://github.com/QQBackup/qq-win-db-key/blob/5c643c39bdc65a7ce3ecc414052fdfd93d5f9107/scripts/windows/pcqq/pcqq_dump.py)
+
+当前更直接的下一步是核对**生成这份备份的电脑 QQ 能看到哪些旧记录**。能看到所需范围，就用下面的固定 QCE 路径取得单文件 JSON；只能看到近期记录，就分别记录实际范围，继续保留手机历史提取为未验证项。不能假设 `.bak` 是手机全部历史的副本。只读诊断可运行 `chattwin import probe /absolute/path/to/export.bak`；[检查报告](evidence/qq-bak-inspection-2026-10-27.md) 区分真实文件头验证与合成导入错误回归。
 
 接下来按实际可见记录分支：
 
@@ -16,7 +22,7 @@
 
 这些分支是在核查数据在哪里，不要求用户在对话发送私聊正文。完整度报告保留请求范围、实际首末时间/条数和未知缺口；解析成功不声明全量。
 
-也检查了 QQBackup 的 iOS 提取说明：旧 iOS 教程已标为不再维护，NTQQ iOS 教程明确标为近期版本未确认；其离线推导段需要原始 `nt_msg.db` 和相关账号元数据，不能据此断言能读取这 8 个官方备份容器。未运行提取工具、修改手机或取得密钥。[旧 iOS 状态](https://github.com/QQBackup/QQDecrypt/blob/main/docs/decrypt/extract/IOSQQ.md) · [NTQQ iOS 状态及输入要求](https://github.com/QQBackup/QQDecrypt/blob/main/docs/decrypt/extract/NTQQ%20%28iOS%29.md)
+也检查了 QQBackup 的 iOS 提取说明：旧 iOS 教程已标为不再维护，NTQQ iOS 教程明确标为近期版本未确认；其离线推导段需要原始 `nt_msg.db` 和相关账号元数据，不能据此断言能读取这些 MSG0 或未识别文件。未运行提取工具、修改手机或取得密钥。[旧 iOS 状态](https://github.com/QQBackup/QQDecrypt/blob/main/docs/decrypt/extract/IOSQQ.md) · [NTQQ iOS 状态及输入要求](https://github.com/QQBackup/QQDecrypt/blob/main/docs/decrypt/extract/NTQQ%20%28iOS%29.md)
 
 下一项候选是 **Finder/iTunes 的 iPhone 整机本地备份**，与 QQ 内的电脑备份分开。Apple 说明电脑备份包含设备大部分数据和设置；这不能证明当前 QQ 的数据库一定包含其中。第三方 `iphone_backup_decrypt` 公开了只按备份目录索引筛选文件的接口，但解开 iOS 备份层也不等于解开 QQ 数据库层。先确认 iOS/QQ 版本及是否有这类备份，再只检查 QQ 对应的目录项和数据库是否存在；在得到可验证的数据库前，不承诺能导出全部旧聊天。[Apple 备份说明](https://support.apple.com/zh-cn/108771) · [备份工具的输入与筛选接口](https://github.com/jsharkey13/iphone_backup_decrypt)
 

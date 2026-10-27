@@ -83,7 +83,7 @@ export default function ImportPanel({
             <span>JSON、JSONL 或 CSV · 不自动读取设备数据库</span>
             <input
               type="file"
-              accept=".json,.jsonl,.csv"
+              accept=".json,.jsonl,.csv,.bak"
               onChange={(e) => {
                 setFile(e.target.files?.[0] ?? null);
                 setPreview(null);
@@ -95,6 +95,7 @@ export default function ImportPanel({
               }}
             />
           </label>
+          <p className="muted">QQ .bak 仅能检查备份类型，尚不能直接解密导入。</p>
           <div className="form-row">
             <label>
               导入格式

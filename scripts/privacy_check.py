@@ -32,11 +32,14 @@ for value in paths:
             ".bin",
             ".pem",
             ".zip",
+            ".bak",
         }
     ):
         blocked.append((value, "private runtime path"))
         continue
     content = subprocess.check_output(["git", "show", ":" + value])
+    if content.startswith((b"SQLite header 3\0", b"SQLite format 3\0")):
+        blocked.append((value, "database file signature"))
     if any(pattern.search(content) for pattern in secret_patterns):
         blocked.append((value, "credential signature"))
 if blocked:

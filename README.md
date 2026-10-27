@@ -35,9 +35,11 @@ uv run chattwin serve
 | 通用 CSV | 字段映射、时区、秒/毫秒、BOM/换行；10 万条合成导入已测 |
 | ChatTwin JSONL v1 | 导入/导出回读与 sidecar hash/数量/范围核验；未声明会话类型按 unknown 排除训练 |
 | QCE 单文件 JSON | 参考 v6.3.2 的导出核心 0.1.0 schema；解析/身份/数据集与网页合成验证通过，真实导出及分块 JSONL 未验收；见[兼容边界](docs/qce-compatibility.md) |
-| 手机数据库/备份容器 | 不支持自动解密、提取或假装导入 |
+| QQ .bak / 数据库容器 | 只读识别 MSG0、QQ_NT DB、普通 SQLite/ZIP；不支持自动解密、提取或假装导入 |
 
-本机 `chat_record` 检查到 8 个无扩展名容器，约 140 MiB；用户已确认来自 QQ“聊天记录管理 → 备份聊天记录到电脑”。内部格式尚未解析，这些备份不等于 QCE JSON。检查仅输出格式和数量元数据，未把私聊正文放进开发上下文；按 [备份与可读导出的边界](docs/qq-setup-research.md) 核对电脑端可见历史，再取得支持的导出。
+本机 `chat_record` 有 8 个无扩展名文件，约 140 MiB；后续头部检查识别出其中 4 个为 MSG0，另外 4 个仍未识别。用户又提供了一份电脑 QQ“导出聊天记录”生成的 `.bak`：外层 ZIP 内有 4 个 MSG0 数据库，归档 CRC 通过，聊天内容仍未解密。它们不等于 QCE JSON；没有把文件名、账号或正文写入 Git。按 [备份与可读导出的边界](docs/qq-setup-research.md) 核对电脑可见历史，再取得支持的导出。
+
+可用 `uv run chattwin import probe /absolute/path/to/export.bak` 只读诊断文件类型。命令不显示文件名、密钥或正文，不解包、不创建聊天数据库；识别成功也不表示已导入。见 [本次检查证据与限制](docs/evidence/qq-bak-inspection-2026-10-27.md)。
 
 网页上传上限为 20 MiB；大文件使用 CLI。成功解析提供的条目不代表历史完整。群聊和未知会话类型可保留预览，默认不进入双人关系的风格、记忆或训练。详见 [数据实现说明](docs/data-implementation.md)。
 
